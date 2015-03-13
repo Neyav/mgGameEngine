@@ -1,7 +1,10 @@
 #ifndef MGMAPELEMENTH
 #define MGMAPELEMENTH
 
-#include "mgShape.h"
+#include <stdlib.h>
+
+#include "mgLineSegment.h"
+#include "mgLinkedList.h"
 
 #define MAP_BLOCKFLOOR 0
 #define MAP_BLOCKWALL 1
@@ -9,14 +12,14 @@
 class mgMapElement
 {
 private:
-	mgShape *BlockShape;
+	mgLinkedList<mgLineSegment> *BlockShape;
 
 public:
 	char BlockType;
 	mgPoint Position;
 
 	void GenerateBlockGeometry(void);
-	mgShape *BlockGeometry(void);
+	mgLinkedList<mgLineSegment> *BlockGeometry(void);
 
 	mgMapElement();
 	~mgMapElement();

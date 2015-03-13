@@ -1,7 +1,6 @@
 #include <stdlib.h>
 
 #include "mgMapElement.h"
-#include "mgShape.h"
 
 void mgMapElement::GenerateBlockGeometry(void)
 {
@@ -10,19 +9,58 @@ void mgMapElement::GenerateBlockGeometry(void)
 
 	if (BlockType == MAP_BLOCKFLOOR)
 	{
-		BlockShape = new mgShape;
+		BlockShape = NULL;
 	}
 	else if (BlockType == MAP_BLOCKWALL)
 	{
-		BlockShape = new mgShape;
-		BlockShape->AddLineToShape({ 0, 0 }, { 0, 1 }, this, NULL);
-		BlockShape->AddLineToShape({ 0, 1 }, { 1, 1 }, this, NULL);
-		BlockShape->AddLineToShape({ 1, 1 }, { 1, 0 }, this, NULL);
-		BlockShape->AddLineToShape({ 1, 0 }, { 0, 0 }, this, NULL);
+		mgLineSegment *ShapeLine;
+		mgPoint Start, End;
+
+		BlockShape = new mgLinkedList<mgLineSegment>;
+
+		// Defined shape of an orthogonical blocking wall
+
+		// 0,0 - 0,1
+		ShapeLine = new mgLineSegment;
+		Start.Y = 0 + Position.Y;
+		Start.X = 0 + Position.X;
+		End.Y = 0 + Position.Y;
+		End.X = 1 + Position.X;
+		ShapeLine->LineSegmentBlock = this;
+		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->ImportLine(Start, End);
+		BlockShape->AddElementReference(ShapeLine);
+
+		// 0,1 - 1,1
+		ShapeLine = new mgLineSegment;
+		Start.X++;
+		End.Y++;
+		ShapeLine->LineSegmentBlock = this;
+		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->ImportLine(Start, End);
+		BlockShape->AddElementReference(ShapeLine);
+
+		// 1,1 - 1,0
+		ShapeLine = new mgLineSegment;
+		Start.Y++;
+		End.X--;
+		ShapeLine->LineSegmentBlock = this;
+		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->ImportLine(Start, End);
+		BlockShape->AddElementReference(ShapeLine);
+
+		// 1,0 - 0,0
+		ShapeLine = new mgLineSegment;
+		Start.X--;
+		End.Y--;
+		ShapeLine->LineSegmentBlock = this;
+		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->ImportLine(Start, End);
+		BlockShape->AddElementReference(ShapeLine);
 	}
 }
 
-mgShape *mgMapElement::BlockGeometry(void)
+mgLinkedList<mgLineSegment> *mgMapElement::BlockGeometry(void)
 {
 	if (BlockShape == NULL)
 		GenerateBlockGeometry();
