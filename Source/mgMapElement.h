@@ -13,6 +13,7 @@ private:
 
 public:
 	char BlockType;
+	mgPoint Position;
 
 	void GenerateBlockGeometry(void);
 	mgShape *BlockGeometry(void);

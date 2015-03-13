@@ -23,6 +23,8 @@ bool mgMapDataHandler::PositionBoundsCheck(int PosY, int PosX)
 
 void mgMapDataHandler::InitalizeMapData(int SizeY, int SizeX)
 {
+	mgPoint PositionReference = { 0, 0 };
+
 	InternalMapData = new mgMapElement[SizeY * SizeX];
 	MapSizeY = SizeY;
 	MapSizeX = SizeX;
@@ -30,6 +32,14 @@ void mgMapDataHandler::InitalizeMapData(int SizeY, int SizeX)
 	for (int Iterator = 0; Iterator < (SizeY * SizeX); Iterator++)
 	{	// Set the defaults for each block in the map.
 		InternalMapData[Iterator].BlockType = MAP_BLOCKWALL;
+		InternalMapData[Iterator].Position = PositionReference;
+
+		PositionReference.X++;
+		if (PositionReference.X >= SizeX)
+		{
+			PositionReference.X = 0;
+			PositionReference.Y++;
+		}
 	}
 }
 

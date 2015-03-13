@@ -7,8 +7,8 @@
 //#include "mgMapObject.h"
 #include "mgVectorPoint.h"
 
-extern class mgMapElement;
-extern class mgMapObject;
+class mgMapElement;
+class mgMapObject;
 
 class mgShape
 {

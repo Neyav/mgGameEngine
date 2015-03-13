@@ -4,7 +4,7 @@
 #include "mgLineSegment.h"
 #include "mgVectorPoint.h"
 
-void mgLineSegment::ImportLine(mgPoint Origin, mgVector Direction, float Length)
+void mgLineSegment::ImportLine(mgPoint Origin, mgVector Direction, double Length)
 {
 	// Let's derive as much information as we can about this line, and fill the corresponding information tables in
 	SegmentStart = Origin;
@@ -30,14 +30,14 @@ void mgLineSegment::ImportLine(mgPoint LineStart, mgPoint LineEnd)
 
 // Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
 // intersect the intersection point may be stored in the floats i_x and i_y.
-char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y,
-	float p2_x, float p2_y, float p3_x, float p3_y, float *i_x, float *i_y)
+char get_line_intersection(double p0_x, double p0_y, double p1_x, double p1_y,
+	double p2_x, double p2_y, double p3_x, double p3_y, double *i_x, double *i_y)
 {
-	float s1_x, s1_y, s2_x, s2_y;
+	double s1_x, s1_y, s2_x, s2_y;
 	s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
 	s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
 
-	float s, t;
+	double s, t;
 	s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
 	t = (s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
 
@@ -56,7 +56,7 @@ char get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y,
 
 mgPoint mgLineSegment::InterceptionPoint(mgLineSegment *SecondLine, bool *ValidIntercept)
 {
-	float x, y;
+	double x, y;
 	
 	char Interception = get_line_intersection(SegmentStart.X, SegmentStart.Y, SegmentEnd.X, SegmentEnd.Y, SecondLine->SegmentStart.X, SecondLine->SegmentStart.Y,
 		SecondLine->SegmentEnd.X, SecondLine->SegmentEnd.Y, &x, &y);

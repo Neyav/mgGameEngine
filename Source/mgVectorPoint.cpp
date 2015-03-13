@@ -15,7 +15,7 @@ double DistanceBetweenPoints(mgPoint Start, mgPoint End)
 // = mgVector C++ class                 =
 // =------------------------------------=
 
-void mgVector::NormalizeVector(float MagnitudeOverride)
+void mgVector::NormalizeVector(double MagnitudeOverride)
 {
 	double Ypositive, Xpositive, Normalizer;
 
@@ -85,7 +85,7 @@ void mgVector::VectorFromDegrees(double Degrees)
 }
 
 // -- Return the vector modified to represent "VectorStep" steps away from the center.
-void mgVector::VectorStepCords(float VectorStep)
+void mgVector::VectorStepCords(double VectorStep)
 {
 	TransformedY = Y * (VectorStep);
 	TransformedX = X * (VectorStep);

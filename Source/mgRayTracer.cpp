@@ -17,11 +17,11 @@ void PrintCoord(mgPoint DisplayPoint)
 // =------------------------------------=
 //
 
-mgLinkedList<mgLineSegmentReference> *mgRayTracer::BuildOccluderLines(mgPoint Position)
+mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 {
-	mgLinkedList<mgLineSegmentReference> *OccluderLineList;
+	mgLinkedList<mgLineSegment> *OccluderLineList;
 
-	OccluderLineList = new mgLinkedList < mgLineSegmentReference > ;
+	OccluderLineList = new mgLinkedList < mgLineSegment > ;
 
 	for (int CheckY = floor(Position.Y) - 1; CheckY < floor(Position.Y) + 2; CheckY++)
 	{
@@ -42,8 +42,7 @@ mgLinkedList<mgLineSegmentReference> *mgRayTracer::BuildOccluderLines(mgPoint Po
 			for (int Iterator = 0; Iterator < BlockLineList->NumberOfElements(); Iterator++)
 			{
 				mgLineSegment *CopiedLine;
-				mgLineSegmentReference NewLineReference;
-
+				
 				CopiedLine = BlockLineList->ReturnElementReference();
 
 				// Apply offsets to the shape to ensure it is checked for occlusions properly.
@@ -52,11 +51,7 @@ mgLinkedList<mgLineSegmentReference> *mgRayTracer::BuildOccluderLines(mgPoint Po
 				CopiedLine->SegmentEnd.Y += CheckY;
 				CopiedLine->SegmentEnd.X += CheckX;
 
-				NewLineReference.ReferenceSegment = *CopiedLine;
-				NewLineReference.ReferencePosition.Y = CheckY;
-				NewLineReference.ReferencePosition.X = CheckX;
-
-				OccluderLineList->AddElement(NewLineReference);
+				OccluderLineList->AddElement(*CopiedLine);
 			}
 
 			delete BlockLineList;
@@ -86,8 +81,8 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 	while (1)
 	{
 		mgPoint MapBlock;
-		mgLinkedList<mgLineSegmentReference> *LineSegmentList;
-		mgLineSegmentReference *LineReference;
+		mgLinkedList<mgLineSegment> *LineSegmentList;
+		mgLineSegment *LineReference;
 		mgLineSegment TestLine;
 
 		TestLine.ImportLine(TracerPosition, Direction, 1); // We are testing one block at a time, so move one blocks distance per check.
@@ -114,7 +109,7 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 			//std::cout << "Checking against line [" << LineSegmentList->CurrentSegment->SegmentStart.Y << ", " << LineSegmentList->CurrentSegment->SegmentStart.X << "] to" << std::endl;
 			//std::cout << "                      [" << LineSegmentList->CurrentSegment->SegmentEnd.Y << ", " << LineSegmentList->CurrentSegment->SegmentEnd.X << "]" << std::endl;
 
-			TestPoint = TestLine.InterceptionPoint(&LineReference->ReferenceSegment, &Intersection);
+			TestPoint = TestLine.InterceptionPoint(LineReference, &Intersection);
 
 			if (Intersection)
 			{
@@ -126,7 +121,8 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 				{
 					distance = testDistance;
 					Occluder = TestPoint;
-					OccluderBlock = LineReference->ReferencePosition;
+					if (LineReference->LineSegmentBlock != NULL)
+						OccluderBlock = LineReference->LineSegmentBlock->Position;
 				}
 			}
 

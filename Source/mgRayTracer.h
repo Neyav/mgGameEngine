@@ -8,12 +8,6 @@
 #include "mgLineSegment.h"
 #include "mgLinkedList.h"
 
-struct mgLineSegmentReference
-{
-	mgLineSegment ReferenceSegment;
-	mgPoint ReferencePosition;
-};
-
 // =------------------------------------=
 // = mgRayTracer C++ class              =
 // =------------------------------------=
@@ -25,7 +19,7 @@ private:
 	mgPoint TracerPosition;
 	mgVector TracerDirection;
 
-	mgLinkedList<mgLineSegmentReference> *BuildOccluderLines(mgPoint Position);
+	mgLinkedList<mgLineSegment> *BuildOccluderLines(mgPoint Position);
 public:
 	~mgRayTracer();
 
@@ -38,6 +32,8 @@ public:
 	// ---
 
 	mgPoint OccluderPoint(mgPoint Origin, mgVector Direction);
+
+	
 };
 
 #endif

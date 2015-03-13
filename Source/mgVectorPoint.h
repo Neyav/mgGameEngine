@@ -23,15 +23,15 @@ public:
 	double X;
 	double TransformedY;
 	double TransformedX;
-	float Magnitude;
+	double Magnitude;
 
-	void NormalizeVector(float MagnitudeOverride);
+	void NormalizeVector(double MagnitudeOverride);
 	void NormalizeVector(void);
 	void VectorFromCord(double Y1, double X1, double Y2, double X2);
 	void VectorFromPoints(mgPoint Start, mgPoint End);
 	void VectorFromRadians(double Radians);
 	void VectorFromDegrees(double Degrees);
-	void VectorStepCords(float VectorStep);
+	void VectorStepCords(double VectorStep);
 
 	mgVector();
 };
