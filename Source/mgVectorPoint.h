@@ -1,6 +1,8 @@
 #ifndef MGVECTORPOINTH
 #define MGVECTORPOINTH
 
+#define mgPI 3.14159265359
+
 struct mgPoint
 {
 	double Y;
@@ -27,11 +29,11 @@ public:
 
 	void NormalizeVector(double MagnitudeOverride);
 	void NormalizeVector(void);
-	void VectorFromCord(double Y1, double X1, double Y2, double X2);
+	void VectorFromCoord(double Y1, double X1, double Y2, double X2);
 	void VectorFromPoints(mgPoint Start, mgPoint End);
 	void VectorFromRadians(double Radians);
 	void VectorFromDegrees(double Degrees);
-	void VectorStepCords(double VectorStep);
+	void VectorStepCoords(double VectorStep);
 
 	mgVector();
 };

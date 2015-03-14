@@ -11,7 +11,7 @@ void mgLineSegment::ImportLine(mgPoint Origin, mgVector Direction, double Length
 	SegmentLength = Length;
 
 	Direction.NormalizeVector(1);
-	Direction.VectorStepCords(Length);
+	Direction.VectorStepCoords(Length);
 
 	SegmentEnd.Y = Origin.Y + Direction.TransformedY;
 	SegmentEnd.X = Origin.X + Direction.TransformedX;
@@ -28,6 +28,10 @@ void mgLineSegment::ImportLine(mgPoint LineStart, mgPoint LineEnd)
 	SegmentLength = DistanceBetweenPoints(SegmentStart, SegmentEnd);
 }
 
+// TODO: This code was copied and pasted from elsewhere because my attempts at line collision detection had failure cases. 
+//			This code doesn't appear to have any failure cases and I wanted to be sure before I wasted time on implementing it.
+//			so I just dropped it in. While it works, and works well, it is ugly as hell and uses weird variable declariations.
+//			I plan on cleaning it up and streamlining it into the class proper.
 // Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
 // intersect the intersection point may be stored in the floats i_x and i_y.
 char get_line_intersection(double p0_x, double p0_y, double p1_x, double p1_y,
@@ -57,11 +61,10 @@ char get_line_intersection(double p0_x, double p0_y, double p1_x, double p1_y,
 mgPoint mgLineSegment::InterceptionPoint(mgLineSegment *SecondLine, bool *ValidIntercept)
 {
 	double x, y;
-	
+	mgPoint InterceptionPoint;
+
 	char Interception = get_line_intersection(SegmentStart.X, SegmentStart.Y, SegmentEnd.X, SegmentEnd.Y, SecondLine->SegmentStart.X, SecondLine->SegmentStart.Y,
 		SecondLine->SegmentEnd.X, SecondLine->SegmentEnd.Y, &x, &y);
-
-	mgPoint InterceptionPoint;
 
 	InterceptionPoint.Y = y;
 	InterceptionPoint.X = x;
@@ -75,7 +78,7 @@ mgPoint mgLineSegment::InterceptionPoint(mgLineSegment *SecondLine, bool *ValidI
 }
 
 // Calculate the lines normal facing the position.
-mgVector mgLineSegment::SurfaceNormalFacingPosition(mgPoint Position)
+mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 {
 	mgPoint MiddleofLine;
 	mgVector Normal, PositionTowardsCenter;

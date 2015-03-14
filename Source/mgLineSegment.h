@@ -27,7 +27,7 @@ public:
 	void ImportLine(mgPoint Origin, mgVector Direction, double Length);
 	void ImportLine(mgPoint LineStart, mgPoint LineEnd);
 	mgPoint InterceptionPoint(mgLineSegment *SecondLine, bool *ValidIntercept);
-	mgVector SurfaceNormalFacingPosition(mgPoint Position);
+	mgVector NormalFacingPosition(mgPoint Position);
 };
 
 #endif

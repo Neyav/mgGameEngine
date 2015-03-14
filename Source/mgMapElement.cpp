@@ -79,5 +79,11 @@ mgMapElement::~mgMapElement()
 {
 	// Cleanup code for a map block.
 	if (BlockShape != NULL)
+	{
+		// The map element block is considered responsible for all the lines that belong to it.
+		// This flag makes sure the linked list cleans the lines up and frees their memory.
+		BlockShape->ExplicitPointerCleanup = true;
+
 		delete BlockShape;
+	}
 }

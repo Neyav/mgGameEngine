@@ -53,7 +53,7 @@ void mgVector::NormalizeVector(void)
 	TransformedX = X = X / Normalizer;
 }
 
-void mgVector::VectorFromCord(double Y1, double X1, double Y2, double X2)
+void mgVector::VectorFromCoord(double Y1, double X1, double Y2, double X2)
 {
 	// Set out vector to the difference between the two points
 	Y = Y2 - Y1;
@@ -65,7 +65,7 @@ void mgVector::VectorFromCord(double Y1, double X1, double Y2, double X2)
 
 void mgVector::VectorFromPoints(mgPoint Start, mgPoint End)
 {
-	VectorFromCord(Start.Y, Start.X, End.Y, End.X);
+	VectorFromCoord(Start.Y, Start.X, End.Y, End.X);
 }
 
 void mgVector::VectorFromRadians(double Radians)
@@ -79,13 +79,13 @@ void mgVector::VectorFromRadians(double Radians)
 
 void mgVector::VectorFromDegrees(double Degrees)
 {
-	double Radians = Degrees * (3.14159265359 / 180);
+	double Radians = Degrees * (mgPI / 180);
 
 	VectorFromRadians(Radians);
 }
 
 // -- Return the vector modified to represent "VectorStep" steps away from the center.
-void mgVector::VectorStepCords(double VectorStep)
+void mgVector::VectorStepCoords(double VectorStep)
 {
 	TransformedY = Y * (VectorStep);
 	TransformedX = X * (VectorStep);
