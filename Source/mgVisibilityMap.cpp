@@ -15,18 +15,16 @@
 // Returns true if the block is marked as visible in our list, false otherwise
 bool mgVisibilityMap::IsMarkedVisible(int CheckY, int CheckX)
 {
-	mgPoint *ListObject;
+	mgPoint ListObject;
 
-	VisibilityList.ResetIterator();
+	VisibilityList.ResetIterator();	
 
-	ListObject = VisibilityList.ReturnElement();
-
-	while (ListObject != NULL)
+	while (!VisibilityList.IteratorAtEnd())
 	{
-		if (ListObject->Y == CheckY && ListObject->X == CheckX)
-			return true; // The block is marked as visible
-
 		ListObject = VisibilityList.ReturnElement();
+
+		if (ListObject.Y == CheckY && ListObject.X == CheckX)
+			return true; // The block is marked as visible
 	}
 
 	return false; // It isn't marked in this list
@@ -57,20 +55,14 @@ int mgVisibilityMap::MappedItems(void)
 mgPoint mgVisibilityMap::SequentialObtainItem(void)
 {
 	mgPoint ReturnValues;
-	mgPoint *PositionReturned;
 
-	PositionReturned = VisibilityList.ReturnElement();
-
-	if (PositionReturned == NULL)
+	if (VisibilityList.IteratorAtEnd())
 	{
-		ReturnValues.Y = -1;
-		ReturnValues.X = -1;
-
-		return ReturnValues;
+		std::cout << "mgPoint mgVisibilityMap::SequentialObtainItem(void) -- Asked for object past end of list." << std::endl;
+		exit(-1);
 	}
 
-	ReturnValues.Y = PositionReturned->Y;
-	ReturnValues.X = PositionReturned->X;
+	ReturnValues = VisibilityList.ReturnElement();
 
 	return ReturnValues;
 }
@@ -110,7 +102,6 @@ void mgVisibilityMap::CalculateVisibility(int BlockY, int BlockX)
 	mgPoint CheckPoint; // HAH.... wait, yes, okay, lolololololol.. ahahaha... Okay, I'm calm.
 	mgPoint CheckPosition;
 	mgVector CheckDirection;
-	mgPoint *CheckedListItem;
 	mgRayTracer VisibilityTracer;
 
 	CheckPosition.Y = BlockY + 0.5;
@@ -131,12 +122,13 @@ void mgVisibilityMap::CalculateVisibility(int BlockY, int BlockX)
 
 		//AddVisiblePoint(round(CheckPoint.Y), round(CheckPoint.X));
 
-		CheckedListItem = VisibilityTracer.PositionsChecked.ReturnElement();
-
-		while (CheckedListItem != NULL)
+		while (!VisibilityTracer.PositionsChecked.IteratorAtEnd())
 		{
-			AddVisiblePoint(*CheckedListItem);
+			mgPoint CheckedListItem;
+
 			CheckedListItem = VisibilityTracer.PositionsChecked.ReturnElement();
+
+			AddVisiblePoint(CheckedListItem);
 		}
 	}
 }

@@ -40,9 +40,10 @@ public:
 	void AddElementReference(TemplateClass *ElementToAdd);
 	void ResetIterator(void);
 	void ClearList(void);
-	TemplateClass *ReturnElement(void);
+	TemplateClass ReturnElement(void);
 	TemplateClass *ReturnElementReference(void);
 	int NumberOfElements(void);
+	bool IteratorAtEnd(void);
 
 	mgLinkedList();
 	~mgLinkedList();
@@ -108,19 +109,24 @@ template <class TemplateClass> void mgLinkedList<TemplateClass>::ResetIterator(v
 	Iterator = LinkedList;
 }
 
-template <class TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::ReturnElement(void)
+template <class TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void)
 {
-	if (Iterator == NULL)
-		return NULL;
-	else
+	if (Iterator != NULL)
 	{
-		TemplateClass *CopyOfObject;
+		TemplateClass CopyOfObject;
 
-		CopyOfObject = new TemplateClass;
-
-		*CopyOfObject = *Iterator->Element;
+		CopyOfObject = *Iterator->Element;
 		Iterator = Iterator->Next;
 		return CopyOfObject;
+	}
+	else
+	{
+		// You should be checking for the end of the list if you are using this function. Exit hard and painfully because this error could crop up somewhere else
+		// in a more ambigious manner if we don't fix the problem now.
+
+		std::cout << "template <class TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void) -- Attempt to read past end of list." << std::endl;
+
+		exit(-1);
 	}
 }
 
@@ -143,6 +149,14 @@ template <class TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::Retur
 template <class TemplateClass> int mgLinkedList<TemplateClass>::NumberOfElements(void)
 {
 	return Elements;
+}
+
+template <class TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEnd(void)
+{
+	if (Iterator == NULL)
+		return true;
+
+	return false;
 }
 
 template <class TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
@@ -184,5 +198,4 @@ template <class TemplateClass> mgLinkedList<TemplateClass>::~mgLinkedList()
 		delete LastEntry;
 	}
 }
-
 #endif
