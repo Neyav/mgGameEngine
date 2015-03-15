@@ -27,6 +27,10 @@ public:
 	double TransformedX;
 	double Magnitude;
 
+	// Operator overloading
+	double operator*(const mgVector& other); // Returns the dot product
+
+	// Class functions
 	void NormalizeVector(double MagnitudeOverride);
 	void NormalizeVector(void);
 	void VectorFromCoord(double Y1, double X1, double Y2, double X2);

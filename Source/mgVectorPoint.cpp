@@ -15,6 +15,16 @@ double DistanceBetweenPoints(mgPoint Start, mgPoint End)
 // = mgVector C++ class                 =
 // =------------------------------------=
 
+// produces the dot product of two vectors.
+double mgVector::operator*(const mgVector& other)
+{
+	double dotproduct;
+
+	dotproduct = (X * other.X) + (Y * other.Y);
+
+	return dotproduct;
+}
+
 void mgVector::NormalizeVector(double MagnitudeOverride)
 {
 	double Ypositive, Xpositive, Normalizer;

@@ -89,9 +89,18 @@ mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 
 	// Calculate the vector from Position pointing at the center of the line.
 	PositionTowardsCenter.VectorFromPoints(Position, MiddleofLine);
-	std::cout << "Middle: " << MiddleofLine.Y << ", " << MiddleofLine.X << std::endl;
 
-	std::cout << "Vector Towards Middle from [" << Position.Y << ", " << Position.X << "] is [" << PositionTowardsCenter.Y << ", " << PositionTowardsCenter.X << "]" << std::endl;
+	// Calculate the normal
+	Normal.Y = (SegmentEnd.X - SegmentStart.X) * -1;
+	Normal.X = (SegmentEnd.Y - SegmentStart.Y);
+
+	if (Normal * PositionTowardsCenter > 0) // They are facing the same direction, this isn't our normal.
+	{
+		Normal.Y *= -1;
+		Normal.X *= -1;
+	}
+
+	Normal.NormalizeVector();
 
 	return Normal;
 }
