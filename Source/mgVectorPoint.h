@@ -29,6 +29,9 @@ public:
 
 	// Operator overloading
 	double operator*(const mgVector& other); // Returns the dot product
+	mgVector operator*(const double& scalar); // multiplies it by a scalar
+	mgVector operator+(const mgVector& other); // addition
+	mgVector operator-(const mgVector& other); // subtraction
 
 	// Class functions
 	void NormalizeVector(double MagnitudeOverride);

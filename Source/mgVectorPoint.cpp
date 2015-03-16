@@ -25,6 +25,40 @@ double mgVector::operator*(const mgVector& other)
 	return dotproduct;
 }
 
+// produces a product vector by modifying a vector by a scalar value
+mgVector mgVector::operator*(const double& scalar)
+{
+	mgVector product;
+
+	product.Y = Y * scalar;
+	product.X = X * scalar;
+
+	return product;
+}
+
+// produces a product of two vectors added together
+mgVector mgVector::operator+(const mgVector& other)
+{
+	mgVector product;
+
+	product.Y = Y + other.Y;
+	product.X = X + other.X;
+
+	return product;
+}
+
+// produces a product of two vectors subtracted from each other.
+mgVector mgVector::operator-(const mgVector& other)
+{
+	mgVector product;
+
+	product.Y = Y - other.Y;
+	product.X = X - other.X;
+
+	return product;
+}
+
+
 void mgVector::NormalizeVector(double MagnitudeOverride)
 {
 	double Ypositive, Xpositive, Normalizer;
