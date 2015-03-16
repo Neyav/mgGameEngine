@@ -14,8 +14,5 @@ public:
 
 	mgPoint Position;
 	mgVector Momentum;
-
-	double ySize;
-	double xSize;
 };
 #endif

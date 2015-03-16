@@ -14,14 +14,14 @@
 	-Chris Laverdure, arrogant engineer of re-inventing the wheel.
 */
 
-template <typename TemplateStruct>
+template <typename TemplateClass>
 struct mgLinkedListElement
 {
-	TemplateStruct *Element;
+	TemplateClass *Element;
 	bool ElementPassedAsPointer;
 
-	mgLinkedListElement<TemplateStruct> *Next;
-	mgLinkedListElement<TemplateStruct> *Previous;
+	mgLinkedListElement<TemplateClass> *Next;
+	mgLinkedListElement<TemplateClass> *Previous;
 };
 
 template <class TemplateClass> class mgLinkedList
@@ -44,6 +44,8 @@ public:
 	TemplateClass *ReturnElementReference(void);
 	int NumberOfElements(void);
 	bool IteratorAtEnd(void);
+	mgLinkedListElement<TemplateClass> *ReturnIterator(void);
+	mgLinkedListElement<TemplateClass> *ReturnHeadIterator(void);
 
 	mgLinkedList();
 	~mgLinkedList();
@@ -157,6 +159,16 @@ template <class TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEnd(v
 		return true;
 
 	return false;
+}
+
+template <class TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnIterator(void)
+{
+	return Iterator;
+}
+
+template <class TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnHeadIterator(void)
+{
+	return LinkedList;
 }
 
 template <class TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
