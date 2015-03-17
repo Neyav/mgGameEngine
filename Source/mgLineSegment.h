@@ -23,6 +23,8 @@ public:
 	// Otherworldly references to the line segment
 	mgMapElement *LineSegmentBlock = NULL;
 	mgMapObject *LineSegmentOwner = NULL;
+	bool ObstructsMovement = true;
+	bool ObstructsVision = true;
 
 	void ImportLine(mgPoint Origin, mgVector Direction, double Length);
 	void ImportLine(mgPoint LineStart, mgPoint LineEnd);

@@ -99,6 +99,12 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 			mgPoint TestPoint;
 			bool Intersection;
 
+			if (!LineReference->ObstructsVision) // This line doesn't block vision, ignore it for our raytrace.
+			{
+				LineReference = LineSegmentList->ReturnElementReference();
+				continue;
+			}
+
 			TestPoint = TestLine.InterceptionPoint(LineReference, &Intersection);
 
 			if (Intersection)

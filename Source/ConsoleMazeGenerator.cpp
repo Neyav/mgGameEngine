@@ -11,6 +11,8 @@
 #include "mgVisibilityMap.h"
 #include "mgLineSegment.h"
 #include "mgMapElement.h"
+#include "mgMapObject.h"
+#include "mgMapObjectPlayer.h"
 
 std::ofstream Outputfile("Maze.txt");
 std::ofstream HTMLOutput("Maze.html");
