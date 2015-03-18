@@ -6,6 +6,8 @@
 #include "mgLinkedList.h"
 #include "mgLineSegment.h"
 
+#define MGPLAYERSIZE 0.2 // Size of our player object.
+
 // =------------------------------------=
 // = mgMapObjectPlayer C++ class        =
 // =------------------------------------=
@@ -14,7 +16,7 @@
 class mgMapObjectPlayer : public mgMapObject
 {
 public:
-	double ObjectSize = 0.2;
+	double ObjectSize = MGPLAYERSIZE;
 
 	mgLinkedList<mgLineSegment> *ObjectGeometry(void);
 };

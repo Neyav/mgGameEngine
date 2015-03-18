@@ -145,6 +145,38 @@ int _tmain(int argc, _TCHAR* argv[])
 	mgMapDataHandler *MazeMap, *MazeMapHoles;
 	int MazeSizeY, MazeSizeX;
 
+	// This block was simply used to test that map objects were working the way they were supposed to with translations.
+	/*mgMapObject *Object;
+	mgMapObjectPlayer Player;
+	mgLinkedList<mgLineSegment> *SegmentList;
+	mgLineSegment *Ref;
+
+	Object = &Player;
+
+	SegmentList = Object->ObjectGeometry();
+
+	Ref = SegmentList->ReturnElementReference();
+	while (Ref != NULL)
+	{
+		std::cout << "[" << Ref->SegmentStart.Y << ", " << Ref->SegmentStart.X << "] -> [" << Ref->SegmentEnd.Y << ", " << Ref->SegmentEnd.X << "]" << std::endl;
+
+		Ref = SegmentList->ReturnElementReference();
+	}
+
+	Player.Position.Y = 5;
+	Player.Position.X = 3;
+
+	SegmentList = Object->ObjectGeometry();
+
+	Ref = SegmentList->ReturnElementReference();
+	while (Ref != NULL)
+	{
+		std::cout << "[" << Ref->SegmentStart.Y << ", " << Ref->SegmentStart.X << "] -> [" << Ref->SegmentEnd.Y << ", " << Ref->SegmentEnd.X << "]" << std::endl;
+
+		Ref = SegmentList->ReturnElementReference();
+	}*/
+
+
 	std::cout << "MazeGenerator with Solution: [Uses mgMapEngine designed for a 3D Maze" << std::endl;
 	std::cout << "                           : solving game]" << std::endl;
 	std::cout << "                           : This program is a testing ground for it." << std::endl;
