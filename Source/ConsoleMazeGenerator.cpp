@@ -176,7 +176,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		Ref = SegmentList->ReturnElementReference();
 	}*/
 
-
 	std::cout << "MazeGenerator with Solution: [Uses mgMapEngine designed for a 3D Maze" << std::endl;
 	std::cout << "                           : solving game]" << std::endl;
 	std::cout << "                           : This program is a testing ground for it." << std::endl;

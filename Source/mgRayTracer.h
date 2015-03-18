@@ -33,6 +33,7 @@ public:
 
 	mgPoint OccluderPoint(mgPoint Origin, mgVector Direction);
 
+	// Essentially a rewrite of the raytracing code. OccluderPoint above is going to be depreciated in the near future.
 	
 };
 

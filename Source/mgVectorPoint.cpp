@@ -33,6 +33,8 @@ mgVector mgVector::operator*(const double& scalar)
 	product.Y = Y * scalar;
 	product.X = X * scalar;
 
+	product.CalculateMagnitude();
+
 	return product;
 }
 
@@ -44,6 +46,8 @@ mgVector mgVector::operator+(const mgVector& other)
 	product.Y = Y + other.Y;
 	product.X = X + other.X;
 
+	product.CalculateMagnitude();
+
 	return product;
 }
 
@@ -54,6 +58,8 @@ mgVector mgVector::operator-(const mgVector& other)
 
 	product.Y = Y - other.Y;
 	product.X = X - other.X;
+
+	product.CalculateMagnitude();
 
 	return product;
 }
@@ -97,6 +103,23 @@ void mgVector::NormalizeVector(void)
 	TransformedX = X = X / Normalizer;
 }
 
+void mgVector::CalculateMagnitude(void)
+{
+	double PosX, PosY;
+
+	if (X < 0)
+		PosX = X * -1;
+	else
+		PosX = X;
+
+	if (Y < 0)
+		PosY = Y * -1;
+	else
+		PosY = Y;
+
+	Magnitude = PosX + PosY;
+}
+
 void mgVector::VectorFromCoord(double Y1, double X1, double Y2, double X2)
 {
 	// Set out vector to the difference between the two points
@@ -104,7 +127,10 @@ void mgVector::VectorFromCoord(double Y1, double X1, double Y2, double X2)
 	X = X2 - X1;
 
 	// Normalize it.
-	NormalizeVector();
+	if (AutoNormalize)
+		NormalizeVector();
+	else
+		CalculateMagnitude();
 }
 
 void mgVector::VectorFromPoints(mgPoint Start, mgPoint End)
@@ -118,7 +144,10 @@ void mgVector::VectorFromRadians(double Radians)
 	Y = sin(Radians);
 
 	// Normalize it
-	NormalizeVector();
+	if (AutoNormalize)
+		NormalizeVector();
+	else
+		CalculateMagnitude();
 }
 
 void mgVector::VectorFromDegrees(double Degrees)
