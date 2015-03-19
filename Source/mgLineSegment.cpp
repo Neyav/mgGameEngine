@@ -77,27 +77,42 @@ mgPoint mgLineSegment::InterceptionPoint(mgLineSegment *SecondLine, bool *ValidI
 	return InterceptionPoint;
 }
 
-// Calculate the lines normal facing the position.
+// Calculate the lines normal facing the position unless the line has a predetermined facing, in which case that facing is used.
 mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 {
 	mgPoint MiddleofLine;
 	mgVector Normal, PositionTowardsCenter;
 
-	// Calculate the middle of our line
-	MiddleofLine.Y = (SegmentEnd.Y - SegmentStart.Y) / 2 + SegmentStart.Y;
-	MiddleofLine.X = (SegmentEnd.X - SegmentStart.X) / 2 + SegmentStart.X;
-
-	// Calculate the vector from Position pointing at the center of the line.
-	PositionTowardsCenter.VectorFromPoints(Position, MiddleofLine);
-
-	// Calculate the normal
-	Normal.Y = (SegmentEnd.X - SegmentStart.X) * -1;
-	Normal.X = (SegmentEnd.Y - SegmentStart.Y);
-
-	if (Normal * PositionTowardsCenter > 0) // They are facing the same direction, this isn't our normal.
+	// Line facing isn't defined, calculate the normal manually using the point position to determine orientation
+	// Organized from most likely to least likely. ( At least in my case )
+	if (Facing == LINEFACE_RIGHT)
 	{
-		Normal.Y *= -1;
-		Normal.X *= -1;
+		Normal.Y = (SegmentEnd.X - SegmentStart.X) * -1;
+		Normal.X = (SegmentEnd.Y - SegmentStart.Y);
+	}
+	else if (Facing == LINEFACE_UNDEFINED)
+	{
+		// Calculate the middle of our line
+		MiddleofLine.Y = (SegmentEnd.Y - SegmentStart.Y) / 2 + SegmentStart.Y;
+		MiddleofLine.X = (SegmentEnd.X - SegmentStart.X) / 2 + SegmentStart.X;
+
+		// Calculate the vector from Position pointing at the center of the line.
+		PositionTowardsCenter.VectorFromPoints(Position, MiddleofLine);
+
+		// Calculate the normal
+		Normal.Y = (SegmentEnd.X - SegmentStart.X) * -1;
+		Normal.X = (SegmentEnd.Y - SegmentStart.Y);
+
+		if (Normal * PositionTowardsCenter > 0) // They are facing the same direction, this isn't our normal.
+		{
+			Normal.Y *= -1;
+			Normal.X *= -1;
+		}
+	}
+	else
+	{	// If none of the rest apply return the left facing.
+		Normal.Y = (SegmentEnd.X - SegmentStart.X);
+		Normal.X = (SegmentEnd.Y - SegmentStart.Y) * -1;
 	}
 
 	Normal.NormalizeVector();

@@ -29,6 +29,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->ImportLine(LineStart, LineEnd);
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_TOP;
+		LineSegmentReference->Facing = LINEFACE_RIGHT;
 		ObjectShape->AddElementReference(LineSegmentReference);
 
 		// 0, 1 -> 1, 1
@@ -38,6 +39,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->ImportLine(LineStart, LineEnd);
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_RIGHTSIDE;
+		LineSegmentReference->Facing = LINEFACE_RIGHT;
 		ObjectShape->AddElementReference(LineSegmentReference);
 
 		// 1, 1 -> 1, 0
@@ -47,6 +49,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->ImportLine(LineStart, LineEnd);
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_BOTTOM;
+		LineSegmentReference->Facing = LINEFACE_RIGHT;
 		ObjectShape->AddElementReference(LineSegmentReference);
 
 		// 1, 0 -> 0, 0
@@ -56,6 +59,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->ImportLine(LineStart, LineEnd);
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_LEFTSIDE;
+		LineSegmentReference->Facing = LINEFACE_RIGHT;
 		ObjectShape->AddElementReference(LineSegmentReference);
 	}
 	else if (GeoPosition.Y != Position.Y || GeoPosition.X != Position.X || GeoSize != ObjectSize)

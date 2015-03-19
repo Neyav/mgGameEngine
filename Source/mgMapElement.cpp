@@ -28,6 +28,7 @@ void mgMapElement::GenerateBlockGeometry(void)
 		End.X = 1 + Position.X;
 		ShapeLine->LineSegmentBlock = this;
 		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->Facing = LINEFACE_RIGHT;
 		ShapeLine->ImportLine(Start, End);
 		BlockShape->AddElementReference(ShapeLine);
 
@@ -37,6 +38,7 @@ void mgMapElement::GenerateBlockGeometry(void)
 		End.Y++;
 		ShapeLine->LineSegmentBlock = this;
 		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->Facing = LINEFACE_RIGHT;
 		ShapeLine->ImportLine(Start, End);
 		BlockShape->AddElementReference(ShapeLine);
 
@@ -46,6 +48,7 @@ void mgMapElement::GenerateBlockGeometry(void)
 		End.X--;
 		ShapeLine->LineSegmentBlock = this;
 		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->Facing = LINEFACE_RIGHT;
 		ShapeLine->ImportLine(Start, End);
 		BlockShape->AddElementReference(ShapeLine);
 
@@ -55,6 +58,7 @@ void mgMapElement::GenerateBlockGeometry(void)
 		End.Y--;
 		ShapeLine->LineSegmentBlock = this;
 		ShapeLine->LineSegmentOwner = NULL;
+		ShapeLine->Facing = LINEFACE_RIGHT;
 		ShapeLine->ImportLine(Start, End);
 		BlockShape->AddElementReference(ShapeLine);
 	}
