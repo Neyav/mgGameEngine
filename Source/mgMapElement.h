@@ -18,6 +18,8 @@ public:
 	char BlockType;
 	mgPoint Position;
 
+	void operator=(const mgMapElement& other);
+
 	void GenerateBlockGeometry(void);
 	mgLinkedList<mgLineSegment> *BlockGeometry(void);
 

@@ -55,8 +55,7 @@ void mgMapDataHandler::CloneMapIntoHost(mgMapDataHandler *MapToClone)
 			From = MapToClone->ReturnMapBlockReference(TempY, TempX);
 			To = ReturnMapBlockReference(TempY, TempX);
 
-			// TODO: Replace with a copy overload on the class.
-			To->BlockType = From->BlockType;
+			*To = *From; // While correct, looks hilarious. Reads as such: Butthole To = Butthole From. The poop goes back in again!
 		}
 	}
 }
@@ -109,7 +108,6 @@ bool mgMapDataHandler::WillObjectFit(double PosY, double PosX, float ObjectSize)
 
 mgMapElement *mgMapDataHandler::ReturnMapBlockReference(int PosY, int PosX)
 {
-	mgMapElement *PointerToElement;
 	int UnifiedPosition = (PosY * MapSizeX) + PosX;
 
 	if (!PositionBoundsCheck(PosY, PosX))

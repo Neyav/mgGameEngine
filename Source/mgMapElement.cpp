@@ -72,6 +72,13 @@ mgLinkedList<mgLineSegment> *mgMapElement::BlockGeometry(void)
 	return BlockShape;
 }
 
+// As new elements are added to the map element be sure to represent them here if you want them to persist through block copying.
+void mgMapElement::operator=(const mgMapElement& other)
+{
+	BlockType = other.BlockType;
+	Position = other.Position;
+}
+
 mgMapElement::mgMapElement()
 {
 	// Initalization code for a map element.
