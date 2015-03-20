@@ -2,6 +2,12 @@
 
 #include "mgVectorPoint.h"
 
+// The square roots in this source file are a point of much contention for me. I keep reading and hearing that square roots are expensive in terms of
+// processing time, and I would like, as much as possible, to limit them or eliminate them. Other people just use the results of Y^2 + X^2 without square rooting
+// them for the purpose of comparing lengths and distances but I use them for more than that here, and they get used often. I would like an alternative that
+// is less expensive but produces the same results for calculating the distance between two points. I suspect that if such a thing existed, it would have already been
+// discovered but my mind is set to task regardless. I might just cave and accept square roots as a part of my life for this project.
+
 double DistanceBetweenPoints(mgPoint Start, mgPoint End)
 {
 	double distance;
@@ -74,11 +80,11 @@ void mgVector::NormalizeVector(double MagnitudeOverride)
 
 	// For the purpose of calculating the normalizer these values cannot be negative. The normalizer is always positive.
 	if (Ypositive < 0)
-		Ypositive *= -1;
+		Ypositive = -Ypositive;
 	if (Xpositive < 0)
-		Xpositive *= -1;
+		Xpositive = -Xpositive;
 
-	Normalizer = (Ypositive + Xpositive) / MagnitudeOverride;
+	Normalizer = sqrt(Ypositive * Ypositive + Xpositive * Xpositive) / MagnitudeOverride;
 
 	TransformedY = Y = Y / Normalizer;
 	TransformedX = X = X / Normalizer;
@@ -93,11 +99,11 @@ void mgVector::NormalizeVector(void)
 
 	// For the purpose of calculating the normalizer these values cannot be negative. The normalizer is always positive.
 	if (Ypositive < 0)
-		Ypositive *= -1;
+		Ypositive = -Ypositive;
 	if (Xpositive < 0)
-		Xpositive *= -1;
+		Xpositive = -Xpositive;
 
-	Normalizer = (Ypositive + Xpositive) / Magnitude;
+	Normalizer = sqrt(Ypositive * Ypositive + Xpositive * Xpositive) / Magnitude;
 
 	TransformedY = Y = Y / Normalizer;
 	TransformedX = X = X / Normalizer;
@@ -107,17 +113,16 @@ void mgVector::CalculateMagnitude(void)
 {
 	double PosX, PosY;
 
-	if (X < 0)
-		PosX = X * -1;
-	else
-		PosX = X;
+	PosX = X;
+	PosY = Y;
 
-	if (Y < 0)
-		PosY = Y * -1;
-	else
-		PosY = Y;
+	if (PosX < 0)
+		PosX = -PosX;
 
-	Magnitude = PosX + PosY;
+	if (PosY < 0)
+		PosY = -PosY;
+
+	Magnitude = sqrt((PosX * PosX) + (PosY * PosY));
 }
 
 void mgVector::VectorFromCoord(double Y1, double X1, double Y2, double X2)
