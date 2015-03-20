@@ -149,10 +149,13 @@ void mgVector::VectorFromRadians(double Radians)
 	Y = sin(Radians);
 
 	// Normalize it
-	if (AutoNormalize)
-		NormalizeVector();
-	else
-		CalculateMagnitude();
+	if (Magnitude != 1)
+	{
+		if (AutoNormalize)
+			NormalizeVector();
+		else
+			Magnitude = 1;
+	}
 }
 
 void mgVector::VectorFromDegrees(double Degrees)
