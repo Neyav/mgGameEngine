@@ -13,6 +13,7 @@
 #include "mgMapElement.h"
 #include "mgMapObject.h"
 #include "mgMapObjectPlayer.h"
+#include "mgMathFunc.h"
 
 std::ofstream Outputfile("Maze.txt");
 std::ofstream HTMLOutput("Maze.html");
@@ -175,6 +176,11 @@ int main(int argc, char* argv[])
 
 		Ref = SegmentList->ReturnElementReference();
 	}*/
+
+#ifdef USEMGMATHFUNCH
+	mgSineStartup(4);
+	mgCoSineStartup(4);
+#endif
 
 	std::cout << "MazeGenerator with Solution: [Uses mgMapEngine designed for a 3D Maze" << std::endl;
 	std::cout << "                           : solving game]" << std::endl;

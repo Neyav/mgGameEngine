@@ -2,6 +2,8 @@
 
 #include "mgVectorPoint.h"
 
+#include "mgMathFunc.h"
+
 // The square roots in this source file are a point of much contention for me. I keep reading and hearing that square roots are expensive in terms of
 // processing time, and I would like, as much as possible, to limit them or eliminate them. Other people just use the results of Y^2 + X^2 without square rooting
 // them for the purpose of comparing lengths and distances but I use them for more than that here, and they get used often. I would like an alternative that
@@ -154,15 +156,29 @@ void mgVector::VectorFromRadians(double Radians)
 		if (AutoNormalize)
 			NormalizeVector();
 		else
-			Magnitude = 1;
+			CalculateMagnitude(); // True embelishment of chaos! This will only get hit here on a grave computing error, but I EMBRACE IT
+								  // by accepting the reality that there is not one computer God, but MANY. I WANT MY 72 VIRGIN INTEGERS!
 	}
 }
 
 void mgVector::VectorFromDegrees(double Degrees)
 {
+#ifndef USEMGMATHFUNCH
 	double Radians = Degrees * (mgPI / 180);
 
 	VectorFromRadians(Radians);
+#else
+	X = mgCoSineDeg(Degrees);
+	Y = mgSineDeg(Degrees);
+
+	if (Magnitude != 1)
+	{
+		if (AutoNormalize)
+			NormalizeVector();
+		else
+			CalculateMagnitude(); 
+	}
+#endif
 }
 
 // -- Return the vector modified to represent "VectorStep" steps away from the center.
