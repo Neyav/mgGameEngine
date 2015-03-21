@@ -22,7 +22,7 @@ public:
 	void InitalizeMapData(int SizeY, int SizeX);
 	void CloneMapIntoHost(mgMapDataHandler *MapToClone);
 	bool IsBlockClippable(int PosY, int PosX);
-	bool mgMapDataHandler::WillObjectFit(double PosY, double PosX, float ObjectSize);
+	bool WillObjectFit(double PosY, double PosX, float ObjectSize);
 	mgMapElement *ReturnMapBlockReference(int PosY, int PosX);
 	//mgMapElement ReturnMapBlock(int PosY, int PosX);
 	//void SetMapBlock(int PosY, int PosX, mgMapElement MapBlock);

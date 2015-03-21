@@ -1,7 +1,7 @@
-#include "stdafx.h"
 #include <time.h>
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 #include "mgVectorPoint.h"
 #include "mgMapDataHandler.h"
@@ -140,7 +140,7 @@ void ClosePresentationOutputs(void)
 	// We should be closing data streams here.
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	mgMapDataHandler *MazeMap, *MazeMapHoles;
 	int MazeSizeY, MazeSizeX;

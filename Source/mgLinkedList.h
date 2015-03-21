@@ -2,6 +2,7 @@
 #define MGLINKEDLISTH
 
 #include <stdlib.h>
+#include <iostream>
 
 /*
 	Now, why in the name of sweet little baby Jesus would I go ahead and use C++ features like objects and templates
