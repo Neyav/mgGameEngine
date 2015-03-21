@@ -12,4 +12,7 @@ double mgSineDeg(double Degrees);
 void mgCoSineStartup(unsigned int precision);
 double mgCoSineDeg(double Degrees);
 
+void mgATanStartup(unsigned int precision);
+//double mgATanDeg(double parameter);
+
 #endif

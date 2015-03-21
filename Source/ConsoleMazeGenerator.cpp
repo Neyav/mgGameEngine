@@ -180,6 +180,7 @@ int main(int argc, char* argv[])
 #ifdef USEMGMATHFUNCH
 	mgSineStartup(4);
 	mgCoSineStartup(4);
+	mgATanStartup(7);
 #endif
 
 	std::cout << "MazeGenerator with Solution: [Uses mgMapEngine designed for a 3D Maze" << std::endl;
