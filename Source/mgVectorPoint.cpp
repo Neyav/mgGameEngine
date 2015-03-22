@@ -158,6 +158,8 @@ void mgVector::VectorFromRadians(double Radians)
 		else
 			CalculateMagnitude(); // True embelishment of chaos! This will only get hit here on a grave computing error, but I EMBRACE IT
 								  // by accepting the reality that there is not one computer God, but MANY. I WANT MY 72 VIRGIN INTEGERS!
+								  // EDIT: Was I fucking drunk? Setting Magnitude to a value that isn't one, and then disabiling AutoNormalize before
+								  // calling this function would trigger this situation. Good thing I "embelished chaos". Fuck me. -- Chris.
 	}
 }
 

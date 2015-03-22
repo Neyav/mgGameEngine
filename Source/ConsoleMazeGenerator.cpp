@@ -14,6 +14,7 @@
 #include "mgMapObject.h"
 #include "mgMapObjectPlayer.h"
 #include "mgMathFunc.h"
+#include "mgStressTest.h"
 
 std::ofstream Outputfile("Maze.txt");
 std::ofstream HTMLOutput("Maze.html");
