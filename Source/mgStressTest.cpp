@@ -1,5 +1,6 @@
 #include <time.h>
 #include <iostream>
+#include <math.h>
 
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
@@ -8,7 +9,7 @@
 
 void mgStressTest::TEST_mgMapDataHandler(void)
 {
-	
+
 }
 
 void mgStressTest::TEST_mgVector(void)

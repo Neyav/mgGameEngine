@@ -25,7 +25,7 @@ public:
 	double X;
 	double TransformedY;
 	double TransformedX;
-	double Magnitude;
+	double Magnitude = 1; // Default magnitude is 1 for all vectors
 
 	bool AutoNormalize = true; // Set to true when setting a vector is intended to normalize it to 1.
 								// If false, the Magnitude will instead be overwritten.
@@ -45,7 +45,5 @@ public:
 	void VectorFromRadians(double Radians);
 	void VectorFromDegrees(double Degrees);
 	void VectorStepCoords(double VectorStep);
-
-	mgVector();
 };
 #endif
