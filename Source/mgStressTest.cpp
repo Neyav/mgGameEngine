@@ -7,6 +7,34 @@
 
 #include "mgStressTest.h"
 
+void mgStressTimer::StartTimer(void)
+{
+	TimerComplete = false;
+	TimerRunning = true;
+
+	Start = clock();
+}
+
+void mgStressTimer::StopTimer(void)
+{
+	if (!TimerRunning)
+		return; // There is no timer, call start before calling stop.
+
+	End = clock();
+	TimerRunning = false;
+	TimerComplete = true;
+}
+
+void mgStressTimer::ConsoleOutputResults(void)
+{
+	if (!TimerComplete)
+	{
+		std::cout << "Timer[" << Description.c_str() << "] results paged with no valid results." << std::endl;
+		return;
+	}
+	std::cout << "Timer[" << Description.c_str() << "] -> " << ((double)End - (double)Start) / CLOCKS_PER_SEC << " Seconds elapsed." << std::endl;
+}
+
 void mgStressTest::TEST_mgMapDataHandler(void)
 {
 
@@ -16,20 +44,20 @@ void mgStressTest::TEST_mgVector(void)
 {
 	mgVector testvector;
 
-	std::cout << "void mgStressTest::TEST_mgVector(void)" << std::endl;
+	std::cout << "[---void mgStressTest::TEST_mgVector(void)---]" << std::endl;
 
-	std::cout << "void mgVector::VectorFromDegrees(double Degrees) * 10mil -> ";
+	Timer.Description = ".VectorFromDegrees(random) x 10mil";
 
-	Start = clock();
+	Timer.StartTimer();
 
 	for (int x = 0; x < 10000000; x++)
 	{
 		testvector.VectorFromDegrees(rand() % 360);
 	}
 
-	End = clock();
+	Timer.StopTimer();
 
-	std::cout << ((double)End - (double)Start) / CLOCKS_PER_SEC << " Seconds." << std::endl;
+	Timer.ConsoleOutputResults();
 
 }
 

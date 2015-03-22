@@ -146,36 +146,14 @@ int main(int argc, char* argv[])
 	mgMapDataHandler *MazeMap, *MazeMapHoles;
 	int MazeSizeY, MazeSizeX;
 
-	// This block was simply used to test that map objects were working the way they were supposed to with translations.
-	/*mgMapObject *Object;
-	mgMapObjectPlayer Player;
-	mgLinkedList<mgLineSegment> *SegmentList;
-	mgLineSegment *Ref;
+	mgStressTimer Timer_Program, Timer_Generate, Timer_PathFind, Timer_vismap, Timer_render;
+	mgStressTest test;
 
-	Object = &Player;
-
-	SegmentList = Object->ObjectGeometry();
-
-	Ref = SegmentList->ReturnElementReference();
-	while (Ref != NULL)
-	{
-		std::cout << "[" << Ref->SegmentStart.Y << ", " << Ref->SegmentStart.X << "] -> [" << Ref->SegmentEnd.Y << ", " << Ref->SegmentEnd.X << "]" << std::endl;
-
-		Ref = SegmentList->ReturnElementReference();
-	}
-
-	Player.Position.Y = 5;
-	Player.Position.X = 3;
-
-	SegmentList = Object->ObjectGeometry();
-
-	Ref = SegmentList->ReturnElementReference();
-	while (Ref != NULL)
-	{
-		std::cout << "[" << Ref->SegmentStart.Y << ", " << Ref->SegmentStart.X << "] -> [" << Ref->SegmentEnd.Y << ", " << Ref->SegmentEnd.X << "]" << std::endl;
-
-		Ref = SegmentList->ReturnElementReference();
-	}*/
+	Timer_Program.Description = "Program run";
+	Timer_Generate.Description = "mgRandomMazeGenerator";
+	Timer_PathFind.Description = "mgPathSolutionGenerator";
+	Timer_vismap.Description = "mgVisibilityMap";
+	Timer_render.Description = "HTML 3D Viewport X 5";
 
 	std::cout << "MazeGenerator with Solution: [Uses mgMapEngine designed for a 3D Maze" << std::endl;
 	std::cout << "                           : solving game]" << std::endl;
@@ -186,6 +164,8 @@ int main(int argc, char* argv[])
 	std::cin >> MazeSizeY;
 	std::cout << "         : X = ";
 	std::cin >> MazeSizeX;
+
+	Timer_Program.StartTimer();
 
 	MazeMap = new mgMapDataHandler;
 	MazeMap->InitalizeMapData(MazeSizeY, MazeSizeX); // Initalize a maze.
@@ -202,12 +182,17 @@ int main(int argc, char* argv[])
 
 	std::cout << "Generating Random Maze...";
 
+	Timer_Generate.StartTimer();
+
 	// Generate the maze block by block, starting at the first block in 1,1
 	mgRandomMazeGenerator *MazeGenerator;
 	MazeGenerator = new mgRandomMazeGenerator;
 	MazeGenerator->Map = MazeMap;
 	MazeGenerator->GenerateMaze(1, 1);
 	delete MazeGenerator;
+
+	Timer_Generate.StopTimer();
+
 	mgMapElement *EndBlock;
 	EndBlock = MazeMap->ReturnMapBlockReference(MazeMap->mapsizeY() - 2, MazeMap->mapsizeX() - 2);
 	EndBlock->BlockType = MAP_BLOCKFLOOR;
@@ -239,11 +224,15 @@ int main(int argc, char* argv[])
 
 	std::cout << "Done." << std::endl;
 
+	Timer_Generate.ConsoleOutputResults();
+
 	// Present the maps after generating them...
 	DisplayMap(1, 1, NULL, MazeMap, NULL);
 	DisplayMap(1, 1, NULL, MazeMapHoles, NULL);
 
 	std::cout << "Generating shortest route path...";
+
+	Timer_PathFind.StartTimer();
 
 	mgPathSolutionGenerator *PathSolution;
 	PathSolution = new mgPathSolutionGenerator;
@@ -255,7 +244,11 @@ int main(int argc, char* argv[])
 		std::cout << ".";
 	}
 
+	Timer_PathFind.StopTimer();
+
 	std::cout << "Done." << std::endl;
+
+	Timer_PathFind.ConsoleOutputResults();
 
 	// Display the normal map after generating it
 	DisplayMap(1, 1, NULL, MazeMap, PathSolution); // <-- Outputs map solution to TXT and HTML presentation formats
@@ -282,12 +275,18 @@ int main(int argc, char* argv[])
 	VisY = 15;
 	VisX = 15;
 
+	Timer_vismap.StartTimer();
+
 	mgVisibilityMap *testVisibilityBlock;
 	testVisibilityBlock = new mgVisibilityMap;
 
 	testVisibilityBlock->LinkToMapHandler(MazeMap);
 	testVisibilityBlock->CalculateVisibility(VisY, VisX);
 	testVisibilityBlock->CalculateAdjacentVisibility(VisY, VisX); // Calculates Visibility for adjacent blocks as well
+
+	Timer_vismap.StopTimer();
+
+	Timer_vismap.ConsoleOutputResults();
 
 	DisplayMap(VisY, VisX, testVisibilityBlock, MazeMap, NULL);
 
@@ -301,6 +300,8 @@ int main(int argc, char* argv[])
 	DisplayMap(VisY, VisX, testHoleVisibilityBlock, MazeMapHoles, NULL);
 
 	// Generate first person perspective viewing
+
+	Timer_render.StartTimer();
 
 	mgPoint RenderPoint;
 	RenderPoint.Y = 1.5;
@@ -316,7 +317,15 @@ int main(int argc, char* argv[])
 	RenderPosition(RenderPoint, 36, MazeMap, MazeSizeX, MazeSizeX, 90);
 	RenderPosition(RenderPoint, 36, MazeMapHoles, MazeSizeX, MazeSizeX, 90);
 
+	Timer_render.StopTimer();
+
+	Timer_render.ConsoleOutputResults();
+
 	ClosePresentationOutputs();
+
+	Timer_Program.StopTimer();
+
+	Timer_Program.ConsoleOutputResults();
 
 	return 0;
 }
