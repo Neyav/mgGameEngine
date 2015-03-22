@@ -100,18 +100,7 @@ void mgVector::NormalizeVector(void)
 
 void mgVector::CalculateMagnitude(void)
 {
-	double PosX, PosY;
-
-	PosX = X;
-	PosY = Y;
-
-	if (PosX < 0)
-		PosX = -PosX;
-
-	if (PosY < 0)
-		PosY = -PosY;
-
-	Magnitude = sqrt((PosX * PosX) + (PosY * PosY));
+	Magnitude = sqrt(X * X + Y * Y);
 }
 
 void mgVector::VectorFromCoord(double Y1, double X1, double Y2, double X2)
