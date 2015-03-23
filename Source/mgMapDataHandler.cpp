@@ -25,6 +25,9 @@ void mgMapDataHandler::InitalizeMapData(int SizeY, int SizeX)
 {
 	mgPoint PositionReference = { 0, 0 };
 
+	if (InternalMapData != NULL)
+		delete InternalMapData; 
+
 	InternalMapData = new mgMapElement[SizeY * SizeX];
 	MapSizeY = SizeY;
 	MapSizeX = SizeX;
@@ -116,35 +119,6 @@ mgMapElement *mgMapDataHandler::ReturnMapBlockReference(int PosY, int PosX)
 	return &InternalMapData[UnifiedPosition];
 }
 
-/*mgMapElement mgMapDataHandler::ReturnMapBlock(int PosY, int PosX)
-{
-	int UnifiedPosition = (PosY * MapSizeX) + PosX;
-
-	// If this block is determined to be out of bounds return a template block that isn't clippable
-	// It is possible and easy to do your own bounds checking so the assumption here is that the data returned is
-	// only useful if the block is not clippable, which a wall as set in the template would be clippable.
-	if (!PositionBoundsCheck(PosY, PosX))
-	{
-		mgMapElement OutOfBoundsBlock;
-
-		OutOfBoundsBlock.BlockType = MAP_BLOCKWALL;
-
-		return OutOfBoundsBlock;
-	}
-
-	return InternalMapData[UnifiedPosition];
-}
-
-void mgMapDataHandler::SetMapBlock(int PosY, int PosX, mgMapElement MapBlock)
-{
-	int UnifiedPosition = (PosY * MapSizeX) + PosX;
-
-	if (!PositionBoundsCheck(PosY, PosX))
-		return; // Don't bother if it's out of bounds
-
-	InternalMapData[UnifiedPosition] = MapBlock;
-}*/
-
 int mgMapDataHandler::mapsizeY(void)
 {
 	return MapSizeY;
@@ -153,4 +127,15 @@ int mgMapDataHandler::mapsizeY(void)
 int mgMapDataHandler::mapsizeX(void)
 {
 	return MapSizeX;
+}
+
+mgMapDataHandler::mgMapDataHandler()
+{
+	InternalMapData = NULL;
+}
+
+mgMapDataHandler::~mgMapDataHandler()
+{
+	if (InternalMapData != NULL)
+		delete InternalMapData;
 }

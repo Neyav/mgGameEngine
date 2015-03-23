@@ -81,8 +81,6 @@ void mgMapElement::operator=(const mgMapElement& other)
 
 mgMapElement::mgMapElement()
 {
-	// Initalization code for a map element.
-	BlockType = MAP_BLOCKWALL;
 	BlockShape = NULL;
 }
 

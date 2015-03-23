@@ -329,6 +329,10 @@ int main(int argc, char* argv[])
 	mgStressTimer Timer_Program, Timer_Generate, Timer_PathFind, Timer_vismap, Timer_render;
 	mgStressTest test;
 
+	// MAJOR TODO: This stress test is actually crashing the program. Something to do with deleting InternalMapData. It's causing some
+	//				long chain cascading assertion failure.
+	//test.TEST_mgMapDataHandler();
+
 	Timer_Program.Description = "Program run";
 	Timer_Generate.Description = "mgRandomMazeGenerator";
 	Timer_PathFind.Description = "mgPathSolutionGenerator";

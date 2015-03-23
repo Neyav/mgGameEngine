@@ -28,5 +28,9 @@ public:
 	//void SetMapBlock(int PosY, int PosX, mgMapElement MapBlock);
 	int mapsizeY(void);
 	int mapsizeX(void);
+
+	mgMapDataHandler();
+	~mgMapDataHandler();
+
 };
 #endif

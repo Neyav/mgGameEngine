@@ -37,7 +37,19 @@ void mgStressTimer::ConsoleOutputResults(void)
 
 void mgStressTest::TEST_mgMapDataHandler(void)
 {
+	mgMapDataHandler testmapdata;
 
+	std::cout << "[---void mgStressTest::TEST_mgMapDataHandler(void)---]" << std::endl;
+
+	Timer.Description = ".InitalizeMapData(100, 100) x 100k";
+
+	Timer.StartTimer();
+
+	for (int x = 0; x < 100000; x++)
+		testmapdata.InitalizeMapData(100, 100);
+
+	Timer.StopTimer();
+	Timer.ConsoleOutputResults();
 }
 
 void mgStressTest::TEST_mgVector(void)

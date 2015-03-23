@@ -15,7 +15,7 @@ private:
 	mgLinkedList<mgLineSegment> *BlockShape;
 
 public:
-	char BlockType;
+	char BlockType = MAP_BLOCKWALL;
 	mgPoint Position;
 
 	void operator=(const mgMapElement& other);
