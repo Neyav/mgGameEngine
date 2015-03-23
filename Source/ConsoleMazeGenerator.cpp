@@ -198,6 +198,22 @@ void RenderHQPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Ma
 
 void MapGrid(mgMapDataHandler *MapData, mgPoint Position)
 {
+	mgVisibilityMap PositionVisMap;
+	mgStressTimer VisTimer;
+
+	VisTimer.Description = "MapGrid mgVisibilityMap";
+
+	PositionVisMap.LinkToMapHandler(MapData);
+
+	if (!MapData->IsBlockClippable(floor(Position.Y), floor(Position.X)))
+	{	// Only calculate the visibility data here if our position is valid.
+		VisTimer.StartTimer();
+		PositionVisMap.CalculateVisibility(floor(Position.Y), floor(Position.X));
+		PositionVisMap.CalculateAdjacentVisibility(floor(Position.Y), floor(Position.X));
+		VisTimer.StopTimer();
+		VisTimer.ConsoleOutputResults();
+	}
+
 	for (int Y = floor(Position.Y) - 5; Y < floor(Position.Y) + 5; Y++)
 	{
 		for (int X = floor(Position.Y) - 5; X < floor(Position.X) + 5; X++)
@@ -207,15 +223,31 @@ void MapGrid(mgMapDataHandler *MapData, mgPoint Position)
 			PositionBlock = MapData->ReturnMapBlockReference(Y, X);
 
 			if (Y == floor(Position.Y) && X == floor(Position.X))
+			{
 				std::cout << " YOU ";
+			}
 			else if (PositionBlock == NULL)
-				std::cout << "[___]";
+			{
+				std::cout << "     ";
+			}
 			else if (PositionBlock->BlockType == MAP_BLOCKWALL)
-				std::cout << "[---]";
+			{
+				if (PositionVisMap.IsMarkedVisible(Y, X))
+					std::cout << "[---]";
+				else
+					std::cout << "[   ]";
+			}
 			else if (PositionBlock->BlockType == MAP_BLOCKFLOOR)
-				std::cout << " ... ";
+			{
+				if (PositionVisMap.IsMarkedVisible(Y, X))
+					std::cout << " ... ";
+				else
+					std::cout << "     ";
+			}
 			else
+			{
 				std::cout << "[???]";
+			}
 		}
 
 		std::cout << std::endl;
@@ -408,7 +440,7 @@ int main(int argc, char* argv[])
 	PathSolutionHoles->LinkToMap(MazeMapHoles);
 
 	PathSolutionHoles->InitateMapSolution(1, 1, MazeMapHoles->mapsizeY() - 2, MazeMap->mapsizeX() - 2);
-	while (!PathSolutionHoles->ProcessMapSolution(10))
+	while (!PathSolutionHoles->ProcessMapSolution(100))
 	{
 
 	}
