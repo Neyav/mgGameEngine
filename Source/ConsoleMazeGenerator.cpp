@@ -1,6 +1,7 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <math.h>
 
 #include "mgVectorPoint.h"
@@ -139,6 +140,153 @@ void ClosePresentationOutputs(void)
 	HTMLOutput << "</div></body>" << std::endl << "</html>" << std::endl;
 
 	// We should be closing data streams here.
+}
+
+void RenderHQPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Map, std::ofstream *HOutput)
+{
+	// Columns represents how wide our display is going to be, Rows is how tall
+	double *ColumnDepthMap;
+
+	*HOutput << "<H2>First Person Raycasting from [" << Position.Y << "," << Position.X << "] with Angle " << RenderAngle << "</H2>" << std::endl;
+
+	ColumnDepthMap = new double[180];
+
+	double DegreesPerColumn = 90 / (double)180;
+
+	for (int RenderColumn = 0; RenderColumn < 180; RenderColumn++)
+	{
+		// For each Column, do a ray trace from the origin and calculate the distance
+		mgRayTracer RenderTracer;
+		mgVector RenderVector;
+
+		double AngleDifference = (DegreesPerColumn * (double)RenderColumn) - (90 / 2);
+		double NewAngle = RenderAngle + AngleDifference;
+
+		RenderVector.VectorFromDegrees(NewAngle);
+
+		RenderTracer.MapReference = Map;
+		RenderTracer.OccluderPoint(Position, RenderVector);
+
+		double Distance = RenderTracer.RayDistance;
+		Distance = Distance * cos(AngleDifference* (mgPI / 180));
+
+		ColumnDepthMap[RenderColumn] = Distance;
+	}
+
+	// Now lets Render it into our HTML file
+	for (int RenderRow = 0; RenderRow < 100; RenderRow++)
+	{
+		for (int RenderColumn = 0; RenderColumn < 180; RenderColumn++)
+		{
+			double Height = 100 / ColumnDepthMap[RenderColumn];
+			double Top = (100 - Height) / 2;
+			double Bottom = 100 - ((100 - Height) / 2);
+
+			if (RenderRow > round(Top) && RenderRow < round(Bottom)) // It's a wall.
+			{
+				*HOutput << "<img height=\"10\" src=\"wall.jpg\" width=\"10\">";
+			}
+			else
+			{	// Floor or ceiling
+				*HOutput << "<img height=\"10\" src=\"pathwall.jpg\" width=\"10\">";
+			}
+		}
+	}
+
+	delete ColumnDepthMap;
+}
+
+void MapGrid(mgMapDataHandler *MapData, mgPoint Position)
+{
+	for (int Y = floor(Position.Y) - 5; Y < floor(Position.Y) + 5; Y++)
+	{
+		for (int X = floor(Position.Y) - 5; X < floor(Position.X) + 5; X++)
+		{
+			mgMapElement *PositionBlock;
+
+			PositionBlock = MapData->ReturnMapBlockReference(Y, X);
+
+			if (Y == floor(Position.Y) && X == floor(Position.X))
+				std::cout << " YOU ";
+			else if (PositionBlock == NULL)
+				std::cout << "[___]";
+			else if (PositionBlock->BlockType == MAP_BLOCKWALL)
+				std::cout << "[---]";
+			else if (PositionBlock->BlockType == MAP_BLOCKFLOOR)
+				std::cout << " ... ";
+			else
+				std::cout << "[???]";
+		}
+
+		std::cout << std::endl;
+	}
+}
+
+void CustomPositionRenders(mgMapDataHandler *MapData)
+{
+	mgPoint InputPosition;
+	double angle;
+	bool validPos = false;
+
+	do
+	{
+		std::cout << "Position: Y -> ";
+		std::cin >> InputPosition.Y;
+		std::cout << "          X -> ";
+		std::cin >> InputPosition.X;
+
+		// If the position is just an integer then assume they want it put in the center of the block.
+		if (InputPosition.Y == floor(InputPosition.Y) && InputPosition.X == floor(InputPosition.X))
+		{
+			InputPosition.Y += .5;
+			InputPosition.X += .5;
+		}
+
+		MapGrid(MapData, InputPosition);
+
+		if (MapData->IsBlockClippable(floor(InputPosition.Y), floor(InputPosition.X)))
+		{
+			std::cout << "Input position is inside a wall or off the map, try another..." << std::endl;
+			continue;
+		}
+
+		std::cout << "Angle to Render -> ";
+		std::cin >> angle;
+
+		validPos = true;
+
+	} while (!validPos);
+
+	std::string FileName;
+	FileName = "FPS" + std::to_string((int)floor(InputPosition.Y)) + "-" + std::to_string((int)floor(InputPosition.X)) + "-" + std::to_string((int)angle) + ".HTML";
+
+	std::ofstream FPSOutput(FileName);
+
+	FPSOutput << "<!DOCTYPE html>" << std::endl << "<head>" << std::endl;
+	FPSOutput << "  <title>FPS Render Shot</title>" << std::endl;
+	FPSOutput << "<style>" << std::endl << "#main {" << std::endl << "    width: " << 10 * 180 + 5 << "px;" << std::endl;
+	FPSOutput << "}" << std::endl << "#main img {" << std::endl << "    float: left;" << std::endl;
+	FPSOutput << "}</style>" << std::endl;
+	FPSOutput << "<meta content=\"css3, transition, image, slide\" name=\"keywords\">" << std::endl;
+	FPSOutput << "</head>" << std::endl << std::endl << "<body><div id=\"main\">" << std::endl;
+
+	mgStressTimer FPSTimer;
+
+	FPSTimer.Description = "FPS HQ Render";
+
+	FPSTimer.StartTimer();
+
+	RenderHQPosition(InputPosition, angle, MapData, &FPSOutput);
+
+	FPSTimer.StopTimer();
+
+	FPSOutput << "</div></body>" << std::endl << "</html>" << std::endl;
+
+	FPSOutput.close();
+
+	std::cout << "Output saved to " << FileName << std::endl;
+
+	FPSTimer.ConsoleOutputResults();
 }
 
 int main(int argc, char* argv[])
@@ -326,6 +474,23 @@ int main(int argc, char* argv[])
 	Timer_Program.StopTimer();
 
 	Timer_Program.ConsoleOutputResults();
+
+	//
+	// --[ Custom position renders]--
+	//
+	while (true)
+	{
+		char response;
+
+		std::cout << "Do you wish to render a position to a seperate HTML files (y\\n)? ";
+
+		std::cin >> response;
+
+		if (response == 'n' || response == 'N')
+			break;
+
+		CustomPositionRenders(MazeMap);
+	}
 
 	return 0;
 }

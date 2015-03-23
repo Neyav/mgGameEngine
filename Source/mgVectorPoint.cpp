@@ -123,8 +123,8 @@ void mgVector::VectorFromPoints(mgPoint Start, mgPoint End)
 
 void mgVector::VectorFromRadians(double Radians)
 {
-	X = cos(Radians);
-	Y = sin(Radians);
+	X = sin(Radians);
+	Y = cos(Radians);
 
 	// Normalize it
 	if (Magnitude != 1)

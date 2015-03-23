@@ -1,6 +1,6 @@
 # Output files
-Maze.html
 Maze.txt
+*.html
 
 # Windows image file caches
 Thumbs.db
