@@ -329,9 +329,8 @@ int main(int argc, char* argv[])
 	mgStressTimer Timer_Program, Timer_Generate, Timer_PathFind, Timer_vismap, Timer_render;
 	mgStressTest test;
 
-	// MAJOR TODO: This stress test is actually crashing the program. Something to do with deleting InternalMapData. It's causing some
-	//				long chain cascading assertion failure.
 	//test.TEST_mgMapDataHandler();
+	//test.TEST_mgVector();
 
 	Timer_Program.Description = "Program run";
 	Timer_Generate.Description = "mgRandomMazeGenerator";
@@ -518,7 +517,7 @@ int main(int argc, char* argv[])
 	{
 		char response;
 
-		std::cout << "Do you wish to render a position to a seperate HTML files (y\\n)? ";
+		std::cout << "Do you wish to render a position to a seperate HTML file (y\\n)? ";
 
 		std::cin >> response;
 

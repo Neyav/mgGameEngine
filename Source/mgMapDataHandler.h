@@ -3,6 +3,11 @@
 
 #include "mgMapElement.h"
 
+struct mgMapElementArray
+{
+	mgMapElement *MapBlock;
+};
+
 // =------------------------------------=
 // = mgMapDataHandler C++ class         =
 // =------------------------------------=
@@ -13,8 +18,10 @@
 class mgMapDataHandler
 {
 private:
-	mgMapElement *InternalMapData;
+	mgMapElementArray *InternalMapData;
 	int MapSizeY, MapSizeX;
+
+	void CleanHouseProtocol(void);  // JARVIS.....
 
 public:
 

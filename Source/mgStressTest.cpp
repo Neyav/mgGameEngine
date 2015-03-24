@@ -41,11 +41,11 @@ void mgStressTest::TEST_mgMapDataHandler(void)
 
 	std::cout << "[---void mgStressTest::TEST_mgMapDataHandler(void)---]" << std::endl;
 
-	Timer.Description = ".InitalizeMapData(100, 100) x 100k";
+	Timer.Description = ".InitalizeMapData(100, 100) x 1k";
 
 	Timer.StartTimer();
 
-	for (int x = 0; x < 100000; x++)
+	for (int x = 0; x < 1000; x++)
 		testmapdata.InitalizeMapData(100, 100);
 
 	Timer.StopTimer();

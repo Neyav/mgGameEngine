@@ -7,6 +7,18 @@
 // = mgMapDataHandler C++ class         =
 // =------------------------------------=
 
+void mgMapDataHandler::CleanHouseProtocol(void)
+{
+	if (InternalMapData == NULL)
+		return;
+
+	// Clean up the blocks inside each element, and each element itself.
+	for (int Iterator = 0; Iterator < (MapSizeY * MapSizeX); Iterator++)
+		delete InternalMapData[Iterator].MapBlock;
+
+	delete InternalMapData;
+}
+
 bool mgMapDataHandler::PositionBoundsCheck(int PosY, int PosX)
 {
 	if (PosY < 0)
@@ -26,16 +38,17 @@ void mgMapDataHandler::InitalizeMapData(int SizeY, int SizeX)
 	mgPoint PositionReference = { 0, 0 };
 
 	if (InternalMapData != NULL)
-		delete InternalMapData; 
+		CleanHouseProtocol();
 
-	InternalMapData = new mgMapElement[SizeY * SizeX];
+	InternalMapData = new mgMapElementArray[SizeY * SizeX];
 	MapSizeY = SizeY;
 	MapSizeX = SizeX;
 
 	for (int Iterator = 0; Iterator < (SizeY * SizeX); Iterator++)
 	{	// Set the defaults for each block in the map.
-		InternalMapData[Iterator].BlockType = MAP_BLOCKWALL;
-		InternalMapData[Iterator].Position = PositionReference;
+		InternalMapData[Iterator].MapBlock = new mgMapElement;
+		InternalMapData[Iterator].MapBlock->BlockType = MAP_BLOCKWALL;
+		InternalMapData[Iterator].MapBlock->Position = PositionReference;
 
 		PositionReference.X++;
 		if (PositionReference.X >= SizeX)
@@ -73,7 +86,7 @@ bool mgMapDataHandler::IsBlockClippable(int PosY, int PosX)
 		return true; // If it lands outside our map area, treat it as a wall.
 
 	// Do any map based clipping tests here, right now that simply is the test for a wall.
-	if (InternalMapData[UnifiedPosition].BlockType == MAP_BLOCKWALL)
+	if (InternalMapData[UnifiedPosition].MapBlock->BlockType == MAP_BLOCKWALL)
 		return true;
 
 	return false;
@@ -86,7 +99,7 @@ bool mgMapDataHandler::WillObjectFit(double PosY, double PosX, float ObjectSize)
 	if (!PositionBoundsCheck(floor(PosY), floor(PosX)))
 		return false;
 
-	if (InternalMapData[UnifiedPosition].BlockType == MAP_BLOCKWALL)
+	if (InternalMapData[UnifiedPosition].MapBlock->BlockType == MAP_BLOCKWALL)
 		return false;
 
 	// We've exausted all simple methods of ruling this position out, time to work on the more complicated ones.
@@ -102,7 +115,7 @@ bool mgMapDataHandler::WillObjectFit(double PosY, double PosX, float ObjectSize)
 	{
 		UnifiedPosition = (floor(TestY[Iterator]) * MapSizeX) + floor(TestY[Iterator]);
 
-		if (InternalMapData[UnifiedPosition].BlockType == MAP_BLOCKWALL)
+		if (InternalMapData[UnifiedPosition].MapBlock->BlockType == MAP_BLOCKWALL)
 			return false;
 	}
 
@@ -116,7 +129,7 @@ mgMapElement *mgMapDataHandler::ReturnMapBlockReference(int PosY, int PosX)
 	if (!PositionBoundsCheck(PosY, PosX))
 		return NULL; 
 
-	return &InternalMapData[UnifiedPosition];
+	return InternalMapData[UnifiedPosition].MapBlock;
 }
 
 int mgMapDataHandler::mapsizeY(void)
@@ -137,5 +150,5 @@ mgMapDataHandler::mgMapDataHandler()
 mgMapDataHandler::~mgMapDataHandler()
 {
 	if (InternalMapData != NULL)
-		delete InternalMapData;
+		CleanHouseProtocol();
 }
