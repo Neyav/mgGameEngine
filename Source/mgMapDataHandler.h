@@ -3,6 +3,17 @@
 
 #include "mgMapElement.h"
 
+// Since this is practically considered the base element of the game engine it makes sense to keep version
+// information here.
+struct _mgGameEngineVersionstruct
+{
+	unsigned int ReleaseVersion;
+	unsigned int FeatureVersion;
+	unsigned int PatchVersion;
+};
+
+extern _mgGameEngineVersionstruct mgGameEngineVersion;
+
 struct mgMapElementArray
 {
 	mgMapElement *MapBlock;
@@ -31,8 +42,6 @@ public:
 	bool IsBlockClippable(int PosY, int PosX);
 	bool WillObjectFit(double PosY, double PosX, float ObjectSize);
 	mgMapElement *ReturnMapBlockReference(int PosY, int PosX);
-	//mgMapElement ReturnMapBlock(int PosY, int PosX);
-	//void SetMapBlock(int PosY, int PosX, mgMapElement MapBlock);
 	int mapsizeY(void);
 	int mapsizeX(void);
 

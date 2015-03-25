@@ -325,12 +325,38 @@ int main(int argc, char* argv[])
 {
 	mgMapDataHandler *MazeMap, *MazeMapHoles;
 	int MazeSizeY, MazeSizeX;
+	bool stresstest = true;
 
 	mgStressTimer Timer_Program, Timer_Generate, Timer_PathFind, Timer_vismap, Timer_render;
 	mgStressTest test;
 
-	//test.TEST_mgMapDataHandler();
-	//test.TEST_mgVector();
+	std::cout << "mgGameEngine production testing suite. Engine Version: " << mgGameEngineVersion.ReleaseVersion << "." << mgGameEngineVersion.FeatureVersion << "." << mgGameEngineVersion.PatchVersion << std::endl;
+	std::cout << "  Generated output is saved to both Maze.HTML and .TXT unless otherwise stated." << std::endl;
+	std::cout << "       Stress tests generate console output only" << std::endl;
+	while (stresstest)
+	{
+		char selection;
+
+		std::cout << "---[ Stress Test Selection ]---" << std::endl;
+		std::cout << "---[ 1) mgMapDataHandler   ]---" << std::endl;
+		std::cout << "---[ 2) mgVector           ]---" << std::endl;
+		std::cout << "---[                       ]---" << std::endl;
+		std::cout << "---Any other key skips tests---" << std::endl;
+		std::cout << "---: ";
+		std::cin >> selection;
+
+		switch (selection)
+		{
+		case '1':
+			test.TEST_mgMapDataHandler();
+			break;
+		case '2':
+			test.TEST_mgVector();
+			break;
+		default:
+			stresstest = false;
+		}
+	}
 
 	Timer_Program.Description = "Program run";
 	Timer_Generate.Description = "mgRandomMazeGenerator";
@@ -338,10 +364,7 @@ int main(int argc, char* argv[])
 	Timer_vismap.Description = "mgVisibilityMap";
 	Timer_render.Description = "HTML 3D Viewport X 5";
 
-	std::cout << "MazeGenerator with Solution: [Uses mgMapEngine designed for a 3D Maze" << std::endl;
-	std::cout << "                           : solving game]" << std::endl;
-	std::cout << "                           : This program is a testing ground for it." << std::endl;
-	std::cout << "                           : Output is Maze.HTML and Maze.TXT" << std::endl;
+	std::cout << "Enter size of maze to process test results against..." << std::endl;
 	std::cout << "=====================================================================" << std::endl;
 	std::cout << "Maze Size: Y = ";
 	std::cin >> MazeSizeY;

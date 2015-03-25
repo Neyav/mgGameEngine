@@ -54,22 +54,54 @@ void mgStressTest::TEST_mgMapDataHandler(void)
 
 void mgStressTest::TEST_mgVector(void)
 {
-	mgVector testvector;
+	volatile double testmemory;
 
 	std::cout << "[---void mgStressTest::TEST_mgVector(void)---]" << std::endl;
 
-	Timer.Description = ".VectorFromDegrees(random) x 10mil";
-
+	Timer.Description = ".VectorFromDegrees(x % 360) x 10mil";
 	Timer.StartTimer();
 
 	for (int x = 0; x < 10000000; x++)
 	{
-		testvector.VectorFromDegrees(rand() % 360);
+		mgVector testvector;
+		testvector.VectorFromDegrees(x % 360);
+
+		testmemory = testvector.Y;
 	}
 
 	Timer.StopTimer();
-
 	Timer.ConsoleOutputResults();
+
+	Timer.Description = ".VectorFromRadians(x % 2) x 10mil";
+	Timer.StartTimer();
+
+	for (int x = 0; x < 10000000; x++)
+	{
+		mgVector testvector;
+		testvector.VectorFromRadians(x % 2);
+
+		testmemory = testvector.Y;
+	}
+
+	Timer.StopTimer();
+	Timer.ConsoleOutputResults();
+
+	Timer.Description = ".NormalizeVector(x % 10) x 10mil";
+	Timer.StartTimer();
+
+	{
+		mgVector NormalizeVector;
+		NormalizeVector.VectorFromDegrees(50);
+
+		for (int x = 0; x < 10000000; x++)
+		{
+			NormalizeVector.NormalizeVector(x % 10);
+		}
+	}
+
+	Timer.StopTimer();
+	Timer.ConsoleOutputResults();
+
 
 }
 
