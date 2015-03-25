@@ -84,14 +84,17 @@ mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 	mgVector Normal, PositionTowardsCenter;
 
 	// Line facing isn't defined, calculate the normal manually using the point position to determine orientation
-	// Organized from most likely to least likely. ( At least in my case )
-	if (Facing == LINEFACE_RIGHT)
-	{
+	switch (Facing)
+	{ 
+	case LINEFACE_RIGHT:
 		Normal.Y = (SegmentEnd.X - SegmentStart.X) * -1;
 		Normal.X = (SegmentEnd.Y - SegmentStart.Y);
-	}
-	else if (Facing == LINEFACE_UNDEFINED)
-	{
+		break;
+	case LINEFACE_LEFT:
+		Normal.Y = (SegmentEnd.X - SegmentStart.X);
+		Normal.X = (SegmentEnd.Y - SegmentStart.Y) * -1;
+		break;
+	default:
 		// Calculate the middle of our line
 		MiddleofLine.Y = (SegmentEnd.Y - SegmentStart.Y) / 2 + SegmentStart.Y;
 		MiddleofLine.X = (SegmentEnd.X - SegmentStart.X) / 2 + SegmentStart.X;
@@ -108,11 +111,6 @@ mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 			Normal.Y *= -1;
 			Normal.X *= -1;
 		}
-	}
-	else
-	{	// If none of the rest apply return the left facing.
-		Normal.Y = (SegmentEnd.X - SegmentStart.X);
-		Normal.X = (SegmentEnd.Y - SegmentStart.Y) * -1;
 	}
 
 	Normal.NormalizeVector();
