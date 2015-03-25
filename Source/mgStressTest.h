@@ -11,8 +11,6 @@ private:
 	bool TimerRunning = false;
 	bool TimerComplete = false;
 public:
-	clock_t Overhead = 0;
-
 	std::string Description = "No Description";
 
 	void StartTimer(void);

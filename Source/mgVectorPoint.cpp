@@ -8,7 +8,7 @@
 // is less expensive but produces the same results for calculating the distance between two points. I suspect that if such a thing existed, it would have already been
 // discovered but my mind is set to task regardless. I might just cave and accept square roots as a part of my life for this project.
 
-double DistanceBetweenPoints(mgPoint Start, mgPoint End)
+double DistanceBetweenPoints(const mgPoint Start, const mgPoint End)
 {
 	double Y, X;
 
