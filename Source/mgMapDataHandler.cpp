@@ -59,6 +59,21 @@ void mgMapDataHandler::InitalizeMapData(int SizeY, int SizeX)
 			PositionReference.Y++;
 		}
 	}
+
+	// This section adds another 2 seconds on the stresstest timer. It's definitely not the fastest way I could have done it, but all things considered it's among the 
+	// cleanest and most straight forward. This isn't a section of code I consider "time sensitive". mgMapDataHandler's are NOT toilet paper. We do not wipe our ripe and
+	// then swipe another.
+	for (int Y = 0; Y < SizeY; Y++)
+	{
+		for (int X = 0; X < SizeX; X++)
+		{
+			mgMapElement *BlockReference = ReturnMapBlockReference(Y, X);
+			BlockReference->Adjacent[ELEMENT_NORTH] = ReturnMapBlockReference(Y - 1, X);
+			BlockReference->Adjacent[ELEMENT_EAST] = ReturnMapBlockReference(Y, X + 1);
+			BlockReference->Adjacent[ELEMENT_WEST] = ReturnMapBlockReference(Y, X - 1);
+			BlockReference->Adjacent[ELEMENT_SOUTH] = ReturnMapBlockReference(Y + 1, X);
+		}
+	}
 }
 
 void mgMapDataHandler::CloneMapIntoHost(mgMapDataHandler *MapToClone)
@@ -81,8 +96,6 @@ void mgMapDataHandler::CloneMapIntoHost(mgMapDataHandler *MapToClone)
 bool mgMapDataHandler::IsBlockClippable(int PosY, int PosX)
 {
 	int UnifiedPosition = (PosY * MapSizeX) + PosX; // Our map blocks are stored in a one dimensional dynamically allocated array.
-
-	//std::cout << "Block: " << PosY << ", " << PosX << std::endl;
 
 	if (!PositionBoundsCheck(PosY, PosX))
 		return true; // If it lands outside our map area, treat it as a wall.

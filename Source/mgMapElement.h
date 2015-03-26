@@ -9,13 +9,19 @@
 #define MAP_BLOCKFLOOR 0
 #define MAP_BLOCKWALL 1
 
+#define ELEMENT_NORTH 0
+#define ELEMENT_EAST 1
+#define ELEMENT_SOUTH 2
+#define ELEMENT_WEST 3
+
 class mgMapElement
 {
 private:
 	mgLinkedList<mgLineSegment> *BlockShape;
 
 public:
-	char BlockType = MAP_BLOCKWALL;
+	unsigned char BlockType = MAP_BLOCKWALL;
+	mgMapElement *Adjacent[4];
 	mgPoint Position;
 
 	void operator=(const mgMapElement& other);
