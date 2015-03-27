@@ -91,6 +91,19 @@ void mgMapDataHandler::CloneMapIntoHost(mgMapDataHandler *MapToClone)
 			*To = *From; // While correct, looks hilarious. Reads as such: Butthole To = Butthole From. The poop goes back in again!
 		}
 	}
+
+	// Connect adjacent block property to its new neighbor.
+	for (int Y = 0; Y < MapSizeY; Y++)
+	{
+		for (int X = 0; X < MapSizeX; X++)
+		{
+			mgMapElement *BlockReference = ReturnMapBlockReference(Y, X);
+			BlockReference->Adjacent[ELEMENT_NORTH] = ReturnMapBlockReference(Y - 1, X);
+			BlockReference->Adjacent[ELEMENT_EAST] = ReturnMapBlockReference(Y, X + 1);
+			BlockReference->Adjacent[ELEMENT_WEST] = ReturnMapBlockReference(Y, X - 1);
+			BlockReference->Adjacent[ELEMENT_SOUTH] = ReturnMapBlockReference(Y + 1, X);
+		}
+	}
 }
 
 bool mgMapDataHandler::IsBlockClippable(int PosY, int PosX)

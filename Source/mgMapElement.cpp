@@ -77,6 +77,8 @@ void mgMapElement::operator=(const mgMapElement& other)
 {
 	BlockType = other.BlockType;
 	Position = other.Position;
+	for (int x = 0; x < 4; x++)
+		Adjacent[x] = other.Adjacent[x];
 }
 
 mgMapElement::mgMapElement()
