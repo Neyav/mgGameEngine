@@ -16,6 +16,7 @@ public:
 	void StartTimer(void);
 	void StopTimer(void);
 	void ConsoleOutputResults(void);
+	void ConsoleOutputIterationResults(const unsigned int Iterations);
 };
 
 class mgStressTest

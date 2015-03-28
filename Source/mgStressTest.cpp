@@ -7,6 +7,10 @@
 
 #include "mgStressTest.h"
 
+#define TIME_NANOSECOND 0.000000001
+#define TIME_MICROSECOND 0.000001
+#define TIME_MILLISECOND 0.001
+
 void mgStressTimer::StartTimer(void)
 {
 	TimerComplete = false;
@@ -35,6 +39,37 @@ void mgStressTimer::ConsoleOutputResults(void)
 	std::cout << "Timer[" << Description.c_str() << "] -> " << ((double)End - (double)Start) / CLOCKS_PER_SEC << " Seconds elapsed." << std::endl;
 }
 
+void mgStressTimer::ConsoleOutputIterationResults(const unsigned int Iterations)
+{
+	if (!TimerComplete)
+	{
+		std::cout << "Timer[" << Description.c_str() << "] results paged with no valid results." << std::endl;
+		return;
+	}
+	
+	double TimePerIteration = (double)((double)(End - Start) / CLOCKS_PER_SEC) / Iterations;
+	
+	std::cout << "IterationTimer[" << Description.c_str() << "] -> ";
+
+	if (TimePerIteration < TIME_MICROSECOND) 
+	{
+		TimePerIteration /= TIME_NANOSECOND;
+		std::cout << TimePerIteration << " Nanoseconds." << std::endl;
+	}
+	else if (TimePerIteration < TIME_MILLISECOND)
+	{
+		TimePerIteration /= TIME_MICROSECOND;
+		std::cout << TimePerIteration << " Microseconds." << std::endl;
+	}
+	else if (TimePerIteration < 1)
+	{
+		TimePerIteration /= TIME_MILLISECOND;
+		std::cout << TimePerIteration << " Milliseconds." << std::endl;
+	}
+	else
+		std::cout << TimePerIteration << " Seconds." << std::endl;
+}
+
 void mgStressTest::TEST_mgMapDataHandler(void)
 {
 	mgMapDataHandler testmapdata;
@@ -50,6 +85,7 @@ void mgStressTest::TEST_mgMapDataHandler(void)
 
 	Timer.StopTimer();
 	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(1000); 
 }
 
 void mgStressTest::TEST_mgVector(void)
@@ -71,6 +107,7 @@ void mgStressTest::TEST_mgVector(void)
 
 	Timer.StopTimer();
 	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(10000000);
 
 	Timer.Description = ".VectorFromRadians(x % 2) x 10mil";
 	Timer.StartTimer();
@@ -85,6 +122,7 @@ void mgStressTest::TEST_mgVector(void)
 
 	Timer.StopTimer();
 	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(10000000);
 
 	Timer.Description = ".NormalizeVector(x % 10) x 10mil";
 	Timer.StartTimer();
@@ -101,6 +139,7 @@ void mgStressTest::TEST_mgVector(void)
 
 	Timer.StopTimer();
 	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(10000000);
 
 
 }
