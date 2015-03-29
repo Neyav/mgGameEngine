@@ -3,7 +3,7 @@
 
 #include "mgVectorPoint.h"
 #include "mgMapDataHandler.h"
-#include "mgLinkedList.H"
+#include "mgLinkedList.h"
 
 // =------------------------------------=
 // = mgVisibilityMap C++ class			=
