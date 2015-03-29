@@ -29,6 +29,27 @@ void mgStressTimer::StopTimer(void)
 	TimerComplete = true;
 }
 
+void mgStressTimer::ConsoleOutputFriendlyTime(double TimeInput)
+{
+	if (TimeInput < TIME_MICROSECOND)
+	{
+		TimeInput /= TIME_NANOSECOND;
+		std::cout << TimeInput << " Nanoseconds." << std::endl;
+	}
+	else if (TimeInput < TIME_MILLISECOND)
+	{
+		TimeInput /= TIME_MICROSECOND;
+		std::cout << TimeInput << " Microseconds." << std::endl;
+	}
+	else if (TimeInput < 1)
+	{
+		TimeInput /= TIME_MILLISECOND;
+		std::cout << TimeInput << " Milliseconds." << std::endl;
+	}
+	else
+		std::cout << TimeInput << " Seconds." << std::endl;
+}
+
 void mgStressTimer::ConsoleOutputResults(void)
 {
 	if (!TimerComplete)
@@ -36,7 +57,9 @@ void mgStressTimer::ConsoleOutputResults(void)
 		std::cout << "Timer[" << Description.c_str() << "] results paged with no valid results." << std::endl;
 		return;
 	}
-	std::cout << "Timer[" << Description.c_str() << "] -> " << ((double)End - (double)Start) / CLOCKS_PER_SEC << " Seconds elapsed." << std::endl;
+	std::cout << "Timer[" << Description.c_str() << "] -> ";
+
+	ConsoleOutputFriendlyTime((double)(End - Start) / CLOCKS_PER_SEC);
 }
 
 void mgStressTimer::ConsoleOutputIterationResults(const unsigned int Iterations)
@@ -51,23 +74,7 @@ void mgStressTimer::ConsoleOutputIterationResults(const unsigned int Iterations)
 	
 	std::cout << "IterationTimer[" << Description.c_str() << "] -> ";
 
-	if (TimePerIteration < TIME_MICROSECOND) 
-	{
-		TimePerIteration /= TIME_NANOSECOND;
-		std::cout << TimePerIteration << " Nanoseconds." << std::endl;
-	}
-	else if (TimePerIteration < TIME_MILLISECOND)
-	{
-		TimePerIteration /= TIME_MICROSECOND;
-		std::cout << TimePerIteration << " Microseconds." << std::endl;
-	}
-	else if (TimePerIteration < 1)
-	{
-		TimePerIteration /= TIME_MILLISECOND;
-		std::cout << TimePerIteration << " Milliseconds." << std::endl;
-	}
-	else
-		std::cout << TimePerIteration << " Seconds." << std::endl;
+	ConsoleOutputFriendlyTime(TimePerIteration);
 }
 
 void mgStressTest::TEST_mgMapDataHandler(void)

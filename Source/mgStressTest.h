@@ -15,6 +15,7 @@ public:
 
 	void StartTimer(void);
 	void StopTimer(void);
+	void ConsoleOutputFriendlyTime(double TimeInput);
 	void ConsoleOutputResults(void);
 	void ConsoleOutputIterationResults(const unsigned int Iterations);
 };
