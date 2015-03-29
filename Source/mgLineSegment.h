@@ -45,8 +45,8 @@ public:
 	mgPoint SegmentEnd;
 	double SegmentLength;
 
-	bool ObstructsMovement = true;
-	bool ObstructsVision = true;
+	bool ObstructsMovement;
+	bool ObstructsVision;
 
 	LineDescription Description;
 	LineFacing Facing;

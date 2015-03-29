@@ -119,10 +119,13 @@ mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 }
 
 mgLineSegment::mgLineSegment()
-{ // Init
+{ // Initialize default behavior for a line segment.
 	Description = LINEDES_UNDEFINED;
 	Facing = LINEFACE_UNDEFINED;
 
 	LineSegmentBlock = NULL;
 	LineSegmentOwner = NULL;
+
+	ObstructsMovement = true;
+	ObstructsVision = true;
 }
