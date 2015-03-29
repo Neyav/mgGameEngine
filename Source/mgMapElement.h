@@ -20,7 +20,7 @@ private:
 	mgLinkedList<mgLineSegment> *BlockShape;
 
 public:
-	unsigned char BlockType = MAP_BLOCKWALL;
+	unsigned char BlockType;
 	mgMapElement *Adjacent[4];
 	mgPoint Position;
 

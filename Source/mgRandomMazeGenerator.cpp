@@ -111,3 +111,8 @@ void mgRandomMazeGenerator::GenerateMaze(unsigned int BlockY, unsigned int Block
 		Depth--; // Go back a block
 	}
 }
+
+mgRandomMazeGenerator::mgRandomMazeGenerator()
+{
+	Map = NULL;
+}

@@ -149,3 +149,10 @@ void mgVector::VectorStepCoords(double VectorStep)
 	TransformedY = Y * (VectorStep);
 	TransformedX = X * (VectorStep);
 }
+
+mgVector::mgVector()
+{
+	Magnitude = 1; // Default magnitude is 1 for all vectors
+
+	AutoNormalize = true; // Default behavior for vectors is to auto normalize
+}

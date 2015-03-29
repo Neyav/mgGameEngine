@@ -83,6 +83,7 @@ void mgMapElement::operator=(const mgMapElement& other)
 
 mgMapElement::mgMapElement()
 {
+	BlockType = MAP_BLOCKWALL;
 	BlockShape = NULL;
 }
 

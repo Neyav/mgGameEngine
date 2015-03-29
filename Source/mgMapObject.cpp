@@ -9,6 +9,12 @@ mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 	return NULL; // Our base object has no shape. 
 }
 
+mgMapObject::mgMapObject()
+{
+	ObjectShape = NULL;
+	ObjectSize = 0;
+}
+
 mgMapObject::~mgMapObject()
 {
 	if (ObjectShape != NULL)

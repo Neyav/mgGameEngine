@@ -48,17 +48,19 @@ public:
 	bool ObstructsMovement = true;
 	bool ObstructsVision = true;
 
-	LineDescription Description = LINEDES_UNDEFINED;
-	LineFacing Facing = LINEFACE_UNDEFINED;
+	LineDescription Description;
+	LineFacing Facing;
 
 	// Otherworldly references to the line segment
-	mgMapElement *LineSegmentBlock = NULL;
-	mgMapObject *LineSegmentOwner = NULL;
+	mgMapElement *LineSegmentBlock;
+	mgMapObject *LineSegmentOwner;
 
 	void ImportLine(mgPoint Origin, mgVector Direction, double Length);
 	void ImportLine(mgPoint LineStart, mgPoint LineEnd);
 	mgPoint InterceptionPoint(mgLineSegment *SecondLine, bool *ValidIntercept);
 	mgVector NormalFacingPosition(mgPoint Position);
+
+	mgLineSegment();
 };
 
 #endif

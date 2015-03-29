@@ -17,18 +17,19 @@ public:
 	// Information about the map object in the world.
 	mgPoint Position;
 	mgVector Momentum;
-	mgLinkedList<mgLineSegment> *ObjectShape = NULL;
+	mgLinkedList<mgLineSegment> *ObjectShape;
 
 	// cached information to decide if new geometry calculations are needed
 	mgPoint GeoPosition;
 	double GeoSize;
 
 	// Information defining the map object.
-	double ObjectSize = 0; // Used to scale and define the geometry generated
+	double ObjectSize; // Used to scale and define the geometry generated
 
 	// Functions for the map object.
 	virtual mgLinkedList<mgLineSegment> *ObjectGeometry(void);
 
+	mgMapObject();
 	~mgMapObject();
 };
 #endif

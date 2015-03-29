@@ -8,16 +8,18 @@ class mgStressTimer
 {
 private:
 	clock_t Start, End;
-	bool TimerRunning = false;
-	bool TimerComplete = false;
+	bool TimerRunning;
+	bool TimerComplete;
 public:
-	std::string Description = "No Description";
+	std::string Description;
 
 	void StartTimer(void);
 	void StopTimer(void);
 	void ConsoleOutputFriendlyTime(double TimeInput);
 	void ConsoleOutputResults(void);
 	void ConsoleOutputIterationResults(const unsigned int Iterations);
+
+	mgStressTimer();
 };
 
 class mgStressTest

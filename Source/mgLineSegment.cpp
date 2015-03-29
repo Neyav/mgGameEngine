@@ -117,3 +117,12 @@ mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 
 	return Normal;
 }
+
+mgLineSegment::mgLineSegment()
+{ // Init
+	Description = LINEDES_UNDEFINED;
+	Facing = LINEFACE_UNDEFINED;
+
+	LineSegmentBlock = NULL;
+	LineSegmentOwner = NULL;
+}

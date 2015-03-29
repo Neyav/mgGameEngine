@@ -16,9 +16,10 @@
 class mgMapObjectPlayer : public mgMapObject
 {
 public:
-	double ObjectSize = MGPLAYERSIZE;
-
 	mgLinkedList<mgLineSegment> *ObjectGeometry(void);
+
+	mgMapObjectPlayer();
+	~mgMapObjectPlayer();
 };
 
 #endif

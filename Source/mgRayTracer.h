@@ -21,20 +21,20 @@ private:
 
 	mgLinkedList<mgLineSegment> *BuildOccluderLines(mgPoint Position);
 public:
+	mgRayTracer();
 	~mgRayTracer();
 
-	mgMapDataHandler *MapReference = NULL;
+	mgMapDataHandler *MapReference;
 	mgLinkedList<mgPoint> PositionsChecked;
-	bool ListPositions = false;
+	bool ListPositions;
 
 	// Essentially a read-only list of information from the last scan
-	double RayDistance = 0;
+	double RayDistance;
 	// ---
 
 	mgPoint OccluderPoint(mgPoint Origin, mgVector Direction);
 
 	// Essentially a rewrite of the raytracing code. OccluderPoint above is going to be depreciated in the near future.
-	
 };
 
 #endif

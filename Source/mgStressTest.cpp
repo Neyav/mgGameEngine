@@ -77,6 +77,13 @@ void mgStressTimer::ConsoleOutputIterationResults(const unsigned int Iterations)
 	ConsoleOutputFriendlyTime(TimePerIteration);
 }
 
+mgStressTimer::mgStressTimer()
+{
+	TimerRunning = false;
+	TimerComplete = false;
+	std::string Description = "No Description";
+}
+
 void mgStressTest::TEST_mgMapDataHandler(void)
 {
 	mgMapDataHandler testmapdata;

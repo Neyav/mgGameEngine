@@ -112,3 +112,19 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 
 	return ObjectShape;
 }
+
+mgMapObjectPlayer::mgMapObjectPlayer()
+{
+	ObjectShape = NULL;
+	ObjectSize = 0;
+}
+
+mgMapObjectPlayer::~mgMapObjectPlayer()
+{
+	if (ObjectShape != NULL)
+	{	// This object generated geometry, delete it.
+		ObjectShape->ExplicitPointerCleanup = true; // We are responsible for the lines we generate.
+
+		delete ObjectShape;
+	}
+}

@@ -34,10 +34,12 @@ private:
 	// for this class, as a strict definition of a variable as this type would overflow the stack by default.
 public:
 
-	mgMapDataHandler *Map = NULL;
+	mgMapDataHandler *Map;
 
 	bool CheckBlock(unsigned int BlockY, unsigned int BlockX);
 	void InitNewBlock(unsigned int BlockY, unsigned int BlockX, int NewDepth);
 	void GenerateMaze(unsigned int BlockY, unsigned int BlockX);
+
+	mgRandomMazeGenerator();
 };
 #endif

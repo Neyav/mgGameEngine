@@ -137,6 +137,13 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 	}
 }
 
+mgRayTracer::mgRayTracer()
+{
+	MapReference = NULL;
+	ListPositions = false;
+	RayDistance = 0;
+}
+
 mgRayTracer::~mgRayTracer()
 {
 	// Any clean up needed.
