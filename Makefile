@@ -4,11 +4,18 @@ CC = c++
 STRIP = strip
 RM = rm
 
-CFLAGS = -O2 -Wall -pipe -fno-strict-aliasing
+CFLAGS = -O3 -funroll-loops -pipe -fno-strict-aliasing
 
 mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgMapObjectPlayer.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
-	$(CC) ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgMapObjectPlayer.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -o mgConsoleTest
+	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgMapObjectPlayer.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(STRIP) --strip-all mgConsoleTest
+
+NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRayTracer.o mgRandomMazeGenerator.o 
+	$(CC) -lncurses -o NCursesExplorer NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRandomMazeGenerator.o
+	$(STRIP) --strip-all NCursesExplorer
+
+NCursesExplorer.o: Source/NCursesExplorer.cpp
+	$(CC) $(CFLAGS) -o NCursesExplorer.o -c Source/NCursesExplorer.cpp
 
 ConsoleMazeGenerator.o: Source/ConsoleMazeGenerator.cpp
 	$(CC) $(CFLAGS) -o ConsoleMazeGenerator.o -c Source/ConsoleMazeGenerator.cpp
