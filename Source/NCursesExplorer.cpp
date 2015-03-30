@@ -102,6 +102,14 @@ int main(void)
 
 			move(RenderRow, RenderColumn);
 
+			if (!ColumnDepthMap[RenderColumn].CompleteScan)
+			{ // An incomplete scan means the results are indeterminate.
+			  // This can be triggered easily by walking out of the map
+			  // boundaries.
+				addch(' ');
+				continue;
+			}
+
 			if (RenderRow > round(Top) && RenderRow < round(Bottom))
 			{
 				// Determine how much of this line is facing
