@@ -8,6 +8,15 @@
 #include "mgLineSegment.h"
 #include "mgLinkedList.h"
 
+struct mgTraceResults
+{
+	mgLineSegment *ImpactLine;
+	mgPoint	ImpactPoint;
+	double RayDistance;
+
+	bool CompleteScan; // True if the scan was complete, false if it was incomplete.
+};
+
 // =------------------------------------=
 // = mgRayTracer C++ class              =
 // =------------------------------------=
@@ -28,11 +37,7 @@ public:
 	mgLinkedList<mgPoint> PositionsChecked;
 	bool ListPositions;
 
-	// Essentially a read-only list of information from the last scan
-	double RayDistance;
-	// ---
-
-	mgPoint OccluderPoint(mgPoint Origin, mgVector Direction);
+	mgTraceResults OccluderPoint(mgPoint Origin, mgVector Direction);
 
 	// Essentially a rewrite of the raytracing code. OccluderPoint above is going to be depreciated in the near future.
 };

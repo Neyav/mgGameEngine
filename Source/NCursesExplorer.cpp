@@ -1,3 +1,11 @@
+// =-------------------------------------------------------------------------------------------------=
+// = NCursesExplorer -> This file was mostly written in nano on FreeBSD 10.1. Not an ideal setup, I  =
+// =                    am aware, but I wanted to play around with it. It is nice to get interactive =
+// =                    results from this project finally, and also to have such a tool for          =
+// =                    diagnostic purposes. Excuse code messiness. It also shows how easy this      =
+// =                    engine is to program for, definitely an intended result. Happy. :)           =
+// =-------------------------------------------------------------------------------------------------=
+
 #include <ncurses.h>
 #include <stdlib.h>
 #include <math.h>
@@ -12,8 +20,9 @@ int main(void)
 {
 	bool ExitProgram = false;
 
-	mgMapDataHandler World;
-	mgRandomMazeGenerator Generator;
+	mgMapDataHandler World; // Gameworld.
+	mgRandomMazeGenerator Generator; // Random number generator.
+	mgRayTracer RenderTracer; // Our tracer.
 
 	// Make a 50x50 world by default.
 	World.InitalizeMapData(50, 50);
@@ -21,6 +30,8 @@ int main(void)
 	// Generate a random maze in the world.
 	Generator.Map = &World;
 	Generator.GenerateMaze(1,1);
+
+	RenderTracer.MapReference = &World;
 
 	// Your position in this world
 	mgPoint ViewPort = { 1.5, 1.5 };
@@ -33,7 +44,7 @@ int main(void)
 	while(!ExitProgram)
 	{ // Render our viewport
 		int MaxY, MaxX;
-		double ColumnDepthMap[300]; // If your terminal is bigger...
+		mgTraceResults ColumnDepthMap[500]; // If your terminal is bigger...
 
 		if (ViewAngle >= 360)
 			ViewAngle -= 360;
@@ -48,29 +59,30 @@ int main(void)
 
 		for (int RenderColumn = 0; RenderColumn < MaxX; RenderColumn++)
 		{	// Shoot a ray for each column to determine if we hit a wall and how far away it is.
-			mgRayTracer RenderTracer;
 			mgVector RenderVector;
+			mgTraceResults TraceResults;
 
 			double AngleDifference = (DegreesPerColumn * (double)RenderColumn) - (FOV / 2);
 			double NewAngle = ViewAngle + AngleDifference;
 
 			RenderVector.VectorFromDegrees(NewAngle);
 
-			RenderTracer.MapReference = &World;
-			RenderTracer.OccluderPoint(ViewPort, RenderVector);
+			TraceResults = RenderTracer.OccluderPoint(ViewPort, RenderVector);
 
-			double Distance = RenderTracer.RayDistance;
-			Distance = Distance * cos(AngleDifference * (mgPI / 180));
+			// Necessary to convert to a flat view plane so we don't get fish eye view.
+			TraceResults.RayDistance = TraceResults.RayDistance * cos(AngleDifference * (mgPI / 180));
 
-			ColumnDepthMap[RenderColumn] = Distance;
+			ColumnDepthMap[RenderColumn] = TraceResults;
 		}
 
 		// Render here
+		// I didn't nest these loops with indents so I could view them on the local terminal screen
+		// on my PC while X.Org and KDE compiled/installed... Retro.... :D
 		for (int RenderRow = 0; RenderRow < MaxY; RenderRow++)
 		{
 		for (int RenderColumn = 0; RenderColumn < MaxX; RenderColumn++)
 		{
-			double Height = MaxY / ColumnDepthMap[RenderColumn];
+			double Height = MaxY / ColumnDepthMap[RenderColumn].RayDistance;
 			double Top = (MaxY - Height) / 2;
 			double Bottom = MaxY - ((MaxY - Height) / 2);
 

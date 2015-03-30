@@ -99,7 +99,6 @@ void mgVisibilityMap::LinkToMapHandler(mgMapDataHandler *LinkMap)
 
 void mgVisibilityMap::CalculateVisibility(int BlockY, int BlockX)
 {
-	mgPoint CheckPoint; // HAH.... wait, yes, okay, lolololololol.. ahahaha... Okay, I'm calm.
 	mgPoint CheckPosition;
 	mgVector CheckDirection;
 	mgRayTracer VisibilityTracer;
@@ -115,12 +114,9 @@ void mgVisibilityMap::CalculateVisibility(int BlockY, int BlockX)
 	{
 		CheckDirection.VectorFromDegrees(CheckAngle);
 
-		//std::cout << "Trace: " << CheckAngle << std::endl;
-
-		CheckPoint = VisibilityTracer.OccluderPoint(CheckPosition, CheckDirection);
+		// Uses the PositionsChecked list to determine results, and therefore doesn't need the information stored in mgTraceResults
+		VisibilityTracer.OccluderPoint(CheckPosition, CheckDirection);
 		VisibilityTracer.PositionsChecked.ResetIterator(); // Make sure we're starting at the beginning.
-
-		//AddVisiblePoint(round(CheckPoint.Y), round(CheckPoint.X));
 
 		while (!VisibilityTracer.PositionsChecked.IteratorAtEnd())
 		{

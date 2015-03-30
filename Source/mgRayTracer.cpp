@@ -58,10 +58,17 @@ mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 }
 
 // Determine if any objects or walls are occluding our ray tracer
-mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
+mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 {
 	mgPoint Occluder, OccluderBlock;
 	double distance = 1000;
+	int Scans = 0;
+	mgTraceResults Results;
+
+	Results.ImpactLine = NULL;
+	Results.ImpactPoint = { 0, 0 };
+	Results.RayDistance = 0;
+	Results.CompleteScan = false;
 
 	TracerOrigin = TracerPosition = Origin;
 	TracerDirection = Direction;
@@ -69,14 +76,15 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 	// If there is a list, clear it out.
 	PositionsChecked.ClearList();
 
-	//std::cout << "mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)" << std::endl;
-
-	while (1)
+	// Scans only exists to prevent infinite length lines.
+	while (Scans < 100)
 	{
 		mgPoint MapBlock;
 		mgLinkedList<mgLineSegment> *LineSegmentList;
 		mgLineSegment *LineReference;
 		mgLineSegment TestLine;
+
+		Scans++;
 
 		TestLine.ImportLine(TracerPosition, Direction, 1); // We are testing one block at a time, so move one blocks distance per check.
 
@@ -117,6 +125,13 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 					Occluder = TestPoint;
 					if (LineReference->LineSegmentBlock != NULL)
 						OccluderBlock = LineReference->LineSegmentBlock->Position;
+
+					// We're just going to jimmy this in here. Not too much concern is being made for the maintainability of this function because it is intended
+					// to get scrapped for a better designed and more capable counterpart.
+					Results.ImpactLine = LineReference;
+					Results.CompleteScan = true;
+					Results.ImpactPoint = TestPoint;
+					Results.RayDistance = distance;
 				}
 			}
 			LineReference = LineSegmentList->ReturnElementReference();
@@ -129,19 +144,18 @@ mgPoint mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 			if (ListPositions)
 				PositionsChecked.AddElement(OccluderBlock);
 
-			RayDistance = distance;
-
 			delete LineSegmentList;
-			return Occluder;
+			return Results;
 		}
 	}
+
+	return Results;
 }
 
 mgRayTracer::mgRayTracer()
 {
 	MapReference = NULL;
 	ListPositions = false;
-	RayDistance = 0;
 }
 
 mgRayTracer::~mgRayTracer()

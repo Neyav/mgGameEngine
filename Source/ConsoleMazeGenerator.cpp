@@ -35,6 +35,7 @@ void RenderPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Map,
 		// For each Column, do a ray trace from the origin and calculate the distance
 		mgRayTracer RenderTracer;
 		mgVector RenderVector;
+		mgTraceResults TraceResults;
 
 		double AngleDifference = (DegreesPerColumn * (double)RenderColumn) - (FOV / 2);
 		double NewAngle = RenderAngle + AngleDifference;
@@ -42,9 +43,9 @@ void RenderPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Map,
 		RenderVector.VectorFromDegrees(NewAngle);
 
 		RenderTracer.MapReference = Map;
-		RenderTracer.OccluderPoint(Position, RenderVector);
+		TraceResults = RenderTracer.OccluderPoint(Position, RenderVector);
 
-		double Distance = RenderTracer.RayDistance;
+		double Distance = TraceResults.RayDistance;
 		Distance = Distance * cos(AngleDifference* (mgPI / 180));
 
 		ColumnDepthMap[RenderColumn] = Distance;
@@ -158,6 +159,7 @@ void RenderHQPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Ma
 		// For each Column, do a ray trace from the origin and calculate the distance
 		mgRayTracer RenderTracer;
 		mgVector RenderVector;
+		mgTraceResults TraceResults;
 
 		double AngleDifference = (DegreesPerColumn * (double)RenderColumn) - (90 / 2);
 		double NewAngle = RenderAngle + AngleDifference;
@@ -165,9 +167,9 @@ void RenderHQPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Ma
 		RenderVector.VectorFromDegrees(NewAngle);
 
 		RenderTracer.MapReference = Map;
-		RenderTracer.OccluderPoint(Position, RenderVector);
+		TraceResults = RenderTracer.OccluderPoint(Position, RenderVector);
 
-		double Distance = RenderTracer.RayDistance;
+		double Distance = TraceResults.RayDistance;
 		Distance = Distance * cos(AngleDifference* (mgPI / 180));
 
 		ColumnDepthMap[RenderColumn] = Distance;
