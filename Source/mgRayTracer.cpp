@@ -66,7 +66,8 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 	mgTraceResults Results;
 
 	Results.ImpactLine = NULL;
-	Results.ImpactPoint = { 0, 0 };
+	Results.ImpactPoint.Y = 0;
+	Results.ImpactPoint.X = 0;
 	Results.RayDistance = 0;
 	Results.CompleteScan = false;
 

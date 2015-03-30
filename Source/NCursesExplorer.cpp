@@ -14,6 +14,11 @@
 #include "mgRayTracer.h"
 #include "mgRandomMazeGenerator.h"
 
+#define COL_WALLS 1
+#define COL_FLOORCEIL 2
+#define COL_SEPERATE 3
+#define COL_MAP 4
+
 int FOV = 90; // Default field of view
 
 int main(void)
@@ -40,6 +45,13 @@ int main(void)
 	initscr();
 	noecho();
 	curs_set(false);
+	start_color();
+
+	init_pair(COL_WALLS, COLOR_WHITE, COLOR_BLACK);
+	init_pair(COL_FLOORCEIL, COLOR_WHITE, COLOR_BLACK);
+	init_pair(COL_SEPERATE, COLOR_RED, COLOR_WHITE);
+	init_pair(COL_MAP, COLOR_WHITE, COLOR_BLUE);
+	attron(COLOR_PAIR(COL_WALLS));
 
 	while(!ExitProgram)
 	{ // Render our viewport
@@ -75,6 +87,8 @@ int main(void)
 			ColumnDepthMap[RenderColumn] = TraceResults;
 		}
 
+		attron(COLOR_PAIR(COL_WALLS));
+
 		// Render here
 		// I didn't nest these loops with indents so I could view them on the local terminal screen
 		// on my PC while X.Org and KDE compiled/installed... Retro.... :D
@@ -86,12 +100,55 @@ int main(void)
 			double Top = (MaxY - Height) / 2;
 			double Bottom = MaxY - ((MaxY - Height) / 2);
 
+			move(RenderRow, RenderColumn);
+
 			if (RenderRow > round(Top) && RenderRow < round(Bottom))
-				mvprintw(RenderRow,RenderColumn, "O");
+			{
+				// Determine how much of this line is facing
+				// you and adjust "shading" to match.
+				mgVector ViewVector;
+				double DotProduct;
+
+				// Bold walls closer than 2.5 blocks away.
+				if (ColumnDepthMap[RenderColumn].RayDistance > 2.5)
+					attroff(A_BOLD);
+				else
+					attron(A_BOLD);
+
+				if (RenderColumn < MaxX && ColumnDepthMap[RenderColumn].ImpactLine != ColumnDepthMap[RenderColumn + 1].ImpactLine)
+				{ // Adjacent Line is different, draw a straight line up and down
+					attron(COLOR_PAIR(COL_SEPERATE));
+					addch(179);
+				}
+				else
+				{ // Draw surface
+				ViewVector.VectorFromDegrees(ViewAngle);
+				DotProduct = ViewVector * ColumnDepthMap[RenderColumn].ImpactLine->NormalFacingPosition(ViewPort);
+
+				// The DotProduct represents the proportionate facing of two Vectors
+				// -1 means they are facing each other. 1 They are looking in the same direction.
+				// These values took experimenting to get right
+				attron(COLOR_PAIR(COL_WALLS));
+				if (DotProduct > -0.05)
+					addch(176);
+				else if (DotProduct > -0.1)
+					addch(177);
+				else if (DotProduct > -0.25)
+					addch(178);
+				else
+					addch(219);
+				}
+			}
 			else
-				mvprintw(RenderRow,RenderColumn, " ");
+			{
+				attron(COLOR_PAIR(COL_FLOORCEIL));
+				attroff(A_BOLD);
+				addch(' ');
+			}
 		}
 		}
+
+		attron(COLOR_PAIR(COL_MAP));
 
 		// Display a "minimap"
 		int ScreenY = 0;
