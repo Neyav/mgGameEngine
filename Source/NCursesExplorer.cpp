@@ -81,6 +81,24 @@ int main(void)
 		}
 		}
 
+		// Display a "minimap"
+		int ScreenY = 0;
+		for (int MMY = floor(ViewPort.Y) - 2; MMY < floor(ViewPort.Y + 3); MMY++)
+		{
+		int ScreenX = 0;
+		for (int MMX = floor(ViewPort.X) - 2; MMX < floor(ViewPort.X + 3); MMX++)
+		{
+		if (MMY == floor(ViewPort.Y) && MMX == floor(ViewPort.X))
+			mvprintw(ScreenY, ScreenX, "[YOU]");
+		else if (World.IsBlockClippable(MMY, MMX))
+			mvprintw(ScreenY, ScreenX, "[XXX]");
+		else
+			mvprintw(ScreenY, ScreenX, "[   ]");
+		ScreenX += 5;
+		}
+		ScreenY++;
+		}
+
 		refresh();
 
 		mgVector Movement; // Just incase we need to move
