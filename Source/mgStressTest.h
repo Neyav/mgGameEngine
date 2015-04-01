@@ -3,6 +3,7 @@
 
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
+#include "mgVisibilityMap.h"
 
 class mgStressTimer
 {
@@ -29,6 +30,7 @@ private:
 public:
 	void TEST_mgMapDataHandler(void);
 	void TEST_mgVector(void);
+	void TEST_mgVisibilityMap(void);
 
 	mgStressTest();
 };

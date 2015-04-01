@@ -158,6 +158,11 @@ void mgStressTest::TEST_mgVector(void)
 
 }
 
+void mgStressTest::TEST_mgVisibilityMap()
+{
+
+}
+
 mgStressTest::mgStressTest()
 {
 	srand(time(NULL)); // Seed the random number generator.
