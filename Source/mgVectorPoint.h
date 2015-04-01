@@ -3,10 +3,17 @@
 
 #define mgPI 3.14159265359
 
-struct mgPoint
+// mgPoint was a struct for the longest time but need for an operator overload for the > forced me to turn it into a shallow
+// class. Shallow in functionality, but a class in and of its own right none the less.
+class mgPoint
 {
+public:
 	double Y;
 	double X;
+
+	bool operator>(const mgPoint& other);
+	bool operator<(const mgPoint& other);
+	bool operator==(const mgPoint& other);
 };
 
 double DistanceBetweenPoints(mgPoint Start, mgPoint End);

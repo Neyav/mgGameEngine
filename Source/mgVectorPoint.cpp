@@ -2,11 +2,46 @@
 
 #include "mgVectorPoint.h"
 
-// The square roots in this source file are a point of much contention for me. I keep reading and hearing that square roots are expensive in terms of
-// processing time, and I would like, as much as possible, to limit them or eliminate them. Other people just use the results of Y^2 + X^2 without square rooting
-// them for the purpose of comparing lengths and distances but I use them for more than that here, and they get used often. I would like an alternative that
-// is less expensive but produces the same results for calculating the distance between two points. I suspect that if such a thing existed, it would have already been
-// discovered but my mind is set to task regardless. I might just cave and accept square roots as a part of my life for this project.
+// Comparative operator overloads for quickly comparing mgPoints for storage in a binary search tree.
+bool mgPoint::operator>(const mgPoint& other)
+{
+	if (Y == other.Y)
+	{
+		if (X > other.X)
+			return true;
+		else
+			return false;
+	}
+
+	if (Y > other.Y)
+		return true;
+	else
+		return false;
+}
+
+bool mgPoint::operator<(const mgPoint& other)
+{
+	if (Y == other.Y)
+	{
+		if (X < other.X)
+			return true;
+		else
+			return false;
+	}
+
+	if (Y < other.Y)
+		return true;
+	else
+		return false;
+}
+
+bool mgPoint::operator==(const mgPoint& other)
+{
+	if (Y == other.Y && X == other.X)
+		return true;
+	else
+		return false;
+}
 
 double DistanceBetweenPoints(const mgPoint Start, const mgPoint End)
 {

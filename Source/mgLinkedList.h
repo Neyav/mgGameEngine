@@ -25,7 +25,7 @@ struct mgLinkedListElement
 	mgLinkedListElement<TemplateClass> *Previous;
 };
 
-template <class TemplateClass> class mgLinkedList
+template <typename TemplateClass> class mgLinkedList
 {
 private:
 	mgLinkedListElement<TemplateClass> *LinkedList;
@@ -52,7 +52,7 @@ public:
 	~mgLinkedList();
 };
 
-template <class TemplateClass> void mgLinkedList<TemplateClass>::AddElement(TemplateClass ElementToAdd)
+template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(TemplateClass ElementToAdd)
 {
 	// This is the head of the linked list, let's create our first entry!
 	mgLinkedListElement<TemplateClass> *LinkedListEntry;
@@ -82,7 +82,7 @@ template <class TemplateClass> void mgLinkedList<TemplateClass>::AddElement(Temp
 	Elements++;
 }
 
-template <class TemplateClass> void mgLinkedList<TemplateClass>::AddElementReference(TemplateClass *ElementToAdd)
+template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementReference(TemplateClass *ElementToAdd)
 {
 	// This is the head of the linked list, let's create our first entry!
 	mgLinkedListElement<TemplateClass> *LinkedListEntry;
@@ -107,12 +107,12 @@ template <class TemplateClass> void mgLinkedList<TemplateClass>::AddElementRefer
 	Elements++;
 }
 
-template <class TemplateClass> void mgLinkedList<TemplateClass>::ResetIterator(void)
+template <typename TemplateClass> void mgLinkedList<TemplateClass>::ResetIterator(void)
 {
 	Iterator = LinkedList;
 }
 
-template <class TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void)
+template <typename TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void)
 {
 	if (Iterator != NULL)
 	{
@@ -133,7 +133,7 @@ template <class TemplateClass> TemplateClass mgLinkedList<TemplateClass>::Return
 	}
 }
 
-template <class TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::ReturnElementReference(void)
+template <typename TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::ReturnElementReference(void)
 {
 	if (Iterator == NULL)
 		return NULL;
@@ -149,12 +149,12 @@ template <class TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::Retur
 }
 
 
-template <class TemplateClass> int mgLinkedList<TemplateClass>::NumberOfElements(void)
+template <typename TemplateClass> int mgLinkedList<TemplateClass>::NumberOfElements(void)
 {
 	return Elements;
 }
 
-template <class TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEnd(void)
+template <typename TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEnd(void)
 {
 	if (Iterator == NULL)
 		return true;
@@ -162,17 +162,17 @@ template <class TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEnd(v
 	return false;
 }
 
-template <class TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnIterator(void)
+template <typename TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnIterator(void)
 {
 	return Iterator;
 }
 
-template <class TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnHeadIterator(void)
+template <typename TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnHeadIterator(void)
 {
 	return LinkedList;
 }
 
-template <class TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
+template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
 {
 	while (LinkedList != NULL)
 	{
@@ -185,7 +185,7 @@ template <class TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
 	}
 }
 
-template <class TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
+template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
 {
 	LinkedList = NULL;
 	Iterator = NULL;
@@ -195,7 +195,7 @@ template <class TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
 	Elements = 0;
 }
 
-template <class TemplateClass> mgLinkedList<TemplateClass>::~mgLinkedList()
+template <typename TemplateClass> mgLinkedList<TemplateClass>::~mgLinkedList()
 {
 	while (LinkedList != NULL)
 	{
