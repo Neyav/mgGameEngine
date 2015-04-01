@@ -1,9 +1,15 @@
 #ifndef MGVISIBILITYMAPH
 #define MGVISIBILITYMAPH
 
+#define USEBINARYTREE
+
 #include "mgVectorPoint.h"
 #include "mgMapDataHandler.h"
+#ifdef USEBINARYTREE
+#include "mgBinaryTree.h"
+#else
 #include "mgLinkedList.h"
+#endif
 
 // =------------------------------------=
 // = mgVisibilityMap C++ class			=
@@ -15,7 +21,11 @@
 class mgVisibilityMap
 {
 private:
+#ifdef USEBINARYTREE
+	mgBinaryTree<mgPoint> VisibilityTree;
+#else
 	mgLinkedList<mgPoint> VisibilityList;
+#endif
 	mgMapDataHandler *MapReference;
 	int VisiblePoints;
 

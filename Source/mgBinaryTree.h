@@ -13,23 +13,48 @@
 */
 
 template <typename TemplateObject>
-struct mgBinaryTreenode
+class mgBinaryTreenode
 {
+public:
 	TemplateObject Element;
 
 	mgBinaryTreenode<TemplateObject> *Greater;
 	mgBinaryTreenode<TemplateObject> *Lesser;
+
+	mgBinaryTreenode();
+	~mgBinaryTreenode();
 };
+
+template <typename TemplateObject>
+mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
+{
+	// We are the greatest and lessest that ever existed.... *ROCK GUITAR CHORD*
+	Lesser = NULL;
+	Greater = NULL;
+}
+
+template <typename TemplateObject>
+mgBinaryTreenode<TemplateObject>::~mgBinaryTreenode()
+{
+	// We are being deleted, our lineage line cannot continue without us... DELETE OUR CHILDREN, BOTH THE BETTER, AND THE WORSE!
+	if (Lesser != NULL)
+		delete Lesser;
+	if (Greater != NULL)
+		delete Greater;
+}
 
 template <typename TemplateObject> 
 class mgBinaryTree
 {
 private:
 	mgBinaryTreenode<TemplateObject> *Root;
+	unsigned int ElementCount;
+
 public:
 
 	void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
+	unsigned int Elements(void);
 
 	mgBinaryTree();
 	~mgBinaryTree();
@@ -51,15 +76,14 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 		while (1) // 1 is always 1.....
 		{
 			if (ProgressNode->Element == Element) // DOPPLEGANGER2#$@#@#
-				continue;
+				break;
 			else if (ProgressNode->Element > Element) // We are small and humble. :(
 			{
 				if (ProgressNode->Lesser == NULL) // This is our home.
 				{
 					ProgressNode->Lesser = new mgBinaryTreenode < TemplateObject > ;
-					ProgressNode->Lesser->Greater = NULL;
-					ProgressNode->Lesser->Lesser = NULL; // philosophy..... dude....
 					ProgressNode->Lesser->Element = Element;
+					ElementCount++;
 					break;
 				}
 				else
@@ -70,9 +94,8 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 				if (ProgressNode->Greater == NULL) // This is our home.
 				{
 					ProgressNode->Greater = new mgBinaryTreenode < TemplateObject >;
-					ProgressNode->Greater->Greater = NULL; // Bummer.....
-					ProgressNode->Greater->Lesser = NULL; 
 					ProgressNode->Greater->Element = Element;
+					ElementCount++;
 					break;
 				}
 				else
@@ -85,6 +108,51 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 template <typename TemplateObject>
 bool mgBinaryTree<TemplateObject>::IsElementPresent(TemplateObject Element)
 {
+	mgBinaryTreenode < TemplateObject > *TravelNode = Root;
 
+	if (TravelNode == NULL)
+		return false; // Obviously, duuuh...
+
+	while (1)
+	{
+		if (TravelNode->Element == Element)
+			return true; // Found it!
+		else if (TravelNode->Element > Element)
+		{	// We're smaller than it, travel the lesser road.
+			if (TravelNode->Lesser == NULL)
+				return false; // It isn't here.
+			else
+				TravelNode = TravelNode->Lesser;
+		}
+		else
+		{	// We must travel the greater road.
+			if (TravelNode->Greater == NULL)
+				return false;
+			else
+				TravelNode = TravelNode->Greater;
+		}
+	}
 }
+
+template <typename TemplateObject>
+unsigned int mgBinaryTree<TemplateObject>::Elements(void)
+{
+	return ElementCount;
+}
+
+template <typename TemplateObject>
+mgBinaryTree<TemplateObject>::mgBinaryTree()
+{
+	Root = NULL;
+	ElementCount = 0;
+}
+
+template <typename TemplateObject>
+mgBinaryTree<TemplateObject>::~mgBinaryTree()
+{
+	if (Root != NULL)
+		delete Root; // See the binarytreenode class and appreciate its self destructive behavior.
+					// It cuts itselfs into deletion to the tune of Marilyn Manson.
+}
+
 #endif

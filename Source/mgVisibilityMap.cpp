@@ -15,6 +15,14 @@
 // Returns true if the block is marked as visible in our list, false otherwise
 bool mgVisibilityMap::IsMarkedVisible(int CheckY, int CheckX)
 {
+#ifdef USEBINARYTREE
+	mgPoint TestPosition;
+
+	TestPosition.Y = CheckY;
+	TestPosition.X = CheckX;
+
+	return VisibilityTree.IsElementPresent(TestPosition);
+#else
 	mgPoint ListObject;
 
 	VisibilityList.ResetIterator();	
@@ -28,10 +36,18 @@ bool mgVisibilityMap::IsMarkedVisible(int CheckY, int CheckX)
 	}
 
 	return false; // It isn't marked in this list
+#endif
 }
 
 void mgVisibilityMap::AddVisiblePoint(int AddY, int AddX)
 {
+#ifdef USEBINARYTREE
+	mgPoint NewPoint;
+
+	NewPoint.Y = AddY;
+	NewPoint.X = AddX;
+	VisibilityTree.AddElement(NewPoint);
+#else
 	if (!IsMarkedVisible(AddY, AddX))
 	{	// It's not in our list, add it to our list.
 		mgPoint NewPoint;
@@ -40,6 +56,7 @@ void mgVisibilityMap::AddVisiblePoint(int AddY, int AddX)
 		NewPoint.X = AddX;
 		VisibilityList.AddElement(NewPoint);
 	}
+#endif
 }
 
 void mgVisibilityMap::AddVisiblePoint(mgPoint Point)
@@ -49,11 +66,18 @@ void mgVisibilityMap::AddVisiblePoint(mgPoint Point)
 
 int mgVisibilityMap::MappedItems(void)
 {
+#ifdef USEBINARYTREE
+	return VisibilityTree.Elements();
+#else
 	return VisibilityList.NumberOfElements();
+#endif
 }
 
 mgPoint mgVisibilityMap::SequentialObtainItem(void)
 {
+#ifdef USEBINARYTREE
+
+#else
 	mgPoint ReturnValues;
 
 	if (VisibilityList.IteratorAtEnd())
@@ -65,16 +89,24 @@ mgPoint mgVisibilityMap::SequentialObtainItem(void)
 	ReturnValues = VisibilityList.ReturnElement();
 
 	return ReturnValues;
+#endif
 }
 
 void mgVisibilityMap::SequentialMarkerReset(void)
 {
+#ifdef USEBINARYTREE
+
+#else
 	VisibilityList.ResetIterator();
+#endif
 }
 
 // Merge another map into this one.
 void mgVisibilityMap::MergeMaps(mgVisibilityMap *OtherMap)
 {
+#ifdef USEBINARYTREE
+
+#else
 	int ElementsToCopy = 0;
 
 	if (OtherMap == NULL)
@@ -89,7 +121,7 @@ void mgVisibilityMap::MergeMaps(mgVisibilityMap *OtherMap)
 		AddVisiblePoint(OtherMap->SequentialObtainItem());
 		ElementsToCopy--;
 	}
-
+#endif
 }
 
 void mgVisibilityMap::LinkToMapHandler(mgMapDataHandler *LinkMap)
