@@ -30,7 +30,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_TOP;
 		LineSegmentReference->Facing = LINEFACE_RIGHT;
-		ObjectShape->AddElementReference(LineSegmentReference);
+		ObjectShape->AddElementReference(LineSegmentReference, true);
 
 		// 0, 1 -> 1, 1
 		LineSegmentReference = new mgLineSegment;
@@ -40,7 +40,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_RIGHTSIDE;
 		LineSegmentReference->Facing = LINEFACE_RIGHT;
-		ObjectShape->AddElementReference(LineSegmentReference);
+		ObjectShape->AddElementReference(LineSegmentReference, true);
 
 		// 1, 1 -> 1, 0
 		LineSegmentReference = new mgLineSegment;
@@ -50,7 +50,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_BOTTOM;
 		LineSegmentReference->Facing = LINEFACE_RIGHT;
-		ObjectShape->AddElementReference(LineSegmentReference);
+		ObjectShape->AddElementReference(LineSegmentReference, true);
 
 		// 1, 0 -> 0, 0
 		LineSegmentReference = new mgLineSegment;
@@ -60,7 +60,7 @@ mgLinkedList<mgLineSegment> *mgMapObjectPlayer::ObjectGeometry(void)
 		LineSegmentReference->LineSegmentOwner = this;
 		LineSegmentReference->Description = LINEDES_LEFTSIDE;
 		LineSegmentReference->Facing = LINEFACE_RIGHT;
-		ObjectShape->AddElementReference(LineSegmentReference);
+		ObjectShape->AddElementReference(LineSegmentReference, true);
 	}
 	else if (GeoPosition.Y != Position.Y || GeoPosition.X != Position.X || GeoSize != ObjectSize)
 	{	// We already have geometry but we need to manipulate it to our new position and size.
@@ -122,9 +122,5 @@ mgMapObjectPlayer::mgMapObjectPlayer()
 mgMapObjectPlayer::~mgMapObjectPlayer()
 {
 	if (ObjectShape != NULL)
-	{	// This object generated geometry, delete it.
-		ObjectShape->ExplicitPointerCleanup = true; // We are responsible for the lines we generate.
-
 		delete ObjectShape;
-	}
 }

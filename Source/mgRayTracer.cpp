@@ -45,7 +45,8 @@ mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 
 					CopiedLine = BlockLineList->ReturnElementReference();
 
-					OccluderLineList->AddElementReference(CopiedLine);
+					// False because we do not own the reference, reference is owned by the MapElement.
+					OccluderLineList->AddElementReference(CopiedLine, false);
 				}
 			}
 

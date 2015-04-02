@@ -18,9 +18,5 @@ mgMapObject::mgMapObject()
 mgMapObject::~mgMapObject()
 {
 	if (ObjectShape != NULL)
-	{	// This object generated geometry, delete it.
-		ObjectShape->ExplicitPointerCleanup = true; // We are responsible for the lines we generate.
-
 		delete ObjectShape;
-	}
 }

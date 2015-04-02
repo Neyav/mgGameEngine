@@ -16,14 +16,39 @@
 */
 
 template <typename TemplateClass>
-struct mgLinkedListElement
+class mgLinkedListElement
 {
+public:
 	TemplateClass *Element;
-	bool ElementPassedAsPointer;
+	bool Ownership;
 
 	mgLinkedListElement<TemplateClass> *Next;
 	mgLinkedListElement<TemplateClass> *Previous;
+
+	mgLinkedListElement<TemplateClass>();
+	~mgLinkedListElement<TemplateClass>();
 };
+
+template <typename TemplateClass> mgLinkedListElement<TemplateClass>::mgLinkedListElement()
+{
+	Ownership = true; // Default ownership
+
+	Element = NULL;
+	Next = Previous = NULL;
+}
+
+template <typename TemplateClass> mgLinkedListElement<TemplateClass>::~mgLinkedListElement()
+{
+	// Keep the chain.
+	if (Next != NULL)
+		Next->Previous = Previous;
+	if (Previous != NULL)
+		Previous->Next = Next;
+
+	if (Ownership)
+		delete Element; // We own it, we clear it.
+}
+
 
 template <typename TemplateClass> class mgLinkedList
 {
@@ -35,10 +60,8 @@ private:
 
 public:
 
-	bool ExplicitPointerCleanup; // If true the linked list cleans its pointers, regardless of any built in behavoir.
-
 	void AddElement(TemplateClass ElementToAdd);
-	void AddElementReference(TemplateClass *ElementToAdd);
+	void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
 	void ResetIterator(void);
 	void ClearList(void);
 	TemplateClass ReturnElement(void);
@@ -66,11 +89,9 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(T
 
 	LinkedListEntry->Element = CopyofElement;
 	LinkedListEntry->Next = LinkedList;
-	LinkedListEntry->ElementPassedAsPointer = false; // This element was not passed as a pointer.
 	if (LinkedList == NULL)
 	{
 		LinkedList = Iterator = LinkedListEntry;
-		LinkedList->Previous = NULL;
 	}
 	else
 	{
@@ -82,7 +103,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(T
 	Elements++;
 }
 
-template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementReference(TemplateClass *ElementToAdd)
+template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementReference(TemplateClass *ElementToAdd, bool Ownership)
 {
 	// This is the head of the linked list, let's create our first entry!
 	mgLinkedListElement<TemplateClass> *LinkedListEntry;
@@ -91,11 +112,10 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementRe
 
 	LinkedListEntry->Element = ElementToAdd;
 	LinkedListEntry->Next = LinkedList;
-	LinkedListEntry->ElementPassedAsPointer = true; // It was passed as a pointer;
+	LinkedListEntry->Ownership = Ownership;
 	if (LinkedList == NULL)
 	{
 		LinkedList = Iterator = LinkedListEntry;
-		LinkedList->Previous = NULL;
 	}
 	else
 	{
@@ -142,8 +162,6 @@ template <typename TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::Re
 		mgLinkedListElement<TemplateClass> *ReturnObject;
 		ReturnObject = Iterator;
 		Iterator = Iterator->Next;
-		ReturnObject->ElementPassedAsPointer = true; // This object has been sent to its parent as a pointer reference
-													// This being true prevents the list clean up from deleting it.
 		return ReturnObject->Element;
 	}
 }
@@ -174,15 +192,13 @@ template <typename TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedLi
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
 {
-	while (LinkedList != NULL)
-	{
-		mgLinkedListElement<TemplateClass> *LastEntry;
+	// Refer to mgLinkedListElement class destructor
+	if (LinkedList != NULL)
+		while (LinkedList->Next != NULL)
+			delete LinkedList->Next;
+	delete LinkedList;
 
-		LastEntry = LinkedList;
-		LinkedList = LinkedList->Next;
-
-		delete LastEntry;
-	}
+	LinkedList = NULL;
 }
 
 template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
@@ -190,25 +206,15 @@ template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
 	LinkedList = NULL;
 	Iterator = NULL;
 
-	ExplicitPointerCleanup = false;
-
 	Elements = 0;
 }
 
 template <typename TemplateClass> mgLinkedList<TemplateClass>::~mgLinkedList()
 {
-	while (LinkedList != NULL)
-	{
-		mgLinkedListElement<TemplateClass> *LastEntry;
-
-		LastEntry = LinkedList;
-		LinkedList = LinkedList->Next;
-
-		if (!LastEntry->ElementPassedAsPointer || ExplicitPointerCleanup)
-			delete LastEntry->Element; // This element was never passed on as a pointer, nor was it recieved as one, we can delete it here.
-										// If it was passed on, or recieved as a pointer it is imagined that the coder will hand delete
-										// their own references.
-		delete LastEntry;
-	}
+	// Refer to mgLinkedListElement class destructor
+	if (LinkedList != NULL)
+		while (LinkedList->Next != NULL)
+			delete LinkedList->Next;
+	delete LinkedList;
 }
 #endif
