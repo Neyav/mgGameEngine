@@ -158,9 +158,41 @@ void mgStressTest::TEST_mgVector(void)
 
 }
 
-void mgStressTest::TEST_mgVisibilityMap()
+void mgStressTest::TEST_mgVisibilityMap(void)
 {
+	mgMapDataHandler TestMap;
+	mgMapElement *MapElement;
 
+	std::cout << "[---void mgStressTest::TEST_mgVisibilityMap(void)---]" << std::endl;
+
+	TestMap.InitalizeMapData(50, 50);
+
+	// Empty out the center core of the map so it's just the outter walls.
+	for (unsigned int Y = 1; Y < 50; Y++)
+		for (unsigned int X = 1; X < 50; X++)
+		{
+			MapElement = TestMap.ReturnMapBlockReference(Y, X);
+			MapElement->BlockType = MAP_BLOCKFLOOR;
+		}
+
+	Timer.Description = ".CalculateVisibility(25,25) & Adjacent x 3";
+
+	Timer.StartTimer();
+
+	for (unsigned int i = 0; i < 3; i++)
+	{
+		mgVisibilityMap VisMap;
+
+		VisMap.LinkToMapHandler(&TestMap);
+
+		// Calculate both the visibility map and the adjacent visibility maps for the center
+		VisMap.CalculateVisibility(25, 25);
+		VisMap.CalculateAdjacentVisibility(25, 25);
+	}
+
+	Timer.StopTimer();
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(3);
 }
 
 mgStressTest::mgStressTest()

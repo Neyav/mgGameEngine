@@ -66,8 +66,6 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 	if (Root == NULL)
 	{	// This is the first object in the list, just add it to the root.
 		Root = new mgBinaryTreenode < TemplateObject > ;
-		Root->Greater = NULL;
-		Root->Lesser = NULL;
 		Root->Element = Element;
 	}
 	else

@@ -342,6 +342,7 @@ int main(int argc, char* argv[])
 		std::cout << "---[ Stress Test Selection ]---" << std::endl;
 		std::cout << "---[ 1) mgMapDataHandler   ]---" << std::endl;
 		std::cout << "---[ 2) mgVector           ]---" << std::endl;
+		std::cout << "---[ 3) mgVisibilityMap    ]---" << std::endl;
 		std::cout << "---[                       ]---" << std::endl;
 		std::cout << "---Any other key skips tests---" << std::endl;
 		std::cout << "---: ";
@@ -354,6 +355,9 @@ int main(int argc, char* argv[])
 			break;
 		case '2':
 			test.TEST_mgVector();
+			break;
+		case '3':
+			test.TEST_mgVisibilityMap();
 			break;
 		default:
 			stresstest = false;
