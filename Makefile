@@ -4,7 +4,7 @@ CC = c++
 STRIP = strip
 RM = rm
 
-CFLAGS = -Ofast
+CFLAGS = -O2
 
 mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgMapObjectPlayer.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgMapObjectPlayer.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
