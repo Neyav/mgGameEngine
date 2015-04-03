@@ -149,6 +149,8 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 			delete LineSegmentList;
 			return Results;
 		}
+
+		delete LineSegmentList; // Just incase...
 	}
 
 	return Results;

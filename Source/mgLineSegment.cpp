@@ -10,11 +10,10 @@ void mgLineSegment::ImportLine(mgPoint Origin, mgVector Direction, double Length
 	SegmentStart = Origin;
 	SegmentLength = Length;
 
-	Direction.NormalizeVector(1);
-	Direction.VectorStepCoords(Length);
-
-	SegmentEnd.Y = Origin.Y + Direction.TransformedY;
-	SegmentEnd.X = Origin.X + Direction.TransformedX;
+	Direction.NormalizeVector(Length);
+	
+	SegmentEnd.Y = Origin.Y + Direction.Y;
+	SegmentEnd.X = Origin.X + Direction.X;
 }
 
 void mgLineSegment::ImportLine(mgPoint LineStart, mgPoint LineEnd)

@@ -18,7 +18,7 @@ void mgMapDataHandler::CleanHouseProtocol(void)
 	for (int Iterator = 0; Iterator < (MapSizeY * MapSizeX); Iterator++)
 		delete InternalMapData[Iterator].MapBlock;
 
-	delete InternalMapData;
+	delete[] InternalMapData;
 }
 
 bool mgMapDataHandler::PositionBoundsCheck(int PosY, int PosX)

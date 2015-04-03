@@ -107,9 +107,9 @@ void mgPathSolutionGenerator::InitateMapSolution(int StartY, int StartX, int End
 		return;
 
 	if (PathMap != NULL)
-		delete PathMap;
+		delete[] PathMap;
 	if (PathCreationMap != NULL)
-		delete PathCreationMap;
+		delete[] PathCreationMap;
 
 	PathMap = new int[MapSizeY * MapSizeX]; // Allocate the appropriate amount of memory
 	PathCreationMap = new int[MapSizeY * MapSizeX];
@@ -184,7 +184,7 @@ bool mgPathSolutionGenerator::ProcessMapSolution(int CyclesToProcess)
 		PathMap[CordToUnifiedCord(Node.Y2, Node.X2)] = Value2;
 	}
 
-	delete PathCreationMap; // We've no need for this anymore as we have our route.
+	delete[] PathCreationMap; // We've no need for this anymore as we have our route.
 
 	return true;
 
@@ -246,8 +246,8 @@ mgPathSolutionGenerator::~mgPathSolutionGenerator()
 	// Clear up any internal dynamically allocated memory blocks.
 
 	if (PathMap != NULL)
-		delete PathMap;
+		delete[] PathMap;
 
 	if (PathCreationMap != NULL)
-		delete PathCreationMap;
+		delete[] PathCreationMap;
 }

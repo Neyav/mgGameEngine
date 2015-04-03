@@ -77,7 +77,6 @@ public:
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(TemplateClass ElementToAdd)
 {
-	// This is the head of the linked list, let's create our first entry!
 	mgLinkedListElement<TemplateClass> *LinkedListEntry;
 	TemplateClass *CopyofElement;
 
@@ -89,23 +88,16 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(T
 
 	LinkedListEntry->Element = CopyofElement;
 	LinkedListEntry->Next = LinkedList;
-	if (LinkedList == NULL)
-	{
-		LinkedList = Iterator = LinkedListEntry;
-	}
-	else
-	{
+	if (LinkedList != NULL) 
 		LinkedList->Previous = LinkedListEntry;
-		LinkedList = LinkedListEntry;
-		Iterator = LinkedListEntry;
-	}
+
+	LinkedList = Iterator = LinkedListEntry;
 
 	Elements++;
 }
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementReference(TemplateClass *ElementToAdd, bool Ownership)
 {
-	// This is the head of the linked list, let's create our first entry!
 	mgLinkedListElement<TemplateClass> *LinkedListEntry;
 
 	LinkedListEntry = new mgLinkedListElement < TemplateClass >;
@@ -113,16 +105,10 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementRe
 	LinkedListEntry->Element = ElementToAdd;
 	LinkedListEntry->Next = LinkedList;
 	LinkedListEntry->Ownership = Ownership;
-	if (LinkedList == NULL)
-	{
-		LinkedList = Iterator = LinkedListEntry;
-	}
-	else
-	{
+	if (LinkedList != NULL) 	
 		LinkedList->Previous = LinkedListEntry;
-		LinkedList = LinkedListEntry;
-		Iterator = LinkedListEntry;
-	}
+
+	LinkedList = Iterator = LinkedListEntry;
 
 	Elements++;
 }
@@ -192,11 +178,12 @@ template <typename TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedLi
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
 {
-	// Refer to mgLinkedListElement class destructor
 	if (LinkedList != NULL)
+	{
 		while (LinkedList->Next != NULL)
 			delete LinkedList->Next;
-	delete LinkedList;
+		delete LinkedList;
+	}
 
 	LinkedList = NULL;
 }
@@ -211,10 +198,7 @@ template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
 
 template <typename TemplateClass> mgLinkedList<TemplateClass>::~mgLinkedList()
 {
-	// Refer to mgLinkedListElement class destructor
-	if (LinkedList != NULL)
-		while (LinkedList->Next != NULL)
-			delete LinkedList->Next;
-	delete LinkedList;
+	// Empty the list
+	this->ClearList();
 }
 #endif

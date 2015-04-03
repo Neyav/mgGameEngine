@@ -76,7 +76,11 @@ int mgVisibilityMap::MappedItems(void)
 mgPoint mgVisibilityMap::SequentialObtainItem(void)
 {
 #ifdef USEBINARYTREE
+	mgPoint t;
+	t.Y = 0;
+	t.X = 0;
 
+	return t;
 #else
 	mgPoint ReturnValues;
 
