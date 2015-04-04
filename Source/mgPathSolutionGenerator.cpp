@@ -8,13 +8,6 @@
 // = mgPathSolutionGenerator C++ class  =
 // =------------------------------------=
 
-int mgPathSolutionGenerator::CordToUnifiedCord(int CordY, int CordX)
-{
-	int UnifiedCordinates = (CordY * MapSizeX) + CordX;
-
-	return UnifiedCordinates;
-}
-
 struct PathFindingNode_s mgPathSolutionGenerator::MapProcessCycle()
 {
 	struct PathFindingNode_s Results;

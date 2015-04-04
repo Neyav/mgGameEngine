@@ -36,7 +36,10 @@ private:
 	int MapSizeY, MapSizeX;
 	struct PathFindingCurrents_s PathFindingCurrents;
 
-	int CordToUnifiedCord(int CordY, int CordX);
+	inline int CordToUnifiedCord(int CordY, int CordX)
+	{
+		return (CordY * MapSizeX) + CordX;
+	}
 	struct PathFindingNode_s MapProcessCycle();
 
 public:
