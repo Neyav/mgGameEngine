@@ -57,4 +57,4 @@ clean:
 	$(RM) *.o
 
 clean-all:
-	$(RM) mgConsoleTest *.o
+	$(RM) *.o mgConsoleTest NCursesExplorer

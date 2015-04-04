@@ -19,7 +19,7 @@
 #define COL_SEPERATE 3
 #define COL_MAP 4
 
-int FOV = 90; // Default field of view
+double FOV = 90; // Default field of view
 
 int main(void)
 {
@@ -82,7 +82,7 @@ int main(void)
 			TraceResults = RenderTracer.OccluderPoint(ViewPort, RenderVector);
 
 			// Necessary to convert to a flat view plane so we don't get fish eye view.
-			TraceResults.RayDistance = TraceResults.RayDistance * cos(AngleDifference * (mgPI / 180));
+			TraceResults.RayDistance = TraceResults.RayDistance * cos(AngleDifference * ((double)mgPI / (double)180));
 
 			ColumnDepthMap[RenderColumn] = TraceResults;
 		}
@@ -96,9 +96,9 @@ int main(void)
 		{
 		for (int RenderColumn = 0; RenderColumn < MaxX; RenderColumn++)
 		{
-			double Height = MaxY / ColumnDepthMap[RenderColumn].RayDistance;
-			double Top = (MaxY - Height) / 2;
-			double Bottom = MaxY - ((MaxY - Height) / 2);
+			double Height = (double)MaxY / ColumnDepthMap[RenderColumn].RayDistance;
+			double Top = ((double)MaxY - Height) / 2;
+			double Bottom = (double)MaxY - (((double)MaxY - Height) / 2);
 
 			move(RenderRow, RenderColumn);
 
