@@ -119,8 +119,8 @@ void mgVector::NormalizeVector(double MagnitudeOverride)
 
 	Normalizer = sqrt(Y * Y + X * X) / MagnitudeOverride;
 
-	TransformedY = Y = Y / Normalizer;
-	TransformedX = X = X / Normalizer;
+	Y = Y / Normalizer;
+	X = X / Normalizer;
 }
 
 void mgVector::NormalizeVector(void)
@@ -129,8 +129,8 @@ void mgVector::NormalizeVector(void)
 
 	Normalizer = sqrt(Y * Y + X * X) / Magnitude;
 
-	TransformedY = Y = Y / Normalizer;
-	TransformedX = X = X / Normalizer;
+	Y = Y / Normalizer;
+	X = X / Normalizer;
 }
 
 void mgVector::CalculateMagnitude(void)
@@ -179,10 +179,14 @@ void mgVector::VectorFromDegrees(double Degrees)
 }
 
 // -- Return the vector modified to represent "VectorStep" steps away from the center.
-void mgVector::VectorStepCoords(double VectorStep)
+mgPoint mgVector::VectorStepCoords(double VectorStep)
 {
-	TransformedY = Y * (VectorStep);
-	TransformedX = X * (VectorStep);
+	mgPoint Transformed;
+
+	Transformed.Y = Y * (VectorStep);
+	Transformed.X = X * (VectorStep);
+
+	return Transformed;
 }
 
 mgVector::mgVector()

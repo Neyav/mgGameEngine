@@ -30,8 +30,6 @@ class mgVector
 public:
 	double Y;
 	double X;
-	double TransformedY;
-	double TransformedX;
 	double Magnitude; // Magnitude represents the length of the vector
 
 	bool AutoNormalize;		    // Set to true when setting a vector is intended to normalize it to 1.
@@ -51,7 +49,7 @@ public:
 	void VectorFromPoints(mgPoint Start, mgPoint End);
 	void VectorFromRadians(double Radians);
 	void VectorFromDegrees(double Degrees);
-	void VectorStepCoords(double VectorStep);
+	mgPoint VectorStepCoords(double VectorStep);
 
 	mgVector();
 };
