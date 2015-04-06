@@ -19,7 +19,7 @@
 #define COL_SEPERATE 3
 #define COL_MAP 4
 
-double FOV = 90; // Default field of view
+double FOV = 70; // Default field of view
 
 int main(void)
 {
@@ -179,6 +179,7 @@ int main(void)
 		refresh();
 
 		mgVector Movement; // Just incase we need to move
+		mgMapElement *MapBlock; // Incase we want to change a tile
 
 		switch (getch())
 		{
@@ -205,6 +206,20 @@ int main(void)
 
 			ViewPort.Y += Movement.Y;
 			ViewPort.X += Movement.X;
+			break;
+		case 67: // C/c for change tile
+		case 99:
+			MapBlock = World.ReturnMapBlockReference(floor(ViewPort.Y), floor(ViewPort.X));
+			if (MapBlock == NULL)
+				break;
+			if (MapBlock->BlockType == MAP_BLOCKWALL)
+			{
+				MapBlock->BlockType = MAP_BLOCKFLOOR;
+				delete MapBlock->BlockShape;
+				MapBlock->BlockShape = NULL;
+			}
+			else
+				MapBlock->BlockType = MAP_BLOCKWALL;
 			break;
 		case 81: // Q/q for Quit
 		case 113:

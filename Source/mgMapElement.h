@@ -16,10 +16,11 @@
 
 class mgMapElement
 {
-private:
+public: // Add a member to clear the blockshape.
+//private:
 	mgLinkedList<mgLineSegment> *BlockShape;
 
-public:
+//public:
 	unsigned char BlockType;
 	mgMapElement *Adjacent[4];
 	mgPoint Position;
