@@ -6,8 +6,10 @@
 #include "mgLineSegment.h"
 #include "mgLinkedList.h"
 
+#define BlockDefine unsigned char
 #define MAP_BLOCKFLOOR 0
 #define MAP_BLOCKWALL 1
+#define MAP_BLOCKCORNER 2 // Just for testing purposes.
 
 #define ELEMENT_NORTH 0
 #define ELEMENT_EAST 1
@@ -16,17 +18,18 @@
 
 class mgMapElement
 {
-public: // Add a member to clear the blockshape.
-//private:
+private:
 	mgLinkedList<mgLineSegment> *BlockShape;
 
-//public:
-	unsigned char BlockType;
+public:	
+	BlockDefine BlockType; // Make private!!!!
+
 	mgMapElement *Adjacent[4];
 	mgPoint Position;
 
 	void operator=(const mgMapElement& other);
 
+	void SetBlockType(BlockDefine NewType);
 	void GenerateBlockGeometry(void);
 	mgLinkedList<mgLineSegment> *BlockGeometry(void);
 

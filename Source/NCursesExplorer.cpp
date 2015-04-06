@@ -213,13 +213,12 @@ int main(void)
 			if (MapBlock == NULL)
 				break;
 			if (MapBlock->BlockType == MAP_BLOCKWALL)
-			{
-				MapBlock->BlockType = MAP_BLOCKFLOOR;
-				delete MapBlock->BlockShape;
-				MapBlock->BlockShape = NULL;
-			}
+				MapBlock->SetBlockType(MAP_BLOCKFLOOR);
+			else if (MapBlock->BlockType == MAP_BLOCKFLOOR)
+				MapBlock->SetBlockType(MAP_BLOCKCORNER);
 			else
-				MapBlock->BlockType = MAP_BLOCKWALL;
+				MapBlock->SetBlockType(MAP_BLOCKWALL);
+			else if 
 			break;
 		case 81: // Q/q for Quit
 		case 113:
