@@ -218,7 +218,6 @@ int main(void)
 				MapBlock->SetBlockType(MAP_BLOCKCORNER);
 			else
 				MapBlock->SetBlockType(MAP_BLOCKWALL);
-			else if 
 			break;
 		case 81: // Q/q for Quit
 		case 113:
