@@ -104,6 +104,7 @@ void mgMapElement::GenerateBlockGeometry(void)
 			// 1,0 - 0,0
 			ShapeLine = new mgLineSegment;
 			Start.X--;
+			Start.Y++;
 			End.Y--;
 			ShapeLine->LineSegmentBlock = this;
 			ShapeLine->LineSegmentOwner = NULL;

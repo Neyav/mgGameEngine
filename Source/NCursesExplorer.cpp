@@ -157,6 +157,7 @@ int main(void)
 		}
 
 		attron(COLOR_PAIR(COL_MAP));
+		attron(A_BOLD);
 
 		// Display a "minimap"
 		int ScreenY = 0;
