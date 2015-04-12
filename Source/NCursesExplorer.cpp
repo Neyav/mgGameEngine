@@ -19,7 +19,10 @@
 #define COL_SEPERATE 3
 #define COL_MAP 4
 
-double FOV = 70; // Default field of view
+#define MAPSIZEY 25
+#define MAPSIZEX 25
+
+double FOV = 100; // Default field of view
 
 int main(void)
 {
@@ -30,7 +33,7 @@ int main(void)
 	mgRayTracer RenderTracer; // Our tracer.
 
 	// Make a 50x50 world by default.
-	World.InitalizeMapData(50, 50);
+	World.InitalizeMapData(MAPSIZEY, MAPSIZEX);
 
 	// Generate a random maze in the world.
 	Generator.Map = &World;
@@ -219,6 +222,16 @@ int main(void)
 				MapBlock->SetBlockType(MAP_BLOCKCORNER);
 			else
 				MapBlock->SetBlockType(MAP_BLOCKWALL);
+			break;
+		case 48: // 48 represents the 0 key. We want to clear the map except for the outer borders.
+			for (int ty = 1; ty < MAPSIZEY - 1; ty++)
+			{
+				for (int tx = 1; tx < MAPSIZEX - 1; tx++)
+				{
+					MapBlock = World.ReturnMapBlockReference(ty,tx);
+					MapBlock->SetBlockType(MAP_BLOCKFLOOR);
+				}
+			}
 			break;
 		case 81: // Q/q for Quit
 		case 113:
