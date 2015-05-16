@@ -13,7 +13,6 @@
 #include "mgLineSegment.h"
 #include "mgMapElement.h"
 #include "mgMapObject.h"
-#include "mgMapObjectPlayer.h"
 #include "mgStressTest.h"
 
 std::ofstream Outputfile("Maze.txt");

@@ -6,8 +6,8 @@ RM = rm
 
 CFLAGS = -std=c++11 -O2
 
-mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgMapObjectPlayer.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
-	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgMapObjectPlayer.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(STRIP) --strip-all mgConsoleTest
 
 NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRayTracer.o mgRandomMazeGenerator.o 
@@ -31,9 +31,6 @@ mgMapElement.o: Source/mgMapElement.cpp Source/mgMapElement.h
 
 mgMapObject.o: Source/mgMapObject.cpp Source/mgMapObject.h
 	$(CC) $(CFLAGS) -o mgMapObject.o -c Source/mgMapObject.cpp
-
-mgMapObjectPlayer.o: Source/mgMapObjectPlayer.cpp Source/mgMapObjectPlayer.h
-	$(CC) $(CFLAGS) -o mgMapObjectPlayer.o -c Source/mgMapObjectPlayer.cpp
 
 mgPathSolutionGenerator.o: Source/mgPathSolutionGenerator.cpp Source/mgPathSolutionGenerator.h
 	$(CC) $(CFLAGS) -o mgPathSolutionGenerator.o -c Source/mgPathSolutionGenerator.cpp

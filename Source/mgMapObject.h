@@ -5,6 +5,8 @@
 #include "mgLinkedList.h"
 #include "mgLineSegment.h"
 
+#define DEFAULTOBJECTSIZE 0.2
+
 // =------------------------------------=
 // = mgMapObject C++ class              =
 // =------------------------------------=
@@ -27,7 +29,7 @@ public:
 	double ObjectSize; // Used to scale and define the geometry generated
 
 	// Functions for the map object.
-	virtual mgLinkedList<mgLineSegment> *ObjectGeometry(void);
+	mgLinkedList<mgLineSegment> *ObjectGeometry(void);
 
 	mgMapObject();
 	~mgMapObject();
