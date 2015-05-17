@@ -16,3 +16,11 @@
 // This class functions as a method for testing two points ( with or without bounding boxes ) for any intersections between them
 // and if appropriate manage a change in momentum, pass colliding object back for pick up or ignore, and determine the final
 // resting position of the point so that it does not violate game object collision rules with other objects or walls.
+
+mgRayCaster::mgRayCaster()
+{
+	MapReference = NULL;
+
+	CurrentState.DistanceTraced = 0;
+	CurrentState.ImpactLine = NULL;
+}

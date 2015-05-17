@@ -37,7 +37,7 @@ bool mgMapDataHandler::PositionBoundsCheck(int PosY, int PosX)
 
 void mgMapDataHandler::InitalizeMapData(int SizeY, int SizeX)
 {
-	mgPoint PositionReference = { 0, 0 };
+	mgPoint PositionReference;
 
 	if (InternalMapData != NULL)
 		CleanHouseProtocol();

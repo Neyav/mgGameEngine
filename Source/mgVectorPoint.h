@@ -11,6 +11,8 @@ public:
 	double Y;
 	double X;
 
+	mgPoint();
+
 	bool operator>(const mgPoint& other);
 	bool operator<(const mgPoint& other);
 	bool operator==(const mgPoint& other);

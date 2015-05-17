@@ -2,6 +2,11 @@
 
 #include "mgVectorPoint.h"
 
+mgPoint::mgPoint()
+{
+	Y = X = 0;
+}
+
 // Comparative operator overloads for quickly comparing mgPoints for storage in a binary search tree.
 bool mgPoint::operator>(const mgPoint& other)
 {
@@ -192,6 +197,7 @@ mgPoint mgVector::VectorStepCoords(double VectorStep)
 mgVector::mgVector()
 {
 	Magnitude = 1; // Default magnitude is 1 for all vectors
+	Y = X = 0;
 
 	AutoNormalize = true; // Default behavior for vectors is to auto normalize
 }

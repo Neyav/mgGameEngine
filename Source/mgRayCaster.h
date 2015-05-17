@@ -8,6 +8,19 @@
 #include "mgLineSegment.h"
 #include "mgLinkedList.h"
 
+// mgRayCasterState is going to store all internal information relating to the current cast, it is going to be accessable publicly and manipulateable.
+// The cast is going to be initalized, then run, if the unresolved motion is solved to zero the cast is considered complete. Upon impact the program
+// will need to identify the impacted line to see if it is something to ignore ( adding it to the line ignore list ) or if it is something that needs
+// to be picked up, or if it's a wall. If it is a wall we need to use the normal of the wall to manipulate the unresolvedmotion vector so that the next
+// run of the trace has us sliding against the wall, unless that is deemed to be impossible and then the motion is considered resolved.
+struct mgRayCasterState
+{
+	mgPoint Position;
+	mgVector UnresolvedMotion;
+	mgLineSegment *ImpactLine;
+	double DistanceTraced;
+};
+
 //
 // =------------------------------------=
 // = mgRayCaster C++ class              =
@@ -23,8 +36,11 @@
 class mgRayCaster
 {
 private:
-
+	mgLinkedList<mgLineSegment> IgnoredLines;
 public:
+	mgRayCaster();
+
+	mgRayCasterState CurrentState;
 
 	mgMapDataHandler *MapReference;
 };
