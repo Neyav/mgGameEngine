@@ -8,6 +8,8 @@
 #include "mgLineSegment.h"
 #include "mgLinkedList.h"
 
+#warning mgRayTracer to be replaced with mgRayCaster.
+
 struct mgTraceResults
 {
 	mgLineSegment *ImpactLine;
