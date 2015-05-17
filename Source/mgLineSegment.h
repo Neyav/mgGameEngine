@@ -36,6 +36,12 @@
 class mgMapElement;
 class mgMapObject;
 
+struct mgLineCollisionResults
+{
+	mgPoint CollisionPoint;
+	bool Collision;
+};
+
 class mgLineSegment
 {
 public:
@@ -57,8 +63,8 @@ public:
 
 	void ImportLine(mgPoint Origin, mgVector Direction, double Length);
 	void ImportLine(mgPoint LineStart, mgPoint LineEnd);
-	mgPoint InterceptionPoint(mgLineSegment *SecondLine, bool *ValidIntercept);
 	mgVector NormalFacingPosition(mgPoint Position);
+	mgLineCollisionResults CollisionTest(mgLineSegment *Against);
 
 	mgLineSegment();
 };

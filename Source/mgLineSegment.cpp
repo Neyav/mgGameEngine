@@ -27,53 +27,34 @@ void mgLineSegment::ImportLine(mgPoint LineStart, mgPoint LineEnd)
 	SegmentLength = DistanceBetweenPoints(SegmentStart, SegmentEnd);
 }
 
-// TODO: This code was copied and pasted from elsewhere because my attempts at line collision detection had failure cases. 
-//			This code doesn't appear to have any failure cases and I wanted to be sure before I wasted time on implementing it.
-//			so I just dropped it in. While it works, and works well, it is ugly as hell and uses weird variable declariations.
-//			I plan on cleaning it up and streamlining it into the class proper.
-// Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
-// intersect the intersection point may be stored in the floats i_x and i_y.
-char get_line_intersection(double p0_x, double p0_y, double p1_x, double p1_y,
-	double p2_x, double p2_y, double p3_x, double p3_y, double *i_x, double *i_y)
+// This code is derived from the very useful example I found at: http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/1968345#1968345
+// Thank you very much sir, you have assisted me in a most troubling time.
+// As a reference to the original material, and a guide for me writing this, p0 = SegmentStart, p1 = SegmentEnd, p2 = Against->SegmentStart, p3 = Against->SegmentEnd
+mgLineCollisionResults mgLineSegment::CollisionTest(mgLineSegment *Against)
 {
-	double s1_x, s1_y, s2_x, s2_y;
-	s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
-	s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
+	mgLineCollisionResults Results;
+	mgPoint s1, s2; // s1 and s2 are hommages to the original source material.
+	double s, t; // Same as above. :p
 
-	double s, t;
-	s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
-	t = (s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
+	Results.Collision = false; // It is assumed they don't collide.
+
+	s1 = SegmentEnd - SegmentStart;
+	s2 = Against->SegmentEnd - Against->SegmentStart;
+
+	// *Cracks knuckles* Translation time. I don't expect this code to be readable, but then again, neither was the source material ( no offense )
+	s = (-s1.Y * (SegmentStart.X - Against->SegmentStart.X) + s1.X * (SegmentStart.Y - Against->SegmentStart.Y)) / (-s2.X * s1.Y + s1.X * s2.Y);
+	t = (s2.X * (SegmentStart.Y - Against->SegmentStart.Y) - s2.Y * (SegmentStart.X - Against->SegmentStart.X)) / (-s2.X * s1.Y + s1.X * s2.Y);
 
 	if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
 	{
 		// Collision detected
-		if (i_x != NULL)
-			*i_x = p0_x + (t * s1_x);
-		if (i_y != NULL)
-			*i_y = p0_y + (t * s1_y);
-		return 1;
+		Results.CollisionPoint.X = SegmentStart.X + (t * s1.X);
+		Results.CollisionPoint.Y = SegmentStart.Y + (t * s1.Y);
+		Results.Collision = true;
 	}
 
-	return 0; // No collision
-}
+	return Results;
 
-mgPoint mgLineSegment::InterceptionPoint(mgLineSegment *SecondLine, bool *ValidIntercept)
-{
-	double x, y;
-	mgPoint InterceptionPoint;
-
-	char Interception = get_line_intersection(SegmentStart.X, SegmentStart.Y, SegmentEnd.X, SegmentEnd.Y, SecondLine->SegmentStart.X, SecondLine->SegmentStart.Y,
-		SecondLine->SegmentEnd.X, SecondLine->SegmentEnd.Y, &x, &y);
-
-	InterceptionPoint.Y = y;
-	InterceptionPoint.X = x;
-
-	if (Interception)
-		*ValidIntercept = true;
-	else
-		*ValidIntercept = false;
-
-	return InterceptionPoint;
 }
 
 // Calculate the lines normal facing the position unless the line has a predetermined facing, in which case that facing is used.

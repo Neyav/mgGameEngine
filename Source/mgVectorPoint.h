@@ -3,8 +3,17 @@
 
 #define mgPI 3.14159265359
 
-// mgPoint was a struct for the longest time but need for an operator overload for the > forced me to turn it into a shallow
-// class. Shallow in functionality, but a class in and of its own right none the less.
+// =------------------------------------=
+// = mgPoint C++ class                  =
+// =------------------------------------=
+//
+// mgPoint is a container for a 2D position reference on the gameworld.
+//
+// Hilariously I originally named this file VectorPoint because the two are so similar in the sense that they are both Y and X values, and most
+// applications use them interchangably. It originally just had the structure for a point, and a class for the vector because the vector class uses more
+// memory than a point needs and that was bothering me. Now the mgPoint class has so many overloads it is really a proper and true class all on its own and
+// the file name, that was previously just a nod to the mgPoint struct being in here, has true meaning.
+
 class mgPoint
 {
 public:
@@ -13,6 +22,10 @@ public:
 
 	mgPoint();
 
+	// Manipulative Overloads
+	mgPoint operator+(const mgPoint& other); // addition
+	mgPoint operator-(const mgPoint& other); // subtraction
+	// Comparison Overloads
 	bool operator>(const mgPoint& other);
 	bool operator<(const mgPoint& other);
 	bool operator==(const mgPoint& other);
@@ -24,9 +37,8 @@ double DistanceBetweenPoints(mgPoint Start, mgPoint End);
 // = mgVector C++ class                 =
 // =------------------------------------=
 //
-// Responsible for both the simplistic handling of Y, X coordinate transferal as a function return
-// or for the handling of creating a vector of variable magnitudes from two points and then the transforming
-// of that vector to obtain the points inbetween two coordinates 
+// A Vector represents a direction. This class has a bunch of functions that facilitate ease of use to that purpose.
+
 class mgVector
 {
 public:

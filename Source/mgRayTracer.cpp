@@ -106,8 +106,7 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 		LineReference = LineSegmentList->ReturnElementReference();
 		while (LineReference != NULL)
 		{
-			mgPoint TestPoint;
-			bool Intersection;
+			mgLineCollisionResults TestResults;
 
 			if (!LineReference->ObstructsVision) // This line doesn't block vision, ignore it for our raytrace.
 			{
@@ -115,16 +114,16 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 				continue;
 			}
 
-			TestPoint = TestLine.InterceptionPoint(LineReference, &Intersection);
+			TestResults = TestLine.CollisionTest(LineReference);
 
-			if (Intersection)
+			if (TestResults.Collision)
 			{
-				double testDistance = DistanceBetweenPoints(TracerOrigin, TestPoint);
+				double testDistance = DistanceBetweenPoints(TracerOrigin, TestResults.CollisionPoint);
 
 				if (testDistance < distance)
 				{
 					distance = testDistance;
-					Occluder = TestPoint;
+					Occluder = TestResults.CollisionPoint;
 					if (LineReference->LineSegmentBlock != NULL)
 						OccluderBlock = LineReference->LineSegmentBlock->Position;
 
@@ -132,7 +131,7 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 					// to get scrapped for a better designed and more capable counterpart.
 					Results.ImpactLine = LineReference;
 					Results.CompleteScan = true;
-					Results.ImpactPoint = TestPoint;
+					Results.ImpactPoint = TestResults.CollisionPoint;
 					Results.RayDistance = distance;
 				}
 			}

@@ -2,9 +2,40 @@
 
 #include "mgVectorPoint.h"
 
+// =------------------------------------=
+// = mgPoint C++ class                  =
+// =------------------------------------=
+//
+// mgPoint is a container for a 2D position reference on the gameworld.
+//
+// Hilariously I originally named this file VectorPoint because the two are so similar in the sense that they are both Y and X values, and most
+// applications use them interchangably. It originally just had the structure for a point, and a class for the vector because the vector class uses more
+// memory than a point needs and that was bothering me. Now the mgPoint class has so many overloads it is really a proper and true class all on its own and
+// the file name, that was previously just a nod to the mgPoint struct being in here, has true meaning.
+
 mgPoint::mgPoint()
 {
 	Y = X = 0;
+}
+
+mgPoint mgPoint::operator+(const mgPoint& other)
+{
+	mgPoint product;
+
+	product.Y = Y + other.Y;
+	product.X = X + other.X;
+
+	return product;
+}
+
+mgPoint mgPoint::operator-(const mgPoint& other)
+{
+	mgPoint product;
+
+	product.Y = Y - other.Y;
+	product.X = X - other.X;
+
+	return product;
 }
 
 // Comparative operator overloads for quickly comparing mgPoints for storage in a binary search tree.
@@ -67,6 +98,8 @@ double DistanceBetweenPoints(const mgPoint Start, const mgPoint End)
 // =------------------------------------=
 // = mgVector C++ class                 =
 // =------------------------------------=
+//
+// A Vector represents a direction. This class has a bunch of functions that facilitate ease of use to that purpose.
 
 // produces the dot product of two vectors.
 double mgVector::operator*(const mgVector& other)
