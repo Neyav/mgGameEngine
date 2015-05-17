@@ -1,9 +1,0 @@
-#include <math.h>
-#include <stdlib.h>
-#include <iostream>
-
-#include "mgRayCaster.h"
-#include "mgLineSegment.h"
-#include "mgMapDataHandler.h"
-#include "mgVectorPoint.h"
-#include "mgLinkedList.h"
