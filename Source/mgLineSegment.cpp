@@ -109,3 +109,22 @@ mgLineSegment::mgLineSegment()
 	ObstructsMovement = true;
 	ObstructsVision = true;
 }
+
+mgLineSegment *mgDefineLine(double StartY, double StartX, double EndY, double EndX, mgPoint Offset, LineDescription Description, LineFacing Facing, mgMapElement *ElementOwner, mgMapObject *ObjectOwner)
+{
+	mgLineSegment *DefinedLine;
+	mgPoint Start, End;
+
+	DefinedLine = new mgLineSegment;
+	Start.Y = StartY + Offset.Y;
+	Start.X = StartX + Offset.X;
+	End.Y = EndY + Offset.Y;
+	End.X = EndX + Offset.X;
+	DefinedLine->ImportLine(Start,End);
+	DefinedLine->LineSegmentBlock = ElementOwner;
+	DefinedLine->LineSegmentOwner = ObjectOwner;
+	DefinedLine->Facing = Facing;
+	DefinedLine->Description = Description;
+
+	return DefinedLine;
+}

@@ -42,8 +42,11 @@ int main(void)
 	RenderTracer.MapReference = &World;
 
 	// Your position in this world
-	mgPoint ViewPort = { 1.5, 1.5 };
+	mgPoint ViewPort;
 	int ViewAngle = 90;
+
+	ViewPort.Y = 1.5;
+	ViewPort.X = 1.5;
 
 	initscr();
 	noecho();

@@ -69,4 +69,6 @@ public:
 	mgLineSegment();
 };
 
+mgLineSegment *mgDefineLine(double StartY, double StartX, double EndY, double EndX, mgPoint Offset, LineDescription Description, LineFacing Facing, mgMapElement *ElementOwner, mgMapObject *ObjectOwner);
+
 #endif
