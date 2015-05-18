@@ -100,7 +100,6 @@ mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 
 mgLineSegment::mgLineSegment()
 { // Initialize default behavior for a line segment.
-	Description = LINEDES_UNDEFINED;
 	Facing = LINEFACE_UNDEFINED;
 
 	LineSegmentBlock = NULL;
@@ -110,7 +109,8 @@ mgLineSegment::mgLineSegment()
 	ObstructsVision = true;
 }
 
-mgLineSegment *mgDefineLine(double StartY, double StartX, double EndY, double EndX, mgPoint Offset, LineDescription Description, LineFacing Facing, mgMapElement *ElementOwner, mgMapObject *ObjectOwner)
+// Pushed into a function to eliminate redundant code when creating line segments. 
+mgLineSegment *mgDefineLine(double StartY, double StartX, double EndY, double EndX, mgPoint Offset, LineFacing Facing, mgMapElement *ElementOwner, mgMapObject *ObjectOwner)
 {
 	mgLineSegment *DefinedLine;
 	mgPoint Start, End;
@@ -124,7 +124,6 @@ mgLineSegment *mgDefineLine(double StartY, double StartX, double EndY, double En
 	DefinedLine->LineSegmentBlock = ElementOwner;
 	DefinedLine->LineSegmentOwner = ObjectOwner;
 	DefinedLine->Facing = Facing;
-	DefinedLine->Description = Description;
 
 	return DefinedLine;
 }

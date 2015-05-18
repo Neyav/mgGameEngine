@@ -5,15 +5,6 @@
 
 #include "mgVectorPoint.h"
 
-#define LineDescription unsigned char
-
-// Feel free to add more as they are needed
-#define LINEDES_UNDEFINED 0
-#define LINEDES_TOP 1
-#define LINEDES_LEFTSIDE 2
-#define LINEDES_RIGHTSIDE 3
-#define LINEDES_BOTTOM 4
-
 // Used when generating a shape so that a lines normal doesn't
 // need to be calculated by position. This saves a lot of unnecessary math where
 // the outword facing of a line is definite and know upon generation
@@ -54,7 +45,6 @@ public:
 	bool ObstructsMovement;
 	bool ObstructsVision;
 
-	LineDescription Description;
 	LineFacing Facing;
 
 	// Otherworldly references to the line segment
@@ -69,6 +59,6 @@ public:
 	mgLineSegment();
 };
 
-mgLineSegment *mgDefineLine(double StartY, double StartX, double EndY, double EndX, mgPoint Offset, LineDescription Description, LineFacing Facing, mgMapElement *ElementOwner, mgMapObject *ObjectOwner);
+mgLineSegment *mgDefineLine(double StartY, double StartX, double EndY, double EndX, mgPoint Offset, LineFacing Facing, mgMapElement *ElementOwner, mgMapObject *ObjectOwner);
 
 #endif
