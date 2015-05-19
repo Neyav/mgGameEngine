@@ -4,6 +4,9 @@
 
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
+#include "mgLinkedList.h"
+#include "mgLineSegment.h"
+#include "mgVisibilityMap.h"
 
 #include "mgStressTest.h"
 
@@ -167,7 +170,7 @@ void mgStressTest::TEST_mgVisibilityMap(void)
 
 	TestMap.InitalizeMapData(50, 50);
 
-	// Empty out the center core of the map so it's just the outter walls.
+	// Empty out the center core of the map so it's just the outer walls.
 	for (unsigned int Y = 1; Y < 50; Y++)
 		for (unsigned int X = 1; X < 50; X++)
 		{
@@ -193,6 +196,43 @@ void mgStressTest::TEST_mgVisibilityMap(void)
 	Timer.StopTimer();
 	Timer.ConsoleOutputResults();
 	Timer.ConsoleOutputIterationResults(3);
+}
+
+void mgStressTest::TEST_mgMapElement(void)
+{
+	mgMapElement *testelement;
+	mgLinkedList<mgLineSegment> *testList;
+
+	std::cout << "[---void mgStressTest::TEST_mgMapElement(void)---]" << std::endl;
+
+	Timer.Description = "Create, return shape, and delete x 10m";
+	Timer.StartTimer();
+
+	for (unsigned int iterator = 0; iterator < 10000000; iterator++)
+	{
+		testelement = new mgMapElement;
+		testList = testelement->BlockGeometry();
+		delete testelement;
+	}
+
+	Timer.StopTimer();
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(10000000);
+
+	Timer.Description = ".BlockGeometry() x 10m";
+
+	testelement = new mgMapElement;
+
+
+	Timer.StartTimer();
+	for (unsigned int iterator = 0; iterator < 10000000; iterator++)
+		testList = testelement->BlockGeometry();
+	Timer.StopTimer();	
+
+	delete testelement;	
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(10000000);
 }
 
 mgStressTest::mgStressTest()
