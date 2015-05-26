@@ -237,5 +237,5 @@ void mgStressTest::TEST_mgMapElement(void)
 
 mgStressTest::mgStressTest()
 {
-	srand(time(NULL)); // Seed the random number generator.
+	srand(time(nullptr)); // Seed the random number generator.
 }

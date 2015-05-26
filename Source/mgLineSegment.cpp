@@ -102,8 +102,8 @@ mgLineSegment::mgLineSegment()
 { // Initialize default behavior for a line segment.
 	Facing = LINEFACE_UNDEFINED;
 
-	LineSegmentBlock = NULL;
-	LineSegmentOwner = NULL;
+	LineSegmentBlock = nullptr;
+	LineSegmentOwner = nullptr;
 
 	ObstructsMovement = true;
 	ObstructsVision = true;

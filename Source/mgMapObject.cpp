@@ -6,12 +6,12 @@
 
 mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 {
-	mgLineSegment *LineSegmentReference = NULL;
+	mgLineSegment *LineSegmentReference = nullptr;
 	mgPoint LineStart, LineEnd;
 
 	// First check to see if any geometry has been generated, if it hasn't generate it.
 	// If the geometry has been generated, then move it around our origin point.
-	if (ObjectShape == NULL)
+	if (ObjectShape == nullptr)
 	{
 		GeoPosition = Position;
 		GeoSize = ObjectSize;
@@ -19,16 +19,16 @@ mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 		ObjectShape = new mgLinkedList < mgLineSegment >;
 
 		// 0, 0 -> 0, 1
-		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, -ObjectSize, -ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, -ObjectSize, -ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 
 		// 0, 1 -> 1, 1
-		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, ObjectSize, ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, ObjectSize, ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 
 		// 1, 1 -> 1, 0
-		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, ObjectSize, ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, ObjectSize, ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 
 		// 1, 0 -> 0, 0
-		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, -ObjectSize, -ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, -ObjectSize, -ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 	}
 	else if (GeoPosition.Y != Position.Y || GeoPosition.X != Position.X || GeoSize != ObjectSize)
 	{	// We already have geometry but we need to manipulate it to our new position and size.
@@ -38,16 +38,16 @@ mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 		GeoSize = ObjectSize;
 
 		// 0, 0 -> 0, 1
-		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, -ObjectSize, -ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, -ObjectSize, -ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 
 		// 0, 1 -> 1, 1
-		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, ObjectSize, ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( -ObjectSize, ObjectSize, ObjectSize, ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 
 		// 1, 1 -> 1, 0
-		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, ObjectSize, ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, ObjectSize, ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 
 		// 1, 0 -> 0, 0
-		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, -ObjectSize, -ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, NULL, this), true);
+		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, -ObjectSize, -ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 	}
 
 	return ObjectShape;
@@ -55,12 +55,12 @@ mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 
 mgMapObject::mgMapObject()
 {
-	ObjectShape = NULL;
+	ObjectShape = nullptr;
 	ObjectSize = DEFAULTOBJECTSIZE;
 }
 
 mgMapObject::~mgMapObject()
 {
-	if (ObjectShape != NULL)
+	if (ObjectShape != nullptr)
 		delete ObjectShape;
 }

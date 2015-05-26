@@ -31,11 +31,11 @@ mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 			mgMapElement *BlockReference;
 
 			BlockReference = MapReference->ReturnMapBlockReference(CheckY, CheckX);
-			if (BlockReference == NULL) // No mapblock here.
+			if (BlockReference == nullptr) // No mapblock here.
 				continue;
 			
 			BlockLineList = BlockReference->BlockGeometry(); 
-			if (BlockLineList != NULL) // Empty blocks don't contain geometry, make sure this isn't one of those before attempting
+			if (BlockLineList != nullptr) // Empty blocks don't contain geometry, make sure this isn't one of those before attempting
 			{							// to add that geometry to our occluder list.
 				BlockLineList->ResetIterator();
 
@@ -66,7 +66,7 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 	int Scans = 0;
 	mgTraceResults Results;
 
-	Results.ImpactLine = NULL;
+	Results.ImpactLine = nullptr;
 	Results.ImpactPoint.Y = 0;
 	Results.ImpactPoint.X = 0;
 	Results.RayDistance = 0;
@@ -104,7 +104,7 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 
 		// Let's go through the lines, one by one, finding the closing occluding point.
 		LineReference = LineSegmentList->ReturnElementReference();
-		while (LineReference != NULL)
+		while (LineReference != nullptr)
 		{
 			mgLineCollisionResults TestResults;
 
@@ -124,7 +124,7 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 				{
 					distance = testDistance;
 					Occluder = TestResults.CollisionPoint;
-					if (LineReference->LineSegmentBlock != NULL)
+					if (LineReference->LineSegmentBlock != nullptr)
 						OccluderBlock = LineReference->LineSegmentBlock->Position;
 
 					// We're just going to jimmy this in here. Not too much concern is being made for the maintainability of this function because it is intended
@@ -157,7 +157,7 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 
 mgRayTracer::mgRayTracer()
 {
-	MapReference = NULL;
+	MapReference = nullptr;
 	ListPositions = false;
 }
 

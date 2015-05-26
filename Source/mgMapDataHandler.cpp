@@ -11,7 +11,7 @@ _mgGameEngineVersionstruct mgGameEngineVersion = { 0, 1, 0 };
 
 void mgMapDataHandler::CleanHouseProtocol(void)
 {
-	if (InternalMapData == NULL)
+	if (InternalMapData == nullptr)
 		return;
 
 	// Clean up the blocks inside each element, and each element itself.
@@ -39,7 +39,7 @@ void mgMapDataHandler::InitalizeMapData(int SizeY, int SizeX)
 {
 	mgPoint PositionReference;
 
-	if (InternalMapData != NULL)
+	if (InternalMapData != nullptr)
 		CleanHouseProtocol();
 
 	InternalMapData = new mgMapElementArray[SizeY * SizeX];
@@ -155,7 +155,7 @@ mgMapElement *mgMapDataHandler::ReturnMapBlockReference(int PosY, int PosX)
 	int UnifiedPosition = (PosY * MapSizeX) + PosX;
 
 	if (!PositionBoundsCheck(PosY, PosX))
-		return NULL; 
+		return nullptr; 
 
 	return InternalMapData[UnifiedPosition].MapBlock;
 }
@@ -172,11 +172,11 @@ int mgMapDataHandler::mapsizeX(void)
 
 mgMapDataHandler::mgMapDataHandler()
 {
-	InternalMapData = NULL;
+	InternalMapData = nullptr;
 }
 
 mgMapDataHandler::~mgMapDataHandler()
 {
-	if (InternalMapData != NULL)
+	if (InternalMapData != nullptr)
 		CleanHouseProtocol();
 }

@@ -50,7 +50,7 @@ void mgRandomMazeGenerator::GenerateMaze(unsigned int BlockY, unsigned int Block
 {
 	Depth = 0;
 
-	srand(time(NULL)); // Seed random generator
+	srand(time(nullptr)); // Seed random generator
 
 	InitNewBlock(BlockY, BlockX, Depth);
 
@@ -114,5 +114,5 @@ void mgRandomMazeGenerator::GenerateMaze(unsigned int BlockY, unsigned int Block
 
 mgRandomMazeGenerator::mgRandomMazeGenerator()
 {
-	Map = NULL;
+	Map = nullptr;
 }

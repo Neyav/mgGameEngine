@@ -33,16 +33,16 @@ template <typename TemplateClass> mgLinkedListElement<TemplateClass>::mgLinkedLi
 {
 	Ownership = true; // Default ownership
 
-	Element = NULL;
-	Next = Previous = NULL;
+	Element = nullptr;
+	Next = Previous = nullptr;
 }
 
 template <typename TemplateClass> mgLinkedListElement<TemplateClass>::~mgLinkedListElement()
 {
 	// Keep the chain.
-	if (Next != NULL)
+	if (Next != nullptr)
 		Next->Previous = Previous;
-	if (Previous != NULL)
+	if (Previous != nullptr)
 		Previous->Next = Next;
 
 	if (Ownership)
@@ -88,7 +88,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(T
 
 	LinkedListEntry->Element = CopyofElement;
 	LinkedListEntry->Next = LinkedList;
-	if (LinkedList != NULL) 
+	if (LinkedList != nullptr) 
 		LinkedList->Previous = LinkedListEntry;
 
 	LinkedList = Iterator = LinkedListEntry;
@@ -105,7 +105,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementRe
 	LinkedListEntry->Element = ElementToAdd;
 	LinkedListEntry->Next = LinkedList;
 	LinkedListEntry->Ownership = Ownership;
-	if (LinkedList != NULL) 	
+	if (LinkedList != nullptr) 	
 		LinkedList->Previous = LinkedListEntry;
 
 	LinkedList = Iterator = LinkedListEntry;
@@ -120,7 +120,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::ResetIterato
 
 template <typename TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void)
 {
-	if (Iterator != NULL)
+	if (Iterator != nullptr)
 	{
 		TemplateClass CopyOfObject;
 
@@ -141,8 +141,8 @@ template <typename TemplateClass> TemplateClass mgLinkedList<TemplateClass>::Ret
 
 template <typename TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::ReturnElementReference(void)
 {
-	if (Iterator == NULL)
-		return NULL;
+	if (Iterator == nullptr)
+		return nullptr;
 	else
 	{
 		mgLinkedListElement<TemplateClass> *ReturnObject;
@@ -160,7 +160,7 @@ template <typename TemplateClass> int mgLinkedList<TemplateClass>::NumberOfEleme
 
 template <typename TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEnd(void)
 {
-	if (Iterator == NULL)
+	if (Iterator == nullptr)
 		return true;
 
 	return false;
@@ -178,20 +178,20 @@ template <typename TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedLi
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
 {
-	if (LinkedList != NULL)
+	if (LinkedList != nullptr)
 	{
-		while (LinkedList->Next != NULL)
+		while (LinkedList->Next != nullptr)
 			delete LinkedList->Next;
 		delete LinkedList;
 	}
 
-	LinkedList = NULL;
+	LinkedList = nullptr;
 }
 
 template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
 {
-	LinkedList = NULL;
-	Iterator = NULL;
+	LinkedList = nullptr;
+	Iterator = nullptr;
 
 	Elements = 0;
 }

@@ -96,12 +96,12 @@ void mgPathSolutionGenerator::LinkToMap(mgMapDataHandler *MapData)
 // Initalize all necessary factors in processing the map solution.
 void mgPathSolutionGenerator::InitateMapSolution(int StartY, int StartX, int EndY, int EndX)
 {
-	if (MapReference == NULL)
+	if (MapReference == nullptr)
 		return;
 
-	if (PathMap != NULL)
+	if (PathMap != nullptr)
 		delete[] PathMap;
-	if (PathCreationMap != NULL)
+	if (PathCreationMap != nullptr)
 		delete[] PathCreationMap;
 
 	PathMap = new int[MapSizeY * MapSizeX]; // Allocate the appropriate amount of memory
@@ -187,7 +187,7 @@ bool mgPathSolutionGenerator::CordPartofPath(int CordY, int CordX)
 {
 	int UnifiedCord = CordToUnifiedCord(CordY, CordX);
 
-	if (PathMap == NULL)
+	if (PathMap == nullptr)
 		return false;
 
 	if (PathMap[UnifiedCord] > 0)
@@ -229,18 +229,18 @@ mgPoint mgPathSolutionGenerator::NextBlock(int CordY, int CordX)
 
 mgPathSolutionGenerator::mgPathSolutionGenerator()
 {
-	PathMap = PathCreationMap = NULL; // Ensure these are NULL
+	PathMap = PathCreationMap = nullptr; // Ensure these are nullptr
 
-	MapReference = NULL; // This as well.
+	MapReference = nullptr; // This as well.
 }
 
 mgPathSolutionGenerator::~mgPathSolutionGenerator()
 {
 	// Clear up any internal dynamically allocated memory blocks.
 
-	if (PathMap != NULL)
+	if (PathMap != nullptr)
 		delete[] PathMap;
 
-	if (PathCreationMap != NULL)
+	if (PathCreationMap != nullptr)
 		delete[] PathCreationMap;
 }

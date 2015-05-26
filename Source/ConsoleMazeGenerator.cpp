@@ -80,7 +80,7 @@ void DisplayMap(int SpecialY, int SpecialX, mgVisibilityMap *DisplayedVisibility
 	DrawY = DisplayedMap->mapsizeY();
 	DrawX = DisplayedMap->mapsizeX();
 
-	if (DisplayedVisibilityMap != NULL)
+	if (DisplayedVisibilityMap != nullptr)
 	{
 		Outputfile << "{-mgVisibilityMap with " << DisplayedVisibilityMap->MappedItems() << " objects being represented-}" << std::endl;
 		HTMLOutput << "<H1>{-mgVisibilityMap with " << DisplayedVisibilityMap->MappedItems() << " objects being represented-}</H1><BR>";
@@ -92,7 +92,7 @@ void DisplayMap(int SpecialY, int SpecialX, mgVisibilityMap *DisplayedVisibility
 		{
 			if (DisplayedMap->IsBlockClippable(TempY, TempX) && !(TempX == DisplayedMap->mapsizeX() - 1 && TempY == DisplayedMap->mapsizeY() - 2) && !(TempX == 1 && TempY == 0))
 			{
-				if (DisplayedVisibilityMap != NULL && DisplayedVisibilityMap->IsMarkedVisible(TempY, TempX))
+				if (DisplayedVisibilityMap != nullptr && DisplayedVisibilityMap->IsMarkedVisible(TempY, TempX))
 				{
 					Outputfile << "[V]";
 					HTMLOutput << "<img height=\"10\" src=\"pathwall.jpg\" width=\"10\">";
@@ -103,19 +103,19 @@ void DisplayMap(int SpecialY, int SpecialX, mgVisibilityMap *DisplayedVisibility
 					HTMLOutput << "<img height=\"10\" src=\"wall.jpg\" width=\"10\">";
 				}
 			}
-			else if (TempY == SpecialY && TempX == SpecialX && DisplayedVisibilityMap == NULL)
+			else if (TempY == SpecialY && TempX == SpecialX && DisplayedVisibilityMap == nullptr)
 			{
 				Outputfile << " X ";
 				HTMLOutput << "<img height=\"10\" src=\"path.jpg\" width=\"10\">";
 			}
-			else if (PathMap != NULL && PathMap->CordPartofPath(TempY, TempX))
+			else if (PathMap != nullptr && PathMap->CordPartofPath(TempY, TempX))
 			{
 				Outputfile << " . ";
 				HTMLOutput << "<img height=\"10\" src=\"path.jpg\" width=\"10\">";
 			}
 			else
 			{
-				if (DisplayedVisibilityMap != NULL && DisplayedVisibilityMap->IsMarkedVisible(TempY, TempX) &&
+				if (DisplayedVisibilityMap != nullptr && DisplayedVisibilityMap->IsMarkedVisible(TempY, TempX) &&
 					!(TempY == SpecialY && TempX == SpecialX)) // Don't draw the "originating block" so we can tell where the visibility block is.
 				{
 					Outputfile << " V ";
@@ -227,7 +227,7 @@ void MapGrid(mgMapDataHandler *MapData, mgPoint Position)
 			{
 				std::cout << " YOU ";
 			}
-			else if (PositionBlock == NULL)
+			else if (PositionBlock == nullptr)
 			{
 				std::cout << "     ";
 			}
@@ -428,7 +428,7 @@ int main(int argc, char* argv[])
 
 			BlockReference = MazeMapHoles->ReturnMapBlockReference(TestClearY, TestClearX);
 
-			if (BlockReference == NULL)
+			if (BlockReference == nullptr)
 				continue;
 			
 			BlockReference->BlockType = MAP_BLOCKFLOOR;
@@ -442,8 +442,8 @@ int main(int argc, char* argv[])
 	Timer_Generate.ConsoleOutputResults();
 
 	// Present the maps after generating them...
-	DisplayMap(1, 1, NULL, MazeMap, NULL);
-	DisplayMap(1, 1, NULL, MazeMapHoles, NULL);
+	DisplayMap(1, 1, nullptr, MazeMap, nullptr);
+	DisplayMap(1, 1, nullptr, MazeMapHoles, nullptr);
 
 	std::cout << "Generating shortest route path...";
 
@@ -466,7 +466,7 @@ int main(int argc, char* argv[])
 	Timer_PathFind.ConsoleOutputResults();
 
 	// Display the normal map after generating it
-	DisplayMap(1, 1, NULL, MazeMap, PathSolution); // <-- Outputs map solution to TXT and HTML presentation formats
+	DisplayMap(1, 1, nullptr, MazeMap, PathSolution); // <-- Outputs map solution to TXT and HTML presentation formats
 
 	// Solve the MazeMap with all the holes in it now.
 
@@ -481,7 +481,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Display the holed out map after generating it.
-	DisplayMap(1, 1, NULL, MazeMapHoles, PathSolutionHoles);
+	DisplayMap(1, 1, nullptr, MazeMapHoles, PathSolutionHoles);
 
 	// --- Calculate visibility for block 15,15
 
@@ -503,7 +503,7 @@ int main(int argc, char* argv[])
 
 	Timer_vismap.ConsoleOutputResults();
 
-	DisplayMap(VisY, VisX, testVisibilityBlock, MazeMap, NULL);
+	DisplayMap(VisY, VisX, testVisibilityBlock, MazeMap, nullptr);
 
 	mgVisibilityMap *testHoleVisibilityBlock;
 	testHoleVisibilityBlock = new mgVisibilityMap;
@@ -512,7 +512,7 @@ int main(int argc, char* argv[])
 	testHoleVisibilityBlock->CalculateVisibility(VisY, VisX);
 	testHoleVisibilityBlock->CalculateAdjacentVisibility(VisY, VisX);
 
-	DisplayMap(VisY, VisX, testHoleVisibilityBlock, MazeMapHoles, NULL);
+	DisplayMap(VisY, VisX, testHoleVisibilityBlock, MazeMapHoles, nullptr);
 
 	// Generate first person perspective viewing
 

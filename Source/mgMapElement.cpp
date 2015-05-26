@@ -5,10 +5,10 @@
 void mgMapElement::SetBlockType(BlockDefine NewType)
 {
 	BlockType = NewType;
-	if (BlockShape != NULL) // If we have a shape it probably isn't valid anymore so delete it.
+	if (BlockShape != nullptr) // If we have a shape it probably isn't valid anymore so delete it.
 	{
 		delete BlockShape;
-		BlockShape = NULL;
+		BlockShape = nullptr;
 	}
 }
 
@@ -18,13 +18,13 @@ void mgMapElement::GenerateBlockGeometry(void)
 	mgLineSegment *ShapeLine;
 	mgPoint Start, End;
 
-	if (BlockShape != NULL)
+	if (BlockShape != nullptr)
 		delete BlockShape;
 
 	switch (BlockType)
 	{
 	case MAP_BLOCKFLOOR: // Floors don't have any shape.
-			BlockShape = NULL;
+			BlockShape = nullptr;
 			break;
 	case MAP_BLOCKWALL: // Walls have a very simple orthagonical block shape.
 			BlockShape = new mgLinkedList < mgLineSegment > ;
@@ -34,32 +34,32 @@ void mgMapElement::GenerateBlockGeometry(void)
 			// mgLineSegment pointer. This ownership means that it is the one responsible for deleting it upon cleanup.
 
 			// 0,0 - 0,1
-			BlockShape->AddElementReference(mgDefineLine(0, 0, 0, 1, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(0, 0, 0, 1, Position, LINEFACE_RIGHT, this, nullptr), true);
 			
 			// 0,1 - 1,1
-			BlockShape->AddElementReference(mgDefineLine(0, 1, 1, 1, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(0, 1, 1, 1, Position, LINEFACE_RIGHT, this, nullptr), true);
 
 			// 1,1 - 1,0
-			BlockShape->AddElementReference(mgDefineLine(1, 1, 1, 0, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(1, 1, 1, 0, Position, LINEFACE_RIGHT, this, nullptr), true);
 
 			// 1,0 - 0,0
-			BlockShape->AddElementReference(mgDefineLine(1, 0, 0, 0, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(1, 0, 0, 0, Position, LINEFACE_RIGHT, this, nullptr), true);
 
 			break;
 	case MAP_BLOCKCORNER: // A more extravagant shape for shits and giggles.
 			BlockShape = new mgLinkedList < mgLineSegment >;
 
-			BlockShape->AddElementReference(mgDefineLine(0, 0, 0.2, 0.5, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(0, 0, 0.2, 0.5, Position, LINEFACE_RIGHT, this, nullptr), true);
 
-			BlockShape->AddElementReference(mgDefineLine(0.2, 0.5, 0, 1, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(0.2, 0.5, 0, 1, Position, LINEFACE_RIGHT, this, nullptr), true);
 
-			BlockShape->AddElementReference(mgDefineLine(0, 1, 1, 1, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(0, 1, 1, 1, Position, LINEFACE_RIGHT, this, nullptr), true);
 
-			BlockShape->AddElementReference(mgDefineLine(1, 1, 0.5, 0.3, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(1, 1, 0.5, 0.3, Position, LINEFACE_RIGHT, this, nullptr), true);
 
-			BlockShape->AddElementReference(mgDefineLine(0.5, 0.3, 1, 0, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(0.5, 0.3, 1, 0, Position, LINEFACE_RIGHT, this, nullptr), true);
 
-			BlockShape->AddElementReference(mgDefineLine(1, 0, 0, 0, Position, LINEFACE_RIGHT, this, NULL), true);
+			BlockShape->AddElementReference(mgDefineLine(1, 0, 0, 0, Position, LINEFACE_RIGHT, this, nullptr), true);
 		
 			break;
 	}
@@ -67,7 +67,7 @@ void mgMapElement::GenerateBlockGeometry(void)
 
 mgLinkedList<mgLineSegment> *mgMapElement::BlockGeometry(void)
 {
-	if (BlockShape == NULL)
+	if (BlockShape == nullptr)
 		GenerateBlockGeometry();
 
 	return BlockShape;
@@ -85,12 +85,12 @@ void mgMapElement::operator=(const mgMapElement& other)
 mgMapElement::mgMapElement()
 {
 	BlockType = MAP_BLOCKWALL;
-	BlockShape = NULL;
+	BlockShape = nullptr;
 }
 
 mgMapElement::~mgMapElement()
 {
 	// Cleanup code for a map block.
-	if (BlockShape != NULL)
+	if (BlockShape != nullptr)
 		delete BlockShape;
 }

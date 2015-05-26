@@ -97,7 +97,7 @@ void mgVisibilityMap::CalculateAdjacentVisibility(int BlockY, int BlockX)
 
 mgVisibilityMap::mgVisibilityMap()
 {
-	MapReference = NULL;
+	MapReference = nullptr;
 	VisiblePoints = 0;
 }
 

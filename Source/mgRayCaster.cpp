@@ -19,8 +19,8 @@
 
 mgRayCaster::mgRayCaster()
 {
-	MapReference = NULL;
+	MapReference = nullptr;
 
 	CurrentState.DistanceTraced = 0;
-	CurrentState.ImpactLine = NULL;
+	CurrentState.ImpactLine = nullptr;
 }
