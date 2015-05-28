@@ -10,17 +10,8 @@
 #include <fstream>
 #endif
 
-/* Template based implementation of a binary tree. It is currently not a balanced tree; I doubt the search performance benefits would pay
-	dividends here at the cost of the added code for automatically balancing it. The information that is intended to be stored in this tree is merely too
-	small. It serves essentially two purposes at this point in time. The first is replacing mgLinkedList in the mgVisibilityMap code for something that
-	can do lookups faster, and the second is to eliminate the need to do a "search" for a value before adding it. This meant iterating over the entire linked list
-	each time an object was added. This takes longer, and longer, and longer. This tree will simply NOT add something if it finds it is already in the list,
-	which it will do WHILE it is adding it.
-		- Chris Laverdure
-*/
+// Template version of a Binary Tree. Optionally it can be built as a Red Black Tree or an unbalanced tree
 
-// TODO: Modify this component so it is a Red Black Tree instead of an unbalanced binary tree. Also remove the sass from the comments.
-//		 I no longer find it funny. :p
 #ifdef REDBLACKTREE
 template <typename TemplateObject>
 class mgBinaryTree;
@@ -196,6 +187,8 @@ public:
 	unsigned int Elements(void);
 
 #ifdef BINARYTREEDUMP
+	unsigned int DepthValues[1000];
+
 	void DumpTreeStructure(std::string OutputFile);
 	int CalculateTreeHeight(int PassDepth, mgBinaryTreenode<TemplateObject> *TraversalNode);
 #endif
@@ -331,6 +324,8 @@ int mgBinaryTree<TemplateObject>::CalculateTreeHeight(int PassDepth, mgBinaryTre
 	if (TraversalNode == Root)
 		TotalDepth = PassDepth = 1;
 
+	DepthValues[PassDepth]++; // Keep track of the number of nodes per depth;
+
 	if (TraversalNode->Lesser != NULL)
 		TotalDepth = this->CalculateTreeHeight(PassDepth + 1, TraversalNode->Lesser);
 	if (TraversalNode->Greater != NULL)
@@ -348,15 +343,28 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 	std::ofstream TreeStructureFile;
 	unsigned int TreeDepth = 0;
 
+	// Initalize this field.
+	for (int Iterator = 0; Iterator < 1000; Iterator++)
+		DepthValues[Iterator] = 0;
+
 	TreeStructureFile.open(OutputFile);
 
 	TreeStructureFile << "mgGameEngine -> void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)" << std::endl;
+#ifdef REDBLACKTREE
+	TreeStructureFile << ":-- mgBinaryTree was compiled as a Red Black Tree." << std::endl;
+#endif
 	TreeStructureFile << ":-- Tree has " << this->Elements() << " elements in it." << std::endl;
 
 	// Calculate the maximum tree depth.
 	TreeDepth = this->CalculateTreeHeight(1, Root);
 
 	TreeStructureFile << ":-- Tree has maximum depth of " << TreeDepth << "." << std::endl;
+	TreeStructureFile << ":----v" << std::endl;
+
+	for (int Iterator = 1; Iterator < TreeDepth; Iterator++)
+	{
+		TreeStructureFile << "     |-> Depth: " << Iterator << " has " << DepthValues[Iterator] << " nodes." << std::endl;
+	}
 
 	TreeStructureFile.close();
 }
