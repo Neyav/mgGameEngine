@@ -2,10 +2,10 @@
 #define MGBINARYTREEH
 
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
+//#define REDBLACKTREE // Tree is a red black tree.
 
 #include <stdlib.h>
 #ifdef BINARYTREEDUMP 
-#include <math.h>
 #include <iostream>
 #include <fstream>
 #endif
@@ -21,13 +21,27 @@
 
 // TODO: Modify this component so it is a Red Black Tree instead of an unbalanced binary tree. Also remove the sass from the comments.
 //		 I no longer find it funny. :p
+template <typename TemplateObject>
+class mgBinaryTree;
 
 template <typename TemplateObject>
 class mgBinaryTreenode
 {
+private:
+#ifdef REDBLACKTREE
+	void leftRotate(mgBinaryTree<TemplateObject> *TreeReference);
+	void rightRotate(mgBinaryTree<TemplateObject> *TreeReference);
+#endif
 public:
 	TemplateObject Element;
 
+#ifdef REDBLACKTREE
+	bool BlackNode;
+
+	void fixUp(mgBinaryTree<TemplateObject> *TreeReference);
+
+	mgBinaryTreenode<TemplateObject> *Parent;
+#endif
 	mgBinaryTreenode<TemplateObject> *Greater;
 	mgBinaryTreenode<TemplateObject> *Lesser;
 
@@ -35,9 +49,114 @@ public:
 	~mgBinaryTreenode();
 };
 
+#ifdef REDBLACKTREE
+template <typename TemplateObject>
+void mgBinaryTreenode<TemplateObject>::leftRotate(mgBinaryTree<TemplateObject> *TreeReference)
+{
+	mgBinaryTreenode<TemplateObject> *ReferenceNode = this->Greater;
+
+	this->Greater = ReferenceNode->Lesser;
+	ReferenceNode->Lesser->Parent = this;
+	ReferenceNode->Parent = this->Parent;
+
+	if (this->Parent = nullptr)
+		TreeReference->SwapRoot(ReferenceNode);
+	else if (this == this->Parent->Lesser)
+		this->Parent->Lesser = ReferenceNode;
+	else
+		this->Parent->Greater = ReferenceNode;
+
+	ReferenceNode->Lesser = this;
+	this->Parent = ReferenceNode;
+}
+
+template <typename TemplateObject>
+void mgBinaryTreenode<TemplateObject>::rightRotate(mgBinaryTree<TemplateObject> *TreeReference)
+{
+	mgBinaryTreenode<TemplateObject> *ReferenceNode = this->Lesser;
+
+	this->Lesser = ReferenceNode->Greater;
+	ReferenceNode->Greater->Parent = this;
+	ReferenceNode->Parent = this->Parent;
+
+	if (this->Parent == nullptr)
+		TreeReference->SwapRoot(ReferenceNode);
+	else if (this == this->Parent->Greater)
+		this->Parent->Greater = ReferenceNode;
+	else
+		this->Parent->Lesser = ReferenceNode;
+
+	ReferenceNode->Greater = this;
+	this->Parent = ReferenceNode;
+}
+
+template <typename TemplateObject>
+void mgBinaryTreenode<TemplateObject>::fixUp(mgBinaryTree<TemplateObject> *TreeReference)
+{
+	mgBinaryTreenode<TemplateObject> *FixupNode = this;
+	// We just added an element and need to perform the necessary steps to fix the balance of the tree
+	while (!FixupNode->Parent->BlackNode)
+	{ // Our parent is a Red Node
+		if (FixupNode->Parent == FixupNode->Parent->Parent->Lesser)
+		{
+			mgBinaryTreenode<TemplateObject> *ReferenceNode = FixupNode->Parent->Parent->Greater;
+
+			if (!ReferenceNode->BlackNode)
+			{
+				FixupNode->Parent->BlackNode = true;
+				ReferenceNode->BlackNode = true;
+				FixupNode->Parent->BlackNode = false;
+				FixupNode = FixupNode->Parent->Parent;
+			}
+			else
+			{
+				if (FixupNode == FixupNode->Parent->Greater)
+				{
+					FixupNode = FixupNode->Parent;
+					FixupNode->leftRotate(TreeReference);
+				}
+
+				FixupNode->Parent->BlackNode = true;
+				FixupNode->Parent->Parent->BlackNode = false;
+
+				FixupNode->Parent->Parent->rightRotate(TreeReference);
+			}
+		}
+		else
+		{
+			mgBinaryTreenode<TemplateObject> *ReferenceNode = FixupNode->Parent->Parent->Lesser;
+
+			if (!ReferenceNode->BlackNode)
+			{
+				FixupNode->Parent->BlackNode = true;
+				ReferenceNode->BlackNode = true;
+				FixupNode->Parent->Parent->BlackNode = false;
+				FixupNode = FixupNode->Parent->Parent;
+			}
+			else
+			{
+				if (FixupNode == FixupNode->Parent->Lesser)
+				{
+					FixupNode = FixupNode->Parent;
+					FixupNode->rightRotate(TreeReference);
+				}
+				FixupNode->Parent->BlackNode = true;
+				FixupNode->Parent->Parent->BlackNode = false;
+				FixupNode->Parent->Parent->leftRotate(TreeReference);
+			}
+		}
+	}
+}
+#endif
+
 template <typename TemplateObject>
 mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 {
+#ifdef REDBLACKTREE
+	BlackNode = false; // Nodes default to Red
+
+	Parent = nullptr;
+#endif
 	// New nodes don't have children, so as default behavior this makes a lot of sense.
 	Lesser = nullptr;
 	Greater = nullptr;
@@ -64,6 +183,10 @@ private:
 
 public:
 
+#ifdef REDBLACKTREE
+	void SwapRoot(mgBinaryTreenode<TemplateObject> *NewRoot);
+#endif
+
 	void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
 	unsigned int Elements(void);
@@ -77,6 +200,14 @@ public:
 	~mgBinaryTree();
 };
 
+#ifdef REDBLACKTREE
+template <typename TemplateObject>
+void mgBinaryTree<TemplateObject>::SwapRoot(mgBinaryTreenode<TemplateObject> *NewRoot)
+{
+	Root = NewRoot;
+}
+#endif
+
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
@@ -84,6 +215,9 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 	{	// This is the first object in the list, just add it to the root.
 		Root = new mgBinaryTreenode < TemplateObject > ;
 		Root->Element = Element;
+#ifdef REDBLACKTREE
+		Root->BlackNode = true; // This is all the fixing we need for a blank tree.
+#endif
 	}
 	else
 	{	// Find a node we belong in, bailing if we find a DOPPLEGANGER!@!!!@@@##!
@@ -99,6 +233,13 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Lesser = new mgBinaryTreenode < TemplateObject > ;
 					ProgressNode->Lesser->Element = Element;
 					ElementCount++;
+
+#ifdef REDBLACKTREE
+					ProgressNode->Lesser->Parent = ProgressNode;
+					ProgressNode->Lesser->fixUp(this);
+					Root->BlackNode = true;
+#endif
+
 					break;
 				}
 				else
@@ -111,6 +252,12 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Greater = new mgBinaryTreenode < TemplateObject >;
 					ProgressNode->Greater->Element = Element;
 					ElementCount++;
+
+#ifdef REDBLACKTREE
+					ProgressNode->Greater->Parent = ProgressNode;
+					ProgressNode->Greater->fixUp(this);
+					Root->BlackNode = true;
+#endif
 					break;
 				}
 				else

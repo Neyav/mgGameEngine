@@ -15,7 +15,6 @@ void mgMapElement::SetBlockType(BlockDefine NewType)
 void mgMapElement::GenerateBlockGeometry(void)
 {
 	// A few variables for generating shapes.
-	mgLineSegment *ShapeLine;
 	mgPoint Start, End;
 
 	if (BlockShape != nullptr)
