@@ -93,6 +93,10 @@ void mgVisibilityMap::CalculateAdjacentVisibility(int BlockY, int BlockX)
 
 	for (int Iterator = 0; Iterator < 4; Iterator++)
 		CalculateVisibility(testY[Iterator], testX[Iterator]);
+
+#ifdef BINARYTREEDUMP
+	VisibilityTree.DumpTreeStructure("TreeOutput.txt");
+#endif
 }
 
 mgVisibilityMap::mgVisibilityMap()

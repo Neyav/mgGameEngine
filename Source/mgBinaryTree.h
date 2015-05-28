@@ -1,7 +1,14 @@
 #ifndef MGBINARYTREEH
 #define MGBINARYTREEH
 
+#define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
+
 #include <stdlib.h>
+#ifdef BINARYTREEDUMP 
+#include <math.h>
+#include <iostream>
+#include <fstream>
+#endif
 
 /* Template based implementation of a binary tree. It is currently not a balanced tree; I doubt the search performance benefits would pay
 	dividends here at the cost of the added code for automatically balancing it. The information that is intended to be stored in this tree is merely too
@@ -31,7 +38,7 @@ public:
 template <typename TemplateObject>
 mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 {
-	// We are the greatest and lessest that ever existed.... *ROCK GUITAR CHORD*
+	// New nodes don't have children, so as default behavior this makes a lot of sense.
 	Lesser = nullptr;
 	Greater = nullptr;
 }
@@ -39,7 +46,9 @@ mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 template <typename TemplateObject>
 mgBinaryTreenode<TemplateObject>::~mgBinaryTreenode()
 {
-	// We are being deleted, our lineage line cannot continue without us... DELETE OUR CHILDREN, BOTH THE BETTER, AND THE WORSE!
+	/* Deleting a node results in its children being deleted. Supporting individual node deletion is planned
+	   and that means this is going to be replaced with code that delinks this node from the tree safely rather than the
+	   destruction of its children */
 	if (Lesser != nullptr)
 		delete Lesser;
 	if (Greater != nullptr)
@@ -58,6 +67,11 @@ public:
 	void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
 	unsigned int Elements(void);
+
+#ifdef BINARYTREEDUMP
+	void DumpTreeStructure(std::string OutputFile);
+	int CalculateTreeHeight(int PassDepth, mgBinaryTreenode<TemplateObject> *TraversalNode);
+#endif
 
 	mgBinaryTree();
 	~mgBinaryTree();
@@ -153,7 +167,48 @@ mgBinaryTree<TemplateObject>::~mgBinaryTree()
 {
 	if (Root != nullptr)
 		delete Root; // See the binarytreenode class and appreciate its self destructive behavior.
-					// It cuts itselfs into deletion to the tune of Marilyn Manson.
 }
+
+#ifdef BINARYTREEDUMP
+
+template <typename TemplateObject>
+int mgBinaryTree<TemplateObject>::CalculateTreeHeight(int PassDepth, mgBinaryTreenode<TemplateObject> *TraversalNode)
+{
+	int TotalDepth = PassDepth;
+	int TempDepth = 0;
+
+	if (TraversalNode == Root)
+		TotalDepth = PassDepth = 1;
+
+	if (TraversalNode->Lesser != NULL)
+		TotalDepth = this->CalculateTreeHeight(PassDepth + 1, TraversalNode->Lesser);
+	if (TraversalNode->Greater != NULL)
+		TempDepth = this->CalculateTreeHeight(PassDepth + 1, TraversalNode->Greater);
+
+	if (TempDepth > TotalDepth)
+		return TempDepth;
+	else
+		return TotalDepth;
+}
+
+template <typename TemplateObject>
+void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
+{
+	std::ofstream TreeStructureFile;
+	unsigned int TreeDepth = 0;
+
+	TreeStructureFile.open(OutputFile);
+
+	TreeStructureFile << "mgGameEngine -> void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)" << std::endl;
+	TreeStructureFile << ":-- Tree has " << this->Elements() << " elements in it." << std::endl;
+
+	// Calculate the maximum tree depth.
+	TreeDepth = this->CalculateTreeHeight(1, Root);
+
+	TreeStructureFile << ":-- Tree has maximum depth of " << TreeDepth << "." << std::endl;
+
+	TreeStructureFile.close();
+}
+#endif
 
 #endif
