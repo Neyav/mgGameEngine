@@ -2,7 +2,7 @@
 #define MGBINARYTREEH
 
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
-//#define REDBLACKTREE // Tree is a red black tree.
+#define REDBLACKTREE // Tree is a red black tree.
 
 #include <stdlib.h>
 #ifdef BINARYTREEDUMP 
@@ -21,8 +21,10 @@
 
 // TODO: Modify this component so it is a Red Black Tree instead of an unbalanced binary tree. Also remove the sass from the comments.
 //		 I no longer find it funny. :p
+#ifdef REDBLACKTREE
 template <typename TemplateObject>
 class mgBinaryTree;
+#endif
 
 template <typename TemplateObject>
 class mgBinaryTreenode
@@ -56,10 +58,11 @@ void mgBinaryTreenode<TemplateObject>::leftRotate(mgBinaryTree<TemplateObject> *
 	mgBinaryTreenode<TemplateObject> *ReferenceNode = this->Greater;
 
 	this->Greater = ReferenceNode->Lesser;
-	ReferenceNode->Lesser->Parent = this;
+	if (ReferenceNode->Lesser != nullptr)
+		ReferenceNode->Lesser->Parent = this;
 	ReferenceNode->Parent = this->Parent;
 
-	if (this->Parent = nullptr)
+	if (this->Parent == nullptr)
 		TreeReference->SwapRoot(ReferenceNode);
 	else if (this == this->Parent->Lesser)
 		this->Parent->Lesser = ReferenceNode;
@@ -76,7 +79,8 @@ void mgBinaryTreenode<TemplateObject>::rightRotate(mgBinaryTree<TemplateObject> 
 	mgBinaryTreenode<TemplateObject> *ReferenceNode = this->Lesser;
 
 	this->Lesser = ReferenceNode->Greater;
-	ReferenceNode->Greater->Parent = this;
+	if (ReferenceNode->Greater != nullptr)
+		ReferenceNode->Greater->Parent = this;
 	ReferenceNode->Parent = this->Parent;
 
 	if (this->Parent == nullptr)
@@ -95,13 +99,13 @@ void mgBinaryTreenode<TemplateObject>::fixUp(mgBinaryTree<TemplateObject> *TreeR
 {
 	mgBinaryTreenode<TemplateObject> *FixupNode = this;
 	// We just added an element and need to perform the necessary steps to fix the balance of the tree
-	while (!FixupNode->Parent->BlackNode)
+	while (FixupNode->Parent != nullptr && !FixupNode->Parent->BlackNode)
 	{ // Our parent is a Red Node
 		if (FixupNode->Parent == FixupNode->Parent->Parent->Lesser)
 		{
 			mgBinaryTreenode<TemplateObject> *ReferenceNode = FixupNode->Parent->Parent->Greater;
 
-			if (!ReferenceNode->BlackNode)
+			if (ReferenceNode != nullptr && !ReferenceNode->BlackNode)
 			{
 				FixupNode->Parent->BlackNode = true;
 				ReferenceNode->BlackNode = true;
@@ -126,7 +130,7 @@ void mgBinaryTreenode<TemplateObject>::fixUp(mgBinaryTree<TemplateObject> *TreeR
 		{
 			mgBinaryTreenode<TemplateObject> *ReferenceNode = FixupNode->Parent->Parent->Lesser;
 
-			if (!ReferenceNode->BlackNode)
+			if (ReferenceNode != nullptr && !ReferenceNode->BlackNode)
 			{
 				FixupNode->Parent->BlackNode = true;
 				ReferenceNode->BlackNode = true;
