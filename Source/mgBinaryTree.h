@@ -100,7 +100,7 @@ void mgBinaryTreenode<TemplateObject>::fixUp(mgBinaryTree<TemplateObject> *TreeR
 			{
 				FixupNode->Parent->BlackNode = true;
 				ReferenceNode->BlackNode = true;
-				FixupNode->Parent->BlackNode = false;
+				FixupNode->Parent->Parent->BlackNode = false;
 				FixupNode = FixupNode->Parent->Parent;
 			}
 			else
