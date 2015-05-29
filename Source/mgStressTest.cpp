@@ -7,6 +7,7 @@
 #include "mgLinkedList.h"
 #include "mgLineSegment.h"
 #include "mgVisibilityMap.h"
+#include "mgBinaryTree.h"
 
 #include "mgStressTest.h"
 
@@ -233,6 +234,11 @@ void mgStressTest::TEST_mgMapElement(void)
 
 	Timer.ConsoleOutputResults();
 	Timer.ConsoleOutputIterationResults(10000000);
+}
+
+void mgStressTest::TEST_mgBinaryTree(void)
+{
+
 }
 
 mgStressTest::mgStressTest()
