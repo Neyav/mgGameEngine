@@ -30,7 +30,7 @@
 #define REDBLACKTREE // Tree is a red black tree.
 
 #include <stdlib.h>
-#ifdef BINARYTREEDUMP 
+#ifdef BINARYTREEDUMP
 #include <iostream>
 #include <fstream>
 #endif
@@ -365,6 +365,8 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 {
 	std::ofstream TreeStructureFile;
 	unsigned int TreeDepth = 0;
+	unsigned int ExpectedNodes = 1;
+	unsigned int UnbalancedNodes = 0;
 
 	// Initalize this field.
 	for (int Iterator = 0; Iterator < 1000; Iterator++)
@@ -374,7 +376,9 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 
 	TreeStructureFile << "mgGameEngine -> void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)" << std::endl;
 #ifdef REDBLACKTREE
-	TreeStructureFile << ":-- mgBinaryTree was compiled as a Red Black Tree." << std::endl;
+	TreeStructureFile << ":-- mgBinaryTree was compiled as self balancing using the Red Black Tree algorithm." << std::endl;
+#else
+	TreeStructureFile << ":-- mgBinaryTree was compiled without any self balancing algoithms." << std::endl;
 #endif
 	TreeStructureFile << ":-- Tree has " << this->Elements() << " elements in it." << std::endl;
 
@@ -386,8 +390,20 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 
 	for (int Iterator = 1; Iterator < TreeDepth; Iterator++)
 	{
-		TreeStructureFile << "     |-> Depth: " << Iterator << " has " << DepthValues[Iterator] << " nodes." << std::endl;
+		TreeStructureFile << "     |-> Depth: " << Iterator << " has " << DepthValues[Iterator] << " nodes. ";
+		if (ExpectedNodes > 0 && DepthValues[Iterator] != ExpectedNodes)
+		{
+			ExpectedNodes = 0;
+			TreeStructureFile << "~[Balanced Tree Ends Here]~";
+		}
+		else if (ExpectedNodes == 0)
+			UnbalancedNodes += DepthValues[Iterator];
+		TreeStructureFile << std::endl;
+		ExpectedNodes *= 2;
 	}
+
+	TreeStructureFile << ":----^" << std::endl;
+	TreeStructureFile << ":-- Binary Tree has " << UnbalancedNodes << " Unbalanced Nodes." << std::endl;
 
 	TreeStructureFile.close();
 }
