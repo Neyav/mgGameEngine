@@ -1,6 +1,31 @@
 #ifndef MGBINARYTREEH
 #define MGBINARYTREEH
 
+/*
+	Binary Tree Template
+
+	TODO: This tree implementation is currently without delete functionality but that is planned for a future update.
+
+	This is a rather simple but flexible and efficent implementation of a Binary Tree. It was converted into a Red Black Tree
+	but for diagnostic purposes all the Red Black Tree code was seperated with the preprocessing flag "REDBLACKTREE". Since there
+	is no runtime penalty to keep this distinction, and the trees are so similar that the code suffers very little added complexity
+	for it, I have decided to keep it. If anything it serves as an easy way to distinguish which parts are used for the Red Black Tree
+	and which parts are common to both.
+
+	I personally found very few guides on the Internet that were actually useful in doing this. Most people seem to not get the
+	common sense practice of naming variables after more than just letters. Plus I think left and right as node branches in this
+	sense are a little nonsensical. z = y->p->p->left is significantly less readable than 
+	FixupNode = ReferenceNode->Parent->Parent->Lesser in my opinion. You are free to disagree.
+
+	Thing I like that I did: Made the rotates and fixup functions of the node class. It just made sense.
+	Thing I didn't like that I did: The fact that the Root node's parent is nullptr, rather than the tree being based around
+			a "placeholder" Root node forced me to carry the reference of the tree itself into the fixup and rotate functions
+			into the node and then call on a function to rotate around the Root node. Feels messy. I'm sure there is a better
+			way.
+
+	- Chris Laverdure
+*/
+
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
 #define REDBLACKTREE // Tree is a red black tree.
 
@@ -9,8 +34,6 @@
 #include <iostream>
 #include <fstream>
 #endif
-
-// Template version of a Binary Tree. Optionally it can be built as a Red Black Tree or an unbalanced tree
 
 #ifdef REDBLACKTREE
 template <typename TemplateObject>
