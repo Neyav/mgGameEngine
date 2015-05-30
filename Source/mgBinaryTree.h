@@ -240,15 +240,15 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 #endif
 	}
 	else
-	{	// Find a node we belong in, bailing if we find a DOPPLEGANGER!@!!!@@@##!
+	{	// Find the proper leaf we need to branch off of....
 		mgBinaryTreenode<TemplateObject> *ProgressNode = Root; // Start at the root.
 		while (1) // 1 is always 1.....
 		{
-			if (ProgressNode->Element == Element) // DOPPLEGANGER2#$@#@#
+			if (ProgressNode->Element == Element) // We found ourselves in the tree. There is nothing more to do here.
 				break;
-			else if (ProgressNode->Element > Element) // We are small and humble. :(
+			else if (ProgressNode->Element > Element) // We are smaller than this branch node.
 			{
-				if (ProgressNode->Lesser == nullptr) // This is our home.
+				if (ProgressNode->Lesser == nullptr) // We belong here.....
 				{
 					ProgressNode->Lesser = new mgBinaryTreenode < TemplateObject > ;
 					ProgressNode->Lesser->Element = Element;
@@ -256,18 +256,18 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 
 #ifdef REDBLACKTREE
 					ProgressNode->Lesser->Parent = ProgressNode;
-					ProgressNode->Lesser->fixUp(this);
+					ProgressNode->Lesser->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
 					Root->BlackNode = true;
 #endif
 
 					break;
 				}
 				else
-					ProgressNode = ProgressNode->Lesser; // Go down the tree....
+					ProgressNode = ProgressNode->Lesser; // Proceed down the next branch of the tree...
 			}
-			else // We must BE GREATER THAN WE THOUGHT!!!!!!
+			else // We are greater than this branch node.
 			{
-				if (ProgressNode->Greater == nullptr) // This is our home.
+				if (ProgressNode->Greater == nullptr) // We belong here.
 				{
 					ProgressNode->Greater = new mgBinaryTreenode < TemplateObject >;
 					ProgressNode->Greater->Element = Element;
@@ -275,13 +275,13 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 
 #ifdef REDBLACKTREE
 					ProgressNode->Greater->Parent = ProgressNode;
-					ProgressNode->Greater->fixUp(this);
+					ProgressNode->Greater->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
 					Root->BlackNode = true;
 #endif
 					break;
 				}
 				else
-					ProgressNode = ProgressNode->Greater; // Go down the tree....
+					ProgressNode = ProgressNode->Greater; // Proceed down the next branch of the tree....
 			}
 		} // END of while loop
 	}
@@ -293,7 +293,7 @@ bool mgBinaryTree<TemplateObject>::IsElementPresent(TemplateObject Element)
 	mgBinaryTreenode < TemplateObject > *TravelNode = Root;
 
 	if (TravelNode == nullptr)
-		return false; // Obviously, duuuh...
+		return false; // This is a blank tree. It can't be present.
 
 	while (1)
 	{
