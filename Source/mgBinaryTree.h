@@ -349,9 +349,9 @@ int mgBinaryTree<TemplateObject>::CalculateTreeHeight(int PassDepth, mgBinaryTre
 
 	DepthValues[PassDepth]++; // Keep track of the number of nodes per depth;
 
-	if (TraversalNode->Lesser != NULL)
+	if (TraversalNode->Lesser != nullptr)
 		TotalDepth = this->CalculateTreeHeight(PassDepth + 1, TraversalNode->Lesser);
-	if (TraversalNode->Greater != NULL)
+	if (TraversalNode->Greater != nullptr)
 		TempDepth = this->CalculateTreeHeight(PassDepth + 1, TraversalNode->Greater);
 
 	if (TempDepth > TotalDepth)
