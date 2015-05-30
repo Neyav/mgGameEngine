@@ -5,6 +5,9 @@
 #include "mgMapDataHandler.h"
 #include "mgBinaryTree.h"
 
+#define MGVISIBILITYEDGEPERCISION 0.49999	// How far from the center to move to calculate the visibility
+											// from the edge of a block. As close as reasonable to the line without going over.
+
 // =------------------------------------=
 // = mgVisibilityMap C++ class			=
 // =------------------------------------=
@@ -26,8 +29,8 @@ public:
 	bool IsMarkedVisible(int CheckY, int CheckX);
 	int MappedItems(void);
 	void LinkToMapHandler(mgMapDataHandler *LinkMap);
-	void CalculateVisibility(int BlockY, int BlockX);
-	void CalculateAdjacentVisibility(int BlockY, int BlockX);
+	void CalculateVisibility(mgPoint CheckPosition);
+	void CalculateVisibilityBlock(int BlockY, int BlockX);
 
 	mgVisibilityMap(); // Constructor
 	~mgVisibilityMap(); // Destructor

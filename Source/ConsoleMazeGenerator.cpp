@@ -209,8 +209,7 @@ void MapGrid(mgMapDataHandler *MapData, mgPoint Position)
 	if (!MapData->IsBlockClippable(floor(Position.Y), floor(Position.X)))
 	{	// Only calculate the visibility data here if our position is valid.
 		VisTimer.StartTimer();
-		PositionVisMap.CalculateVisibility(floor(Position.Y), floor(Position.X));
-		PositionVisMap.CalculateAdjacentVisibility(floor(Position.Y), floor(Position.X));
+		PositionVisMap.CalculateVisibilityBlock(floor(Position.Y), floor(Position.X));
 		VisTimer.StopTimer();
 		VisTimer.ConsoleOutputResults();
 	}
@@ -496,8 +495,7 @@ int main(int argc, char* argv[])
 	testVisibilityBlock = new mgVisibilityMap;
 
 	testVisibilityBlock->LinkToMapHandler(MazeMap);
-	testVisibilityBlock->CalculateVisibility(VisY, VisX);
-	testVisibilityBlock->CalculateAdjacentVisibility(VisY, VisX); // Calculates Visibility for adjacent blocks as well
+	testVisibilityBlock->CalculateVisibilityBlock(VisY, VisX);
 
 	Timer_vismap.StopTimer();
 
@@ -509,8 +507,7 @@ int main(int argc, char* argv[])
 	testHoleVisibilityBlock = new mgVisibilityMap;
 
 	testHoleVisibilityBlock->LinkToMapHandler(MazeMapHoles);
-	testHoleVisibilityBlock->CalculateVisibility(VisY, VisX);
-	testHoleVisibilityBlock->CalculateAdjacentVisibility(VisY, VisX);
+	testHoleVisibilityBlock->CalculateVisibilityBlock(VisY, VisX);
 
 	DisplayMap(VisY, VisX, testHoleVisibilityBlock, MazeMapHoles, nullptr);
 

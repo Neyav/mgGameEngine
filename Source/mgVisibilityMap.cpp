@@ -47,14 +47,10 @@ void mgVisibilityMap::LinkToMapHandler(mgMapDataHandler *LinkMap)
 	MapReference = LinkMap;
 }
 
-void mgVisibilityMap::CalculateVisibility(int BlockY, int BlockX)
+void mgVisibilityMap::CalculateVisibility(mgPoint CheckPosition)
 {
-	mgPoint CheckPosition;
 	mgVector CheckDirection;
 	mgRayTracer VisibilityTracer;
-
-	CheckPosition.Y = BlockY + 0.5;
-	CheckPosition.X = BlockX + 0.5;
 
 	VisibilityTracer.MapReference = MapReference;
 	VisibilityTracer.ListPositions = true;
@@ -79,20 +75,28 @@ void mgVisibilityMap::CalculateVisibility(int BlockY, int BlockX)
 	}
 }
 
-void mgVisibilityMap::CalculateAdjacentVisibility(int BlockY, int BlockX)
+void mgVisibilityMap::CalculateVisibilityBlock(int BlockY, int BlockX)
 {
-	// Calculate visibility for adjacent blocks, do this by calling the CalculateVisibility function on each block beside.
-	int testY[4], testX[4];
+	mgPoint CheckBlock[5];
 
-	testY[0] = BlockY - 1;
-	testY[1] = BlockY + 1;
-	testY[2] = testY[3] = BlockY;
-	testX[0] = testX[1] = BlockX;
-	testX[2] = BlockX - 1;
-	testX[3] = BlockX + 1;
+	// To calculate visibility potential from a block we do a 360 raytrace from 5 points in the block.
+	// The first is the center, which may be unnecessary and will possibly get removed [TODO].
+	// The other four are the four corners, just to be sure we cover all possible visible areas from within
+	// the block space.
+	CheckBlock[0].Y = BlockY + 0.5;
+	CheckBlock[0].X = BlockX + 0.5;
+	CheckBlock[1].Y = CheckBlock[0].Y - MGVISIBILITYEDGEPERCISION;
+	CheckBlock[1].X = CheckBlock[0].X - MGVISIBILITYEDGEPERCISION;
+	CheckBlock[2].Y = CheckBlock[0].Y - MGVISIBILITYEDGEPERCISION;
+	CheckBlock[2].X = CheckBlock[0].X + MGVISIBILITYEDGEPERCISION;
+	CheckBlock[3].Y = CheckBlock[0].Y + MGVISIBILITYEDGEPERCISION;
+	CheckBlock[3].X = CheckBlock[0].X - MGVISIBILITYEDGEPERCISION;
+	CheckBlock[4].Y = CheckBlock[0].Y + MGVISIBILITYEDGEPERCISION;
+	CheckBlock[4].X = CheckBlock[0].X + MGVISIBILITYEDGEPERCISION;
 
-	for (int Iterator = 0; Iterator < 4; Iterator++)
-		CalculateVisibility(testY[Iterator], testX[Iterator]);
+
+	for (int Iterator = 0; Iterator < 5; Iterator++)
+		CalculateVisibility(CheckBlock[Iterator]);
 
 #ifdef BINARYTREEDUMP
 	VisibilityTree.DumpTreeStructure("TreeOutput.txt");

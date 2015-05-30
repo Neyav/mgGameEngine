@@ -179,7 +179,7 @@ void mgStressTest::TEST_mgVisibilityMap(void)
 			MapElement->BlockType = MAP_BLOCKFLOOR;
 		}
 
-	Timer.Description = ".CalculateVisibility(25,25) & Adjacent x 3";
+	Timer.Description = ".CalculateVisibilityBlock(25,25) x 3";
 
 	Timer.StartTimer();
 
@@ -190,8 +190,7 @@ void mgStressTest::TEST_mgVisibilityMap(void)
 		VisMap.LinkToMapHandler(&TestMap);
 
 		// Calculate both the visibility map and the adjacent visibility maps for the center
-		VisMap.CalculateVisibility(25, 25);
-		VisMap.CalculateAdjacentVisibility(25, 25);
+		VisMap.CalculateVisibilityBlock(25, 25);
 	}
 
 	Timer.StopTimer();
