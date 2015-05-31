@@ -28,6 +28,7 @@
 
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
 #define REDBLACKTREE // Tree is a red black tree.
+//#define AVLTREE // Tree is an AVL tree: Option is exclusive with the option above.
 
 #include <stdlib.h>
 #ifdef BINARYTREEDUMP
@@ -57,6 +58,9 @@ public:
 	void fixUp(mgBinaryTree<TemplateObject> *TreeReference);
 
 	mgBinaryTreenode<TemplateObject> *Parent;
+#endif
+#ifdef AVLTREE
+	int Height;
 #endif
 	mgBinaryTreenode<TemplateObject> *Greater;
 	mgBinaryTreenode<TemplateObject> *Lesser;
@@ -175,6 +179,9 @@ mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 
 	Parent = nullptr;
 #endif
+#ifdef AVLTREE
+	Height = 1; // A new Node has a height of 1.
+#endif
 	// New nodes don't have children, so as default behavior this makes a lot of sense.
 	Lesser = nullptr;
 	Greater = nullptr;
@@ -198,6 +205,57 @@ class mgBinaryTree
 private:
 	mgBinaryTreenode<TemplateObject> *Root;
 	unsigned int ElementCount;
+
+#ifdef AVLTREE
+	inline int AVLheight(mgBinaryTreenode<TemplateObject> *CurrentNode)
+	{
+		if (CurrentNode == nullptr)
+			return 0;
+		return CurrentNode->Height;
+	}
+	inline int maxvalue(int a, int b)
+	{
+		return (a > b) ? a : b;
+	}
+	inline int getBalance(mgBinaryTreenode<TemplateObject> *CurrentNode)
+	{
+		if (CurrentNode == nullptr)
+			return 0;
+		return AVLheight(CurrentNode->Lesser) - AVLheight(CurrentNode->Greater);
+	}
+	inline mgBinaryTreenode<TemplateObject> *AVLrightRotate(mgBinaryTreenode<TemplateObject> *CurrentNode)
+	{
+		mgBinaryTreenode<TemplateObject> *LesserChild = CurrentNode->Lesser;
+		mgBinaryTreenode<TemplateObject> *GreaterGrandChild = LesserChild->Greater;
+
+		// Right Rotation
+		LesserChild->Greater = CurrentNode;
+		CurrentNode->Lesser = GreaterGrandChild;
+
+		// Update heights
+		CurrentNode->Height = maxvalue(AVLheight(CurrentNode->Lesser), AVLheight(CurrentNode->Greater)) + 1;
+		LesserChild->Height = maxvalue(AVLheight(LesserChild->Lesser), AVLheight(LesserChild->Greater)) + 1;
+
+		return LesserChild;
+	}
+	inline mgBinaryTreenode<TemplateObject> *AVLleftRotate(mgBinaryTreenode<TemplateObject> *CurrentNode)
+	{
+		mgBinaryTreenode<TemplateObject> *GreaterChild = CurrentNode->Greater;
+		mgBinaryTreenode<TemplateObject> *LesserGrandChild = GreaterChild->Lesser;
+
+		// Left Rotation
+		GreaterChild->Lesser = CurrentNode;
+		CurrentNode->Greater = LesserGrandChild;
+
+		// Update heights
+		CurrentNode->Height = maxvalue(AVLheight(CurrentNode->Lesser), AVLheight(CurrentNode->Greater)) + 1;
+		GreaterChild->Height = maxvalue(AVLheight(GreaterChild->Lesser), AVLheight(GreaterChild->Greater)) + 1;
+
+		return GreaterChild;
+	}
+
+	mgBinaryTreenode<TemplateObject> *AVLInsert(mgBinaryTreenode<TemplateObject> *CurrentNode, TemplateObject Element);
+#endif
 
 public:
 
@@ -228,9 +286,70 @@ void mgBinaryTree<TemplateObject>::SwapRoot(mgBinaryTreenode<TemplateObject> *Ne
 }
 #endif
 
+#ifdef AVLTREE
+template <typename TemplateObject>
+mgBinaryTreenode<TemplateObject> *mgBinaryTree<TemplateObject>::AVLInsert(mgBinaryTreenode<TemplateObject> *CurrentNode, TemplateObject Element)
+{
+	mgBinaryTreenode<TemplateObject> *WorkerNode;
+	if (CurrentNode == nullptr) // We landed on a empty leaf, this is where we want to add our node
+	{
+		mgBinaryTreenode<TemplateObject> *newNode;
+		
+		newNode = new mgBinaryTreenode < TemplateObject >;
+		newNode->Element = Element;
+
+		ElementCount++;
+
+		return newNode;
+	}
+
+	// Only traverse if it is greater or lesser. If it is equal we unwind right now.
+	if (Element < CurrentNode->Element)
+	{
+		WorkerNode = AVLInsert(CurrentNode->Lesser, Element);
+
+		if (WorkerNode != nullptr)
+			CurrentNode->Lesser = WorkerNode;
+	}
+	else if (Element > CurrentNode->Element)
+	{
+		WorkerNode = AVLInsert(CurrentNode->Greater, Element);
+
+		if (WorkerNode != nullptr)
+			CurrentNode->Greater = WorkerNode;
+	}
+	else
+		return nullptr; // We found an equal, just unwind the loop now.
+
+	CurrentNode->Height = maxvalue(AVLheight(CurrentNode->Lesser), AVLheight(CurrentNode->Greater)) + 1;
+
+	int balance = getBalance(CurrentNode);
+
+	if (balance > 1 && Element < CurrentNode->Lesser->Element)
+		return AVLrightRotate(CurrentNode);
+	if (balance < -1 && Element > CurrentNode->Greater->Element)
+		return AVLleftRotate(CurrentNode);
+	if (balance > 1 && Element > CurrentNode->Lesser->Element)
+	{
+		CurrentNode->Lesser = AVLleftRotate(CurrentNode->Lesser);
+		return AVLrightRotate(CurrentNode);
+	}
+	if (balance < -1 && Element < CurrentNode->Greater->Element)
+	{
+		CurrentNode->Greater = AVLrightRotate(CurrentNode->Greater);
+		return AVLleftRotate(CurrentNode);
+	}
+
+	return CurrentNode; // No change
+}
+#endif
+
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
+#ifdef AVLTREE
+	Root = AVLInsert(Root, Element);
+#else
 	if (Root == nullptr)
 	{	// This is the first object in the list, just add it to the root.
 		Root = new mgBinaryTreenode < TemplateObject > ;
@@ -238,6 +357,7 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 #ifdef REDBLACKTREE
 		Root->BlackNode = true; // This is all the fixing we need for a blank tree.
 #endif
+		ElementCount++;
 	}
 	else
 	{	// Find the proper leaf we need to branch off of....
@@ -285,6 +405,7 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 			}
 		} // END of while loop
 	}
+#endif // AVLTREE
 }
 
 template <typename TemplateObject>
@@ -377,8 +498,14 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 	TreeStructureFile << "mgGameEngine -> void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)" << std::endl;
 #ifdef REDBLACKTREE
 	TreeStructureFile << ":-- mgBinaryTree was compiled as self balancing using the Red Black Tree algorithm." << std::endl;
-#else
+#endif
+#ifdef AVLTREE
+	TreeStructureFile << ":-- mgBinaryTree was compiled as self balancing using the AVL algorithm." << std::endl;
+#endif
+#ifndef REDBLACKTREE
+#ifndef AVLTREE
 	TreeStructureFile << ":-- mgBinaryTree was compiled without any self balancing algoithms." << std::endl;
+#endif
 #endif
 	TreeStructureFile << ":-- Tree has " << this->Elements() << " elements in it." << std::endl;
 
