@@ -4,6 +4,8 @@
 /*
 	Binary Tree Template
 
+	Supports Unbalanced, Red Black Tree, and AVL implementations.
+
 	TODO: This tree implementation is currently without delete functionality but that is planned for a future update.
 
 	This is a rather simple but flexible and efficent implementation of a Binary Tree. It was converted into a Red Black Tree
@@ -23,17 +25,27 @@
 			into the node and then call on a function to rotate around the Root node. Feels messy. I'm sure there is a better
 			way.
 
+	Special thanks to http://www.geeksforgeeks.org/avl-tree-set-1-insertion/ for the AVL implementation. 
+	I adapted it to this code base, which is why it looks so different from	the rest of the code. There are parts I like 
+	about the way it's done, and parts I do not like. Overall, this has been a fun and educational exercise.
+
 	- Chris Laverdure
 */
 
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
-#define REDBLACKTREE // Tree is a red black tree.
-//#define AVLTREE // Tree is an AVL tree: Option is exclusive with the option above.
+//#define REDBLACKTREE // Tree is a red black tree.
+#define AVLTREE // Tree is an AVL tree: Option is exclusive with the option above.
 
 #include <stdlib.h>
 #ifdef BINARYTREEDUMP
 #include <iostream>
 #include <fstream>
+#endif
+
+#ifdef AVLTREE
+#ifdef REDBLACKTREE
+#undef REDBLACKTREE // Prioritize AVL if they are both #defined
+#endif
 #endif
 
 #ifdef REDBLACKTREE
@@ -348,7 +360,9 @@ template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
 #ifdef AVLTREE
-	Root = AVLInsert(Root, Element);
+	mgBinaryTreenode<TemplateObject> *newNode = AVLInsert(Root, Element);
+	if (newNode != nullptr) // This occurs when the root of the tree is a duplicate to a new Insert query. It returns nullptr
+		Root = newNode;	    // to escape.
 #else
 	if (Root == nullptr)
 	{	// This is the first object in the list, just add it to the root.
