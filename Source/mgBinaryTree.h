@@ -233,7 +233,7 @@ private:
 	{
 		if (CurrentNode == nullptr)
 			return 0;
-		return AVLheight(CurrentNode->Lesser) - AVLheight(CurrentNode->Greater);
+		return AVLheight(CurrentNode->Greater) - AVLheight(CurrentNode->Lesser);
 	}
 	inline mgBinaryTreenode<TemplateObject> *AVLrightRotate(mgBinaryTreenode<TemplateObject> *CurrentNode)
 	{
@@ -337,21 +337,17 @@ mgBinaryTreenode<TemplateObject> *mgBinaryTree<TemplateObject>::AVLInsert(mgBina
 
 	int balance = getBalance(CurrentNode);
 
-	if (balance > 1 && Element < CurrentNode->Lesser->Element)
-		return AVLrightRotate(CurrentNode);
-	if (balance < -1 && Element > CurrentNode->Greater->Element)
-		return AVLleftRotate(CurrentNode);
-	if (balance > 1 && Element > CurrentNode->Lesser->Element)
+	if (balance == 2)
 	{
-		CurrentNode->Lesser = AVLleftRotate(CurrentNode->Lesser);
-
-		return AVLrightRotate(CurrentNode);
+		if (getBalance(CurrentNode->Greater) < 0)
+			CurrentNode->Greater = AVLrightRotate(CurrentNode->Greater);
+		return AVLleftRotate(CurrentNode);
 	}
-	if (balance < -1 && Element < CurrentNode->Greater->Element)
+	else if (balance == -2)
 	{
-		CurrentNode->Greater = AVLrightRotate(CurrentNode->Greater);
-		
-		return AVLleftRotate(CurrentNode);
+		if (getBalance(CurrentNode->Lesser) > 0)
+			CurrentNode->Lesser = AVLleftRotate(CurrentNode->Lesser);
+		return AVLrightRotate(CurrentNode);
 	}
 
 	return CurrentNode; // No change
