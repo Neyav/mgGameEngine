@@ -344,11 +344,13 @@ mgBinaryTreenode<TemplateObject> *mgBinaryTree<TemplateObject>::AVLInsert(mgBina
 	if (balance > 1 && Element > CurrentNode->Lesser->Element)
 	{
 		CurrentNode->Lesser = AVLleftRotate(CurrentNode->Lesser);
+
 		return AVLrightRotate(CurrentNode);
 	}
 	if (balance < -1 && Element < CurrentNode->Greater->Element)
 	{
 		CurrentNode->Greater = AVLrightRotate(CurrentNode->Greater);
+		
 		return AVLleftRotate(CurrentNode);
 	}
 
@@ -538,13 +540,13 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 			TreeStructureFile << "~[Balanced Tree Ends Here]~";
 		}
 		else if (ExpectedNodes == 0)
-			UnbalancedNodes += DepthValues[Iterator];
+			UnbalancedNodes++;
 		TreeStructureFile << std::endl;
 		ExpectedNodes *= 2;
 	}
 
 	TreeStructureFile << ":----^" << std::endl;
-	TreeStructureFile << ":-- Binary Tree has " << UnbalancedNodes << " Unbalanced Nodes." << std::endl;
+	TreeStructureFile << ":-- Binary Tree has " << UnbalancedNodes << " Unbalanced layers." << std::endl;
 
 	TreeStructureFile.close();
 }
