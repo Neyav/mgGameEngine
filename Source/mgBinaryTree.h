@@ -4,7 +4,7 @@
 /*
 	Binary Tree Template
 
-	Supports Unbalanced, Red Black Tree, and AVL implementations.
+	Supports AVL tree through the polymorphism template mgAVLBinaryTree
 
 	TODO: This tree implementation is currently without delete functionality but that is planned for a future update.
 
@@ -25,27 +25,16 @@
 			into the node and then call on a function to rotate around the Root node. Feels messy. I'm sure there is a better
 			way.
 
-	Special thanks to http://www.geeksforgeeks.org/avl-tree-set-1-insertion/ for the AVL implementation. 
-	I adapted it to this code base, which is why it looks so different from	the rest of the code. There are parts I like 
-	about the way it's done, and parts I do not like. Overall, this has been a fun and educational exercise.
-
 	- Chris Laverdure
 */
 
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
 //#define REDBLACKTREE // Tree is a red black tree.
-#define AVLTREE // Tree is an AVL tree: Option is exclusive with the option above.
 
 #include <stdlib.h>
 #ifdef BINARYTREEDUMP
 #include <iostream>
 #include <fstream>
-#endif
-
-#ifdef AVLTREE
-#ifdef REDBLACKTREE
-#undef REDBLACKTREE // Prioritize AVL if they are both #defined
-#endif
 #endif
 
 #ifdef REDBLACKTREE
@@ -56,7 +45,7 @@ class mgBinaryTree;
 template <typename TemplateObject>
 class mgBinaryTreenode
 {
-private:
+public:
 #ifdef REDBLACKTREE
 	void leftRotate(mgBinaryTree<TemplateObject> *TreeReference);
 	void rightRotate(mgBinaryTree<TemplateObject> *TreeReference);
@@ -71,9 +60,7 @@ public:
 
 	mgBinaryTreenode<TemplateObject> *Parent;
 #endif
-#ifdef AVLTREE
-	int Height;
-#endif
+
 	mgBinaryTreenode<TemplateObject> *Greater;
 	mgBinaryTreenode<TemplateObject> *Lesser;
 
@@ -191,9 +178,6 @@ mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 
 	Parent = nullptr;
 #endif
-#ifdef AVLTREE
-	Height = 1; // A new Node has a height of 1.
-#endif
 	// New nodes don't have children, so as default behavior this makes a lot of sense.
 	Lesser = nullptr;
 	Greater = nullptr;
@@ -214,62 +198,9 @@ mgBinaryTreenode<TemplateObject>::~mgBinaryTreenode()
 template <typename TemplateObject> 
 class mgBinaryTree
 {
-private:
+public:
 	mgBinaryTreenode<TemplateObject> *Root;
 	unsigned int ElementCount;
-
-#ifdef AVLTREE
-	inline int AVLheight(mgBinaryTreenode<TemplateObject> *CurrentNode)
-	{
-		if (CurrentNode == nullptr)
-			return 0;
-		return CurrentNode->Height;
-	}
-	inline int maxvalue(int a, int b)
-	{
-		return (a > b) ? a : b;
-	}
-	inline int getBalance(mgBinaryTreenode<TemplateObject> *CurrentNode)
-	{
-		if (CurrentNode == nullptr)
-			return 0;
-		return AVLheight(CurrentNode->Greater) - AVLheight(CurrentNode->Lesser);
-	}
-	inline mgBinaryTreenode<TemplateObject> *AVLrightRotate(mgBinaryTreenode<TemplateObject> *CurrentNode)
-	{
-		mgBinaryTreenode<TemplateObject> *LesserChild = CurrentNode->Lesser;
-		mgBinaryTreenode<TemplateObject> *GreaterGrandChild = LesserChild->Greater;
-
-		// Right Rotation
-		LesserChild->Greater = CurrentNode;
-		CurrentNode->Lesser = GreaterGrandChild;
-
-		// Update heights
-		CurrentNode->Height = maxvalue(AVLheight(CurrentNode->Lesser), AVLheight(CurrentNode->Greater)) + 1;
-		LesserChild->Height = maxvalue(AVLheight(LesserChild->Lesser), AVLheight(LesserChild->Greater)) + 1;
-
-		return LesserChild;
-	}
-	inline mgBinaryTreenode<TemplateObject> *AVLleftRotate(mgBinaryTreenode<TemplateObject> *CurrentNode)
-	{
-		mgBinaryTreenode<TemplateObject> *GreaterChild = CurrentNode->Greater;
-		mgBinaryTreenode<TemplateObject> *LesserGrandChild = GreaterChild->Lesser;
-
-		// Left Rotation
-		GreaterChild->Lesser = CurrentNode;
-		CurrentNode->Greater = LesserGrandChild;
-
-		// Update heights
-		CurrentNode->Height = maxvalue(AVLheight(CurrentNode->Lesser), AVLheight(CurrentNode->Greater)) + 1;
-		GreaterChild->Height = maxvalue(AVLheight(GreaterChild->Lesser), AVLheight(GreaterChild->Greater)) + 1;
-
-		return GreaterChild;
-	}
-
-	mgBinaryTreenode<TemplateObject> *AVLInsert(mgBinaryTreenode<TemplateObject> *CurrentNode, TemplateObject Element);
-#endif
-
-public:
 
 #ifdef REDBLACKTREE
 	void SwapRoot(mgBinaryTreenode<TemplateObject> *NewRoot);
@@ -298,70 +229,10 @@ void mgBinaryTree<TemplateObject>::SwapRoot(mgBinaryTreenode<TemplateObject> *Ne
 }
 #endif
 
-#ifdef AVLTREE
-template <typename TemplateObject>
-mgBinaryTreenode<TemplateObject> *mgBinaryTree<TemplateObject>::AVLInsert(mgBinaryTreenode<TemplateObject> *CurrentNode, TemplateObject Element)
-{
-	mgBinaryTreenode<TemplateObject> *WorkerNode;
-	if (CurrentNode == nullptr) // We landed on a empty leaf, this is where we want to add our node
-	{
-		mgBinaryTreenode<TemplateObject> *newNode;
-		
-		newNode = new mgBinaryTreenode < TemplateObject >;
-		newNode->Element = Element;
-
-		ElementCount++;
-
-		return newNode;
-	}
-
-	// Only traverse if it is greater or lesser. If it is equal we unwind right now.
-	if (Element < CurrentNode->Element)
-	{
-		WorkerNode = AVLInsert(CurrentNode->Lesser, Element);
-
-		if (WorkerNode != nullptr)
-			CurrentNode->Lesser = WorkerNode;
-	}
-	else if (Element > CurrentNode->Element)
-	{
-		WorkerNode = AVLInsert(CurrentNode->Greater, Element);
-
-		if (WorkerNode != nullptr)
-			CurrentNode->Greater = WorkerNode;
-	}
-	else
-		return nullptr; // We found an equal, just unwind the loop now.
-
-	CurrentNode->Height = maxvalue(AVLheight(CurrentNode->Lesser), AVLheight(CurrentNode->Greater)) + 1;
-
-	int balance = getBalance(CurrentNode);
-
-	if (balance == 2)
-	{
-		if (getBalance(CurrentNode->Greater) < 0)
-			CurrentNode->Greater = AVLrightRotate(CurrentNode->Greater);
-		return AVLleftRotate(CurrentNode);
-	}
-	else if (balance == -2)
-	{
-		if (getBalance(CurrentNode->Lesser) > 0)
-			CurrentNode->Lesser = AVLleftRotate(CurrentNode->Lesser);
-		return AVLrightRotate(CurrentNode);
-	}
-
-	return CurrentNode; // No change
-}
-#endif
 
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
-#ifdef AVLTREE
-	mgBinaryTreenode<TemplateObject> *newNode = AVLInsert(Root, Element);
-	if (newNode != nullptr) // This occurs when the root of the tree is a duplicate to a new Insert query. It returns nullptr
-		Root = newNode;	    // to escape.
-#else
 	if (Root == nullptr)
 	{	// This is the first object in the list, just add it to the root.
 		Root = new mgBinaryTreenode < TemplateObject > ;
@@ -417,7 +288,6 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 			}
 		} // END of while loop
 	}
-#endif // AVLTREE
 }
 
 template <typename TemplateObject>
@@ -508,17 +378,6 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 	TreeStructureFile.open(OutputFile);
 
 	TreeStructureFile << "mgGameEngine -> void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)" << std::endl;
-#ifdef REDBLACKTREE
-	TreeStructureFile << ":-- mgBinaryTree was compiled as self balancing using the Red Black Tree algorithm." << std::endl;
-#endif
-#ifdef AVLTREE
-	TreeStructureFile << ":-- mgBinaryTree was compiled as self balancing using the AVL algorithm." << std::endl;
-#endif
-#ifndef REDBLACKTREE
-#ifndef AVLTREE
-	TreeStructureFile << ":-- mgBinaryTree was compiled without any self balancing algoithms." << std::endl;
-#endif
-#endif
 	TreeStructureFile << ":-- Tree has " << this->Elements() << " elements in it." << std::endl;
 
 	// Calculate the maximum tree depth.
