@@ -3,7 +3,7 @@
 
 #include "mgMapDataHandler.h"
 
-_mgGameEngineVersionstruct mgGameEngineVersion = { 0, 1, 0 };
+_mgGameEngineVersionstruct mgGameEngineVersion = { 0, 5, 0 };
 
 // =------------------------------------=
 // = mgMapDataHandler C++ class         =

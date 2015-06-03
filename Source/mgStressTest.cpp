@@ -8,6 +8,8 @@
 #include "mgLineSegment.h"
 #include "mgVisibilityMap.h"
 #include "mgBinaryTree.h"
+#include "mgAVLBinaryTree.h"
+#include "mgRBTBinaryTree.h"
 
 #include "mgStressTest.h"
 
@@ -237,6 +239,96 @@ void mgStressTest::TEST_mgMapElement(void)
 
 void mgStressTest::TEST_mgBinaryTree(void)
 {
+	mgBinaryTree<int> BinaryTree;
+	mgAVLBinaryTree<int> AVLBinaryTree;
+	mgRBTBinaryTree<int> RBTBinaryTree;
+
+	std::cout << "[---void mgStressTest::TEST_mgBinaryTree(void)---]" << std::endl;
+
+	std::cout << "[-> Insertion tests" << std::endl;
+
+	Timer.Description = "Unbalanced Tree, 50k incrementing, 50k decrementing";
+	Timer.StartTimer();
+	for (int i = 0; i < 50000; i++)
+		BinaryTree.AddElement(i);
+	for (int i = 50000; i > 0; i--)
+		BinaryTree.AddElement(i);
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(100000);
+
+	Timer.Description = "Red Black Tree, 50k incrementing, 50k decrementing";
+	Timer.StartTimer();
+	for (int i = 0; i < 50000; i++)
+		RBTBinaryTree.AddElement(i);
+	for (int i = 50000; i > 0; i--)
+		RBTBinaryTree.AddElement(i);
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(100000);
+
+	Timer.Description = "AVL Tree, 50k incrementing, 50k decrementing";
+	Timer.StartTimer();
+	for (int i = 0; i < 50000; i++)
+		AVLBinaryTree.AddElement(i);
+	for (int i = 50000; i > 0; i--)
+		AVLBinaryTree.AddElement(i);
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(100000);
+
+	std::cout << "[-> Search tests" << std::endl;
+
+	Timer.Description = "Unbalanced Tree, 100k incrementing";
+	Timer.StartTimer();
+	for (int i = 0; i < 100000; i++)
+	{
+		if (BinaryTree.IsElementPresent(i))
+		{
+			volatile int a;
+
+			a = 1;
+		}
+	}
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(100000);
+
+	Timer.Description = "Red Black Tree, 100k incrementing";
+	Timer.StartTimer();
+	for (int i = 0; i < 100000; i++)
+	{
+		if (RBTBinaryTree.IsElementPresent(i))
+		{
+			volatile int a;
+
+			a = 1;
+		}
+	}
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(100000);
+
+	Timer.Description = "AVL Tree, 100k incrementing";
+	Timer.StartTimer();
+	for (int i = 0; i < 100000; i++)
+	{
+		if (AVLBinaryTree.IsElementPresent(i))
+		{
+			volatile int a;
+
+			a = 1;
+		}
+	}
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(100000);
 
 }
 
