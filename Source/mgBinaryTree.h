@@ -4,32 +4,15 @@
 /*
 	Binary Tree Template
 
-	Supports AVL tree through the polymorphism template mgAVLBinaryTree
+	Supports AVL tree through the polymorphism template mgAVLBinaryTree and RBT through mgRBTBinaryTree
 
 	TODO: This tree implementation is currently without delete functionality but that is planned for a future update.
 
-	This is a rather simple but flexible and efficent implementation of a Binary Tree. It was converted into a Red Black Tree
-	but for diagnostic purposes all the Red Black Tree code was seperated with the preprocessing flag "REDBLACKTREE". Since there
-	is no runtime penalty to keep this distinction, and the trees are so similar that the code suffers very little added complexity
-	for it, I have decided to keep it. If anything it serves as an easy way to distinguish which parts are used for the Red Black Tree
-	and which parts are common to both.
-
-	I personally found very few guides on the Internet that were actually useful in doing this. Most people seem to not get the
-	common sense practice of naming variables after more than just letters. Plus I think left and right as node branches in this
-	sense are a little nonsensical. z = y->p->p->left is significantly less readable than 
-	FixupNode = ReferenceNode->Parent->Parent->Lesser in my opinion. You are free to disagree.
-
-	Thing I like that I did: Made the rotates and fixup functions of the node class. It just made sense.
-	Thing I didn't like that I did: The fact that the Root node's parent is nullptr, rather than the tree being based around
-			a "placeholder" Root node forced me to carry the reference of the tree itself into the fixup and rotate functions
-			into the node and then call on a function to rotate around the Root node. Feels messy. I'm sure there is a better
-			way.
-
-	- Chris Laverdure
+	This is a rather simple but flexible and efficent implementation of a Binary Tree. It is expanded into a self-balancing
+	tree through two different methods that inherent its basic properties and expand upon them for their specific purposes.
 */
 
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
-//#define REDBLACKTREE // Tree is a red black tree.
 
 #include <stdlib.h>
 #ifdef BINARYTREEDUMP
@@ -37,29 +20,11 @@
 #include <fstream>
 #endif
 
-#ifdef REDBLACKTREE
-template <typename TemplateObject>
-class mgBinaryTree;
-#endif
-
 template <typename TemplateObject>
 class mgBinaryTreenode
 {
 public:
-#ifdef REDBLACKTREE
-	void leftRotate(mgBinaryTree<TemplateObject> *TreeReference);
-	void rightRotate(mgBinaryTree<TemplateObject> *TreeReference);
-#endif
-public:
 	TemplateObject Element;
-
-#ifdef REDBLACKTREE
-	bool BlackNode;
-
-	void fixUp(mgBinaryTree<TemplateObject> *TreeReference);
-
-	mgBinaryTreenode<TemplateObject> *Parent;
-#endif
 
 	mgBinaryTreenode<TemplateObject> *Greater;
 	mgBinaryTreenode<TemplateObject> *Lesser;
@@ -68,116 +33,9 @@ public:
 	~mgBinaryTreenode();
 };
 
-#ifdef REDBLACKTREE
-template <typename TemplateObject>
-void mgBinaryTreenode<TemplateObject>::leftRotate(mgBinaryTree<TemplateObject> *TreeReference)
-{
-	mgBinaryTreenode<TemplateObject> *ReferenceNode = this->Greater;
-
-	this->Greater = ReferenceNode->Lesser;
-	if (ReferenceNode->Lesser != nullptr)
-		ReferenceNode->Lesser->Parent = this;
-	ReferenceNode->Parent = this->Parent;
-
-	if (this->Parent == nullptr)
-		TreeReference->SwapRoot(ReferenceNode);
-	else if (this == this->Parent->Lesser)
-		this->Parent->Lesser = ReferenceNode;
-	else
-		this->Parent->Greater = ReferenceNode;
-
-	ReferenceNode->Lesser = this;
-	this->Parent = ReferenceNode;
-}
-
-template <typename TemplateObject>
-void mgBinaryTreenode<TemplateObject>::rightRotate(mgBinaryTree<TemplateObject> *TreeReference)
-{
-	mgBinaryTreenode<TemplateObject> *ReferenceNode = this->Lesser;
-
-	this->Lesser = ReferenceNode->Greater;
-	if (ReferenceNode->Greater != nullptr)
-		ReferenceNode->Greater->Parent = this;
-	ReferenceNode->Parent = this->Parent;
-
-	if (this->Parent == nullptr)
-		TreeReference->SwapRoot(ReferenceNode);
-	else if (this == this->Parent->Greater)
-		this->Parent->Greater = ReferenceNode;
-	else
-		this->Parent->Lesser = ReferenceNode;
-
-	ReferenceNode->Greater = this;
-	this->Parent = ReferenceNode;
-}
-
-template <typename TemplateObject>
-void mgBinaryTreenode<TemplateObject>::fixUp(mgBinaryTree<TemplateObject> *TreeReference)
-{
-	mgBinaryTreenode<TemplateObject> *FixupNode = this;
-	// We just added an element and need to perform the necessary steps to fix the balance of the tree
-	while (FixupNode->Parent != nullptr && !FixupNode->Parent->BlackNode)
-	{ // Our parent is a Red Node
-		if (FixupNode->Parent == FixupNode->Parent->Parent->Lesser)
-		{
-			mgBinaryTreenode<TemplateObject> *ReferenceNode = FixupNode->Parent->Parent->Greater;
-
-			if (ReferenceNode != nullptr && !ReferenceNode->BlackNode)
-			{
-				FixupNode->Parent->BlackNode = true;
-				ReferenceNode->BlackNode = true;
-				FixupNode->Parent->Parent->BlackNode = false;
-				FixupNode = FixupNode->Parent->Parent;
-			}
-			else
-			{
-				if (FixupNode == FixupNode->Parent->Greater)
-				{
-					FixupNode = FixupNode->Parent;
-					FixupNode->leftRotate(TreeReference);
-				}
-
-				FixupNode->Parent->BlackNode = true;
-				FixupNode->Parent->Parent->BlackNode = false;
-
-				FixupNode->Parent->Parent->rightRotate(TreeReference);
-			}
-		}
-		else
-		{
-			mgBinaryTreenode<TemplateObject> *ReferenceNode = FixupNode->Parent->Parent->Lesser;
-
-			if (ReferenceNode != nullptr && !ReferenceNode->BlackNode)
-			{
-				FixupNode->Parent->BlackNode = true;
-				ReferenceNode->BlackNode = true;
-				FixupNode->Parent->Parent->BlackNode = false;
-				FixupNode = FixupNode->Parent->Parent;
-			}
-			else
-			{
-				if (FixupNode == FixupNode->Parent->Lesser)
-				{
-					FixupNode = FixupNode->Parent;
-					FixupNode->rightRotate(TreeReference);
-				}
-				FixupNode->Parent->BlackNode = true;
-				FixupNode->Parent->Parent->BlackNode = false;
-				FixupNode->Parent->Parent->leftRotate(TreeReference);
-			}
-		}
-	}
-}
-#endif
-
 template <typename TemplateObject>
 mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 {
-#ifdef REDBLACKTREE
-	BlackNode = false; // Nodes default to Red
-
-	Parent = nullptr;
-#endif
 	// New nodes don't have children, so as default behavior this makes a lot of sense.
 	Lesser = nullptr;
 	Greater = nullptr;
@@ -201,10 +59,7 @@ class mgBinaryTree
 public:
 	mgBinaryTreenode<TemplateObject> *Root;
 	unsigned int ElementCount;
-
-#ifdef REDBLACKTREE
-	void SwapRoot(mgBinaryTreenode<TemplateObject> *NewRoot);
-#endif
+	std::string Definition;
 
 	void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
@@ -221,15 +76,6 @@ public:
 	~mgBinaryTree();
 };
 
-#ifdef REDBLACKTREE
-template <typename TemplateObject>
-void mgBinaryTree<TemplateObject>::SwapRoot(mgBinaryTreenode<TemplateObject> *NewRoot)
-{
-	Root = NewRoot;
-}
-#endif
-
-
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
@@ -237,9 +83,7 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 	{	// This is the first object in the list, just add it to the root.
 		Root = new mgBinaryTreenode < TemplateObject > ;
 		Root->Element = Element;
-#ifdef REDBLACKTREE
-		Root->BlackNode = true; // This is all the fixing we need for a blank tree.
-#endif
+
 		ElementCount++;
 	}
 	else
@@ -257,12 +101,6 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Lesser->Element = Element;
 					ElementCount++;
 
-#ifdef REDBLACKTREE
-					ProgressNode->Lesser->Parent = ProgressNode;
-					ProgressNode->Lesser->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
-					Root->BlackNode = true;
-#endif
-
 					break;
 				}
 				else
@@ -276,11 +114,6 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Greater->Element = Element;
 					ElementCount++;
 
-#ifdef REDBLACKTREE
-					ProgressNode->Greater->Parent = ProgressNode;
-					ProgressNode->Greater->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
-					Root->BlackNode = true;
-#endif
 					break;
 				}
 				else
@@ -328,6 +161,8 @@ unsigned int mgBinaryTree<TemplateObject>::Elements(void)
 template <typename TemplateObject>
 mgBinaryTree<TemplateObject>::mgBinaryTree()
 {
+	Definition = "Unbalanced Binary Tree";
+
 	Root = nullptr;
 	ElementCount = 0;
 }
@@ -370,6 +205,7 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 	unsigned int TreeDepth = 0;
 	unsigned int ExpectedNodes = 1;
 	unsigned int UnbalancedNodes = 0;
+	unsigned int CountedElements = 0;
 
 	// Initalize this field.
 	for (int Iterator = 0; Iterator < 1000; Iterator++)
@@ -378,6 +214,7 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 	TreeStructureFile.open(OutputFile);
 
 	TreeStructureFile << "mgGameEngine -> void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)" << std::endl;
+	TreeStructureFile << ":-- Tree identifies as: " << Definition.c_str() << std::endl;
 	TreeStructureFile << ":-- Tree has " << this->Elements() << " elements in it." << std::endl;
 
 	// Calculate the maximum tree depth.
@@ -398,10 +235,15 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 			UnbalancedNodes++;
 		TreeStructureFile << std::endl;
 		ExpectedNodes *= 2;
+		CountedElements += DepthValues[Iterator];
 	}
 
 	TreeStructureFile << ":----^" << std::endl;
 	TreeStructureFile << ":-- Binary Tree has " << UnbalancedNodes << " Unbalanced layers." << std::endl;
+	if (CountedElements == ElementCount)
+		TreeStructureFile << ":--(Sanity: Pass) Binary Tree is accurate on elements present." << std::endl;
+	else
+		TreeStructureFile << ":--(Sanity: Fail) Binary Tree count is actually " << CountedElements << ", not " << ElementCount << "!!!!!" << std::endl;
 
 	TreeStructureFile.close();
 }

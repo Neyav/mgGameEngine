@@ -15,6 +15,8 @@
 	- Chris Laverdure
 */
 
+// Used to convert references of mgBinaryTree node to mgAVLBinaryTree node. Since the AVL Insert function is the only
+// one that creates nodes we can be confident that all nodes in this tree are actually mgAVLBinaryTree node's. Victims of polymorphism.
 #define AVLNODE (mgAVLBinaryTreenode<TemplateObject> *)
 
 template <typename TemplateObject>
@@ -26,7 +28,6 @@ public:
 	mgAVLBinaryTreenode()
 	{
 		this->Height = 1; // Default height for new objects is 1.
-
 	}
 };
 
@@ -84,6 +85,11 @@ public:
 	mgAVLBinaryTreenode<TemplateObject> *AVLInsert(mgAVLBinaryTreenode<TemplateObject> *CurrentNode, TemplateObject Element);
 
 	void AddElement(TemplateObject Element); // Override the AddElement function.
+
+	mgAVLBinaryTree()
+	{
+		Definition = "AVL self balancing algorithm";
+	}
 };
 
 template <typename TemplateObject>
