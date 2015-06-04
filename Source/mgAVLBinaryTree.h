@@ -88,7 +88,7 @@ public:
 
 	mgAVLBinaryTree()
 	{
-		Definition = "AVL self balancing algorithm";
+		this->Definition = "AVL self balancing algorithm";
 	}
 };
 
@@ -103,7 +103,7 @@ mgAVLBinaryTreenode<TemplateObject> *mgAVLBinaryTree<TemplateObject>::AVLInsert(
 		newNode = new mgAVLBinaryTreenode < TemplateObject >;
 		newNode->Element = Element;
 
-		ElementCount++;
+		this->ElementCount++;
 
 		return newNode;
 	}
@@ -149,9 +149,9 @@ mgAVLBinaryTreenode<TemplateObject> *mgAVLBinaryTree<TemplateObject>::AVLInsert(
 template <typename TemplateObject>
 void mgAVLBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
-	mgAVLBinaryTreenode<TemplateObject> *newNode = AVLInsert(AVLNODE  Root, Element);
+	mgAVLBinaryTreenode<TemplateObject> *newNode = AVLInsert(AVLNODE  this->Root, Element);
 	if (newNode != nullptr) // This occurs when the root of the tree is a duplicate to a new Insert query. It returns nullptr
-		Root = newNode;	    // to escape.
+		this->Root = newNode;	    // to escape.
 }
 
 #endif

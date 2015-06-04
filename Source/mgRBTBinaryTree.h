@@ -153,26 +153,26 @@ public:
 
 	mgRBTBinaryTree()
 	{
-		Definition = "Red Black Tree self balancing algorithm";
+		this->Definition = "Red Black Tree self balancing algorithm";
 	}
 };
 
 template <typename TemplateObject>
 void mgRBTBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
-	if (Root == nullptr)
+	if (this->Root == nullptr)
 	{	// This is the first object in the list, just add it to the root.
 		mgRBTBinaryTreenode < TemplateObject > *newNode;
 		newNode = new mgRBTBinaryTreenode < TemplateObject >;
 		newNode->Element = Element;
 		newNode->BlackNode = true; // This is all the fixing we need for a blank tree.
-		Root = newNode;
+		this->Root = newNode;
 
-		ElementCount++;
+		this->ElementCount++;
 	}
 	else
 	{	// Find the proper leaf we need to branch off of....
-		mgBinaryTreenode<TemplateObject> *ProgressNode = Root; // Start at the root.
+		mgBinaryTreenode<TemplateObject> *ProgressNode = this->Root; // Start at the root.
 		while (1) // 1 is always 1.....
 		{
 			if (ProgressNode->Element == Element) // We found ourselves in the tree. There is nothing more to do here.
@@ -187,11 +187,10 @@ void mgRBTBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					newNode->Element = Element;
 					newNode->Parent = RBTNODE ProgressNode;
 					newNode->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
-					(RBTNODE Root)->BlackNode = true;
+					(RBTNODE this->Root)->BlackNode = true;
 
 					ProgressNode->Lesser = newNode;
-					ElementCount++;
-
+					this->ElementCount++;
 					break;
 				}
 				else
@@ -207,10 +206,10 @@ void mgRBTBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					newNode->Element = Element;
 					newNode->Parent = RBTNODE ProgressNode;
 					newNode->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
-					(RBTNODE Root)->BlackNode = true;
+					(RBTNODE this->Root)->BlackNode = true;
 
 					ProgressNode->Greater = newNode;
-					ElementCount++;
+					this->ElementCount++;
 					break;
 				}
 				else
