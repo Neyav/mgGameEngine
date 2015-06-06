@@ -52,14 +52,16 @@ template <typename TemplateClass> mgLinkedListElement<TemplateClass>::~mgLinkedL
 
 template <typename TemplateClass> class mgLinkedList
 {
-private:
+public:
 	mgLinkedListElement<TemplateClass> *LinkedList;
 	mgLinkedListElement<TemplateClass> *Iterator;
 
 	int Elements;
 
-public:
+	// Operator Overloads
+	TemplateClass *operator[] (const int IndexNumber);
 
+	// Functions
 	void AddElement(TemplateClass ElementToAdd);
 	void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
 	void ResetIterator(void);
@@ -74,6 +76,27 @@ public:
 	mgLinkedList();
 	~mgLinkedList();
 };
+
+template <typename TemplateClass>
+TemplateClass *mgLinkedList<TemplateClass>::operator[] (const int IndexNumber)
+{
+	mgLinkedListElement<TemplateClass> *Iterator = LinkedList;
+	int IndexIterator = IndexNumber;
+
+	// These are invalid requests
+	if (IndexNumber > (Elements - 1))
+		return nullptr;
+	else if (IndexNumber < 0)
+		return nullptr;
+
+	while (IndexIterator > 0)
+	{
+		Iterator = Iterator->Next;
+		IndexIterator--;
+	}
+
+	return Iterator->Element;
+}
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(TemplateClass ElementToAdd)
 {

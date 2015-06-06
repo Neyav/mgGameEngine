@@ -150,8 +150,8 @@ template <typename TemplateObject>
 void mgAVLBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
 	mgAVLBinaryTreenode<TemplateObject> *newNode = AVLInsert(AVLNODE  this->Root, Element);
-	if (newNode != nullptr) // This occurs when the root of the tree is a duplicate to a new Insert query. It returns nullptr
-		this->Root = newNode;	    // to escape.
+	if (newNode != nullptr)			// This occurs when the root of the tree is a duplicate to a new Insert query. It returns nullptr
+		this->Root = newNode;		// to escape.
 }
 
 #endif
