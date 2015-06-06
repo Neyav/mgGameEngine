@@ -6,7 +6,7 @@
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
 #include "mgLineSegment.h"
-#include "mgLinkedList.h"
+#include "Containers/mgLinkedList.h"
 
 //#warning mgRayTracer to be replaced with mgRayCaster.
 

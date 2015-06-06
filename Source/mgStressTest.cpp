@@ -4,12 +4,12 @@
 
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
-#include "mgLinkedList.h"
+#include "Containers/mgLinkedList.h"
 #include "mgLineSegment.h"
 #include "mgVisibilityMap.h"
-#include "mgBinaryTree.h"
-#include "mgAVLBinaryTree.h"
-#include "mgRBTBinaryTree.h"
+#include "Containers/mgBinaryTree.h"
+#include "Containers/mgAVLBinaryTree.h"
+#include "Containers/mgRBTBinaryTree.h"
 
 #include "mgStressTest.h"
 

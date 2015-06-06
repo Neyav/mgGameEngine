@@ -62,8 +62,8 @@ public:
 	TemplateClass *operator[] (const int IndexNumber);
 
 	// Functions
-	void AddElement(TemplateClass ElementToAdd);
-	void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
+	virtual void AddElement(TemplateClass ElementToAdd);
+	virtual void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
 	void ResetIterator(void);
 	void ClearList(void);
 	TemplateClass ReturnElement(void);
@@ -80,7 +80,7 @@ public:
 template <typename TemplateClass>
 TemplateClass *mgLinkedList<TemplateClass>::operator[] (const int IndexNumber)
 {
-	mgLinkedListElement<TemplateClass> *Iterator = LinkedList;
+	mgLinkedListElement<TemplateClass> *LocalIterator = LinkedList;
 	int IndexIterator = IndexNumber;
 
 	// These are invalid requests
@@ -91,11 +91,11 @@ TemplateClass *mgLinkedList<TemplateClass>::operator[] (const int IndexNumber)
 
 	while (IndexIterator > 0)
 	{
-		Iterator = Iterator->Next;
+		LocalIterator = LocalIterator->Next;
 		IndexIterator--;
 	}
 
-	return Iterator->Element;
+	return LocalIterator->Element;
 }
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(TemplateClass ElementToAdd)
@@ -110,6 +110,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(T
 	LinkedListEntry = new mgLinkedListElement < TemplateClass >;
 
 	LinkedListEntry->Element = CopyofElement;
+	LinkedListEntry->Ownership = true;
 	LinkedListEntry->Next = LinkedList;
 	if (LinkedList != nullptr) 
 		LinkedList->Previous = LinkedListEntry;

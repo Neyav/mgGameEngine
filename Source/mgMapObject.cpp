@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "mgMapObject.h"
-#include "mgLinkedList.h"
+#include "Containers/mgLinkedList.h"
 #include "mgLineSegment.h"
 
 mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)

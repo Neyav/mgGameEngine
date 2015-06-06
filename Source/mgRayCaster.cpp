@@ -6,7 +6,7 @@
 #include "mgLineSegment.h"
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
-#include "mgLinkedList.h"
+#include "Containers/mgLinkedList.h"
 
 //
 // =------------------------------------=

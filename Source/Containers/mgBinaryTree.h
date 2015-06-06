@@ -61,7 +61,7 @@ public:
 	unsigned int ElementCount;
 	std::string Definition;
 
-	void AddElement(TemplateObject Element);
+	virtual void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
 	unsigned int Elements(void);
 

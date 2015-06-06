@@ -4,8 +4,8 @@
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
 #include "mgVisibilityMap.h"
-#include "mgLinkedList.h"
-#include "mgBinaryTree.h"
+#include "Containers/mgLinkedList.h"
+#include "Containers/mgBinaryTree.h"
 #include "mgLineSegment.h"
 
 class mgStressTimer

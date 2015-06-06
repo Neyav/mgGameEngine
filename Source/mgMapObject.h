@@ -2,7 +2,7 @@
 #define MGMAPOBJECTH
 
 #include "mgVectorPoint.h"
-#include "mgLinkedList.h"
+#include "Containers/mgLinkedList.h"
 #include "mgLineSegment.h"
 
 #define DEFAULTOBJECTSIZE 0.2

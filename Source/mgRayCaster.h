@@ -6,7 +6,7 @@
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
 #include "mgLineSegment.h"
-#include "mgLinkedList.h"
+#include "Containers/mgLinkedList.h"
 
 // mgRayCasterState is going to store all internal information relating to the current cast, it is going to be accessable publicly and manipulateable.
 // The cast is going to be initalized, then run, if the unresolved motion is solved to zero the cast is considered complete. Upon impact the program

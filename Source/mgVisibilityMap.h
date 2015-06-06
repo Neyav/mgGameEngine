@@ -3,7 +3,7 @@
 
 #include "mgVectorPoint.h"
 #include "mgMapDataHandler.h"
-#include "mgAVLBinaryTree.h"
+#include "Containers/mgAVLBinaryTree.h"
 
 #define MGVISIBILITYEDGEPERCISION 0.49999	// How far from the center to move to calculate the visibility
 											// from the edge of a block. As close as reasonable to the line without going over.

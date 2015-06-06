@@ -6,7 +6,7 @@
 #include "mgVectorPoint.h"
 #include "mgMapDataHandler.h"
 #include "mgRayTracer.h"
-#include "mgLinkedList.h"
+#include "Containers/mgLinkedList.h"
 
 // =------------------------------------=
 // = mgVisibilityMap C++ class			=
