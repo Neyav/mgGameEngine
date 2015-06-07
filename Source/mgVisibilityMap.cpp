@@ -100,6 +100,13 @@ void mgVisibilityMap::CalculateVisibilityBlock(int BlockY, int BlockX)
 
 #ifdef BINARYTREEDUMP
 	VisibilityTree.DumpTreeStructure("TreeOutput.txt");
+
+// Code is a test of the rebalancing algorithm
+// TODO: Something...
+/*#ifdef REBALANCETREE
+	VisibilityTree.ReBalanceTree();
+	VisibilityTree.DumpTreeStructure("RebalanceTreeOutput.txt");
+#endif*/
 #endif
 }
 

@@ -13,11 +13,15 @@
 */
 
 #define BINARYTREEDUMP // Build binary tree with capability to dump structure to a file.
+#define REBALANCETREE // Build binary tree with the capability to rebalance itself.
 
 #include <stdlib.h>
 #ifdef BINARYTREEDUMP
 #include <iostream>
 #include <fstream>
+#endif
+#ifdef REBALANCETREE
+#include "mgSortedList.h"
 #endif
 
 template <typename TemplateObject>
@@ -61,6 +65,14 @@ public:
 	unsigned int ElementCount;
 	std::string Definition;
 
+#ifdef REBALANCETREE
+	mgSortedList<TemplateObject> BinaryTreeList;
+
+	void NodeToList(mgBinaryTreenode<TemplateObject> *Node);
+	void SplitListSection(int LeftBorder, int RightBorder);
+	void ReBalanceTree(void);
+#endif
+
 	virtual void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
 	unsigned int Elements(void);
@@ -75,6 +87,62 @@ public:
 	mgBinaryTree();
 	~mgBinaryTree();
 };
+
+#ifdef REBALANCETREE
+template <typename TemplateObject>
+void mgBinaryTree<TemplateObject>::NodeToList(mgBinaryTreenode<TemplateObject> *Node)
+{
+	if (Node == nullptr)
+		return; // unwind
+
+	this->BinaryTreeList.AddElement(Node->Element); // Add a copy of the element to our sorted list.
+
+	this->NodeToList(Node->Greater);
+	this->NodeToList(Node->Lesser);
+}
+template <typename TemplateObject>
+void mgBinaryTree<TemplateObject>::SplitListSection(int LeftBorder, int RightBorder)
+{
+	int MiddleEntry;
+	
+	// Find the middle of these entries.
+	MiddleEntry = (RightBorder - LeftBorder) / 2 + LeftBorder;
+
+	this->AddElement(*this->BinaryTreeList[MiddleEntry]); // Add the middle element to the tree.
+
+	if (LeftBorder == RightBorder)
+		return; // We've divided it as much as we can
+
+	// Split the remaining
+	if (MiddleEntry != LeftBorder)
+		this->SplitListSection(LeftBorder, MiddleEntry - 1);
+	if (MiddleEntry != RightBorder)
+		this->SplitListSection(MiddleEntry + 1, RightBorder);
+}
+template <typename TemplateObject>
+void mgBinaryTree<TemplateObject>::ReBalanceTree(void)
+{
+	this->BinaryTreeList.ClearList(); // Make sure our list is empty before we begin adding things to it.
+
+	this->NodeToList(Root); // Recursively dump the entire tree to our sorted list.
+
+	if (this->Root != nullptr)
+		delete this->Root; // Kill the tree.
+	
+	this->Root = nullptr;
+	this->ElementCount = 0;
+
+	// This is where we rebuild the tree in the optimal order.
+	int ListSize = this->BinaryTreeList.NumberOfElements();
+	
+	if (ListSize == 0)
+		return; // There is nothing to balance.
+
+	this->SplitListSection(0, ListSize - 1);
+
+	this->BinaryTreeList.ClearList(); // Destroy the list.
+}
+#endif
 
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
