@@ -43,7 +43,7 @@ void mgSortedList<TemplateClass>::AddElementReference(TemplateClass *ElementToAd
 	{
 		this->LinkedList = LinkedListEntry; // There is no list, add it here
 
-		Elements++;
+		this->Elements++;
 		return;
 	}
 
