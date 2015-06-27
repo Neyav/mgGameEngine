@@ -289,12 +289,8 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StartTimer();
 	for (int i = 0; i < 10000; i++)
 	{
-		if (BinaryTree.IsElementPresent(i))
-		{
-			volatile int a;
-
-			a = 1;
-		}
+		volatile bool a;
+		a = BinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
 
@@ -305,12 +301,8 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StartTimer();
 	for (int i = 0; i < 10000; i++)
 	{
-		if (RBTBinaryTree.IsElementPresent(i))
-		{
-			volatile int a;
-
-			a = 1;
-		}
+		volatile bool a;
+		a = RBTBinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
 
@@ -321,12 +313,8 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StartTimer();
 	for (int i = 0; i < 10000; i++)
 	{
-		if (AVLBinaryTree.IsElementPresent(i))
-		{
-			volatile int a;
-
-			a = 1;
-		}
+		volatile bool a;
+		a = AVLBinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
 
@@ -347,12 +335,8 @@ void mgStressTest::TEST_mgBinaryTree(void)
 
 	for (int i = 0; i < 10000; i++)
 	{
-		if (BinaryTree.IsElementPresent(i))
-		{
-			volatile int a;
-
-			a = 1;
-		}
+		volatile bool a;
+		a = BinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
 
