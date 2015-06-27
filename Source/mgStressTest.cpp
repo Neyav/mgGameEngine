@@ -247,44 +247,47 @@ void mgStressTest::TEST_mgBinaryTree(void)
 
 	std::cout << "[-> Insertion tests" << std::endl;
 
-	Timer.Description = "Unbalanced Tree, 50k incrementing, 50k decrementing";
+	Timer.Description = "Unbalanced Tree, 5k inc and dec";
 	Timer.StartTimer();
-	for (int i = 0; i < 50000; i++)
+	for (int i = 0; i < 5000; i++)
+	{
 		BinaryTree.AddElement(i);
-	for (int i = 50000; i > 0; i--)
-		BinaryTree.AddElement(i);
+		BinaryTree.AddElement(10000 - i);
+	}
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(100000);
+	Timer.ConsoleOutputIterationResults(10000);
 
-	Timer.Description = "Red Black Tree, 50k incrementing, 50k decrementing";
+	Timer.Description = "Red Black Tree, 5k inc and dec";
 	Timer.StartTimer();
-	for (int i = 0; i < 50000; i++)
+	for (int i = 0; i < 5000; i++)
+	{
 		RBTBinaryTree.AddElement(i);
-	for (int i = 50000; i > 0; i--)
-		RBTBinaryTree.AddElement(i);
+		RBTBinaryTree.AddElement(10000 - i);
+	}
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(100000);
+	Timer.ConsoleOutputIterationResults(10000);
 
-	Timer.Description = "AVL Tree, 50k incrementing, 50k decrementing";
+	Timer.Description = "AVL Tree, 5k inc and dec";
 	Timer.StartTimer();
-	for (int i = 0; i < 50000; i++)
+	for (int i = 0; i < 5000; i++)
+	{
 		AVLBinaryTree.AddElement(i);
-	for (int i = 50000; i > 0; i--)
-		AVLBinaryTree.AddElement(i);
+		AVLBinaryTree.AddElement(10000 - i);
+	}
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(100000);
+	Timer.ConsoleOutputIterationResults(10000);
 
 	std::cout << "[-> Search tests" << std::endl;
 
-	Timer.Description = "Unbalanced Tree, 100k incrementing";
+	Timer.Description = "Unbalanced Tree, 10k incrementing";
 	Timer.StartTimer();
-	for (int i = 0; i < 100000; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		if (BinaryTree.IsElementPresent(i))
 		{
@@ -296,11 +299,11 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(100000);
+	Timer.ConsoleOutputIterationResults(10000);
 
-	Timer.Description = "Red Black Tree, 100k incrementing";
+	Timer.Description = "Red Black Tree, 10k incrementing";
 	Timer.StartTimer();
-	for (int i = 0; i < 100000; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		if (RBTBinaryTree.IsElementPresent(i))
 		{
@@ -312,11 +315,11 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(100000);
+	Timer.ConsoleOutputIterationResults(10000);
 
-	Timer.Description = "AVL Tree, 100k incrementing";
+	Timer.Description = "AVL Tree, 10k incrementing";
 	Timer.StartTimer();
-	for (int i = 0; i < 100000; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		if (AVLBinaryTree.IsElementPresent(i))
 		{
@@ -328,7 +331,34 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(100000);
+	Timer.ConsoleOutputIterationResults(10000);
+
+#ifdef REBALANCETREE
+	Timer.Description = "Unbalanced Tree: Rebalance operation";
+	Timer.StartTimer();
+
+	BinaryTree.ReBalanceTree();
+
+	Timer.StopTimer();
+	Timer.ConsoleOutputResults();
+
+	Timer.Description = "Rebalanced Tree, 10k incrementing";
+	Timer.StartTimer();
+
+	for (int i = 0; i < 10000; i++)
+	{
+		if (BinaryTree.IsElementPresent(i))
+		{
+			volatile int a;
+
+			a = 1;
+		}
+	}
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(10000);
+#endif
 
 }
 
