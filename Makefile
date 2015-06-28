@@ -6,8 +6,8 @@ RM = rm
 
 CFLAGS = -std=c++11 -O2
 
-mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgRayCaster.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
-	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgRayCaster.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(STRIP) --strip-all mgConsoleTest
 
 NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRayTracer.o mgRandomMazeGenerator.o 
@@ -50,8 +50,8 @@ mgVisibilityMap.o: Source/mgVisibilityMap.cpp Source/mgVisibilityMap.h
 mgRayTracer.o: Source/mgRayTracer.cpp Source/mgRayTracer.h
 	$(CC) $(CFLAGS) -o mgRayTracer.o -c Source/mgRayTracer.cpp
 
-mgRayCaster.o: Source/mgRayCaster.cpp Source/mgRayCaster.h
-	$(CC) $(CFLAGS) -o mgRayCaster.o -c Source/mgRayCaster.cpp
+mgCollisionDetection.o: Source/mgCollisionDetection.cpp Source/mgCollisionDetection.h
+	$(CC) $(CFLAGS) -o mgRayCaster.o -c Source/mgCollisionDetection.cpp
 
 clean:
 	$(RM) *.o

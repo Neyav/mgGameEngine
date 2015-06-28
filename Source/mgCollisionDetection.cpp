@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-#include "mgRayCaster.h"
+#include "mgCollisionDetection.h"
 #include "mgLineSegment.h"
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"

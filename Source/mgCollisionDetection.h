@@ -1,5 +1,5 @@
-#ifndef MGRAYCASTERH
-#define MGRAYCASTERH
+#ifndef MGCOLLISIONDETECTIONH
+#define MGCOLLISIONDETECTIONH
 
 #include <stdlib.h>
 
