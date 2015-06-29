@@ -51,7 +51,7 @@ mgRayTracer.o: Source/mgRayTracer.cpp Source/mgRayTracer.h
 	$(CC) $(CFLAGS) -o mgRayTracer.o -c Source/mgRayTracer.cpp
 
 mgCollisionDetection.o: Source/mgCollisionDetection.cpp Source/mgCollisionDetection.h
-	$(CC) $(CFLAGS) -o mgRayCaster.o -c Source/mgCollisionDetection.cpp
+	$(CC) $(CFLAGS) -o mgCollisionDetection.o -c Source/mgCollisionDetection.cpp
 
 clean:
 	$(RM) *.o
