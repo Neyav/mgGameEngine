@@ -291,7 +291,7 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 	TreeStructureFile << ":-- Tree has maximum depth of " << TreeDepth << "." << std::endl;
 	TreeStructureFile << ":----v" << std::endl;
 
-	for (int Iterator = 1; Iterator <= TreeDepth; Iterator++)
+	for (unsigned int Iterator = 1; Iterator <= TreeDepth; Iterator++)
 	{
 		TreeStructureFile << "     |-> Depth: " << Iterator << " has " << DepthValues[Iterator] << " nodes. ";
 		if (ExpectedNodes > 0 && DepthValues[Iterator] != ExpectedNodes)
