@@ -124,6 +124,19 @@ mgVector mgVector::operator*(const double& scalar)
 	return product;
 }
 
+// divides a vector by a scalar.
+mgVector mgVector::operator/(const double& scalar)
+{
+	mgVector product;
+
+	product.Y = Y / scalar;
+	product.X = X / scalar;
+
+	product.CalculateMagnitude();
+
+	return product;
+}
+
 // produces a product of two vectors added together
 mgVector mgVector::operator+(const mgVector& other)
 {
@@ -154,6 +167,8 @@ mgVector mgVector::operator-(const mgVector& other)
 void mgVector::NormalizeVector(double MagnitudeOverride)
 {
 	double Normalizer;
+
+	Magnitude = MagnitudeOverride;
 
 	Normalizer = sqrt(Y * Y + X * X) / MagnitudeOverride;
 
@@ -205,7 +220,8 @@ void mgVector::VectorFromRadians(double Radians)
 		if (AutoNormalize)
 			NormalizeVector();
 		else
-			CalculateMagnitude(); 
+			Magnitude = 1;	// The results of sin/cos operations on a radian always result in a 1 magnitude vector.
+							// There is no need to calculate anything here.
 	}
 }
 
@@ -225,6 +241,27 @@ mgPoint mgVector::VectorStepCoords(double VectorStep)
 	Transformed.X = X * (VectorStep);
 
 	return Transformed;
+}
+
+// Returns a vector of identical orientation to this one, but with a magnitude of 1.
+mgVector mgVector::ReturnUnitVector(void)
+{
+	mgVector UnitVector;
+
+	UnitVector = *this / Magnitude;
+
+	return UnitVector;
+}
+
+// Returns a double representing this vectors projection along ProjectionAxis
+double mgVector::ProjectAgainst(mgVector ProjectionAxis)
+{
+	double Projection;
+	mgVector AxisUnitVector = ProjectionAxis.ReturnUnitVector();
+
+	Projection = *this * AxisUnitVector;
+
+	return Projection;
 }
 
 mgVector::mgVector()

@@ -52,6 +52,7 @@ public:
 	// Operator overloading
 	double operator*(const mgVector& other); // Returns the dot product
 	mgVector operator*(const double& scalar); // multiplies it by a scalar
+	mgVector operator/(const double& scalar); // divides it by a scalar
 	mgVector operator+(const mgVector& other); // addition
 	mgVector operator-(const mgVector& other); // subtraction
 
@@ -64,6 +65,8 @@ public:
 	void VectorFromRadians(double Radians);
 	void VectorFromDegrees(double Degrees);
 	mgPoint VectorStepCoords(double VectorStep);
+	mgVector ReturnUnitVector(void); // Returns a vector pointing in the same direction but with a magnitude of 1.
+	double ProjectAgainst(mgVector ProjectionAxis);	// Returns a double representing this vectors projection along ProjectionAxis
 
 	mgVector();
 };
