@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 #include "mgMapDataHandler.h"
+#include "mgMapObject.h"
+#include "mgMapElement.h"
 #include "mgVectorPoint.h"
 #include "mgLineSegment.h"
 #include "Containers/mgLinkedList.h"
@@ -41,11 +43,19 @@ class mgCollisionDetection
 {
 	private:
 
+	mgMapObject *MovingObject;
+	mgVector RemainingMovement;
+
+	mgLinkedList<mgMapElement> MapElements;
+
 	public:
 
 	mgMapDataHandler *MapReference;
 
+	void CollisionSetup(mgMapObject *MovingObject, mgVector Movement); // Stage One
+	//void SetupDetectionArea(unsigned int Range); // Stage Two
+
 	mgCollisionDetection();
-}
+};
 
 #endif
