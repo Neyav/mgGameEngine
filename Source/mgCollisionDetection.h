@@ -53,7 +53,7 @@ class mgCollisionDetection
 	mgMapDataHandler *MapReference;
 
 	void CollisionSetup(mgMapObject *MovingObject, mgVector Movement); // Stage One
-	//void SetupDetectionArea(unsigned int Range); // Stage Two
+	void SetupDetectionArea(unsigned int Range); // Stage Two
 
 	mgCollisionDetection();
 };
