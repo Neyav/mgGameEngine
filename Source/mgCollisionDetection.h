@@ -39,6 +39,13 @@
 //		objects total momentum ( not just the movement that was processed ) so future tests have it slide against the line instead of
 //		just come to a dead halt.
 
+struct mgDetectedCollision
+{
+	mgPoint PointOfCollision;
+	mgLineSegment *CollisionLine;
+	mgVector CollisionCorrection;
+}
+
 class mgCollisionDetection
 {
 	private:
@@ -48,6 +55,7 @@ class mgCollisionDetection
 
 	mgLinkedList<mgMapElement> MapElements;
 	mgLinkedList<mgLineSegment> CollisionLines;
+	mgLinkedList<mgDetectedCollision> DetectedCollisions;
 
 	public:
 
@@ -56,6 +64,7 @@ class mgCollisionDetection
 	void CollisionSetup(mgMapObject *MovingObject, mgVector Movement); // Stage One
 	void SetupDetectionArea(unsigned int Range); // Stage Two
 	void AggregateCollisionLines(void); // Stage Three
+	void PerformCollisionTests(void); // Stage Four
 
 	mgCollisionDetection();
 };

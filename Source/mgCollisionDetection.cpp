@@ -76,6 +76,32 @@ void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
 	}
 }
 
+void mgCollisionDetection::PerformCollisionTests(void) // Stage Four 
+{
+	mgLinkedList<mgLineSegment> *MapObjectShape;
+
+	MapObjectShape = MovingObject->ObjectGeometry();
+
+	DetectedCollisions.ClearList(); // Make sure our list is empty. We need a clean test.
+
+	if (MapObjectShape == nullptr)
+		return; // Object has no shape, cannot collide.
+
+	// Part One: Test from our MapObject outwards.
+	for (int Iterator = 0; Iterator < MapObjectShape->NumberOfElements(); Iterator++)
+	{ // For each line in the shape of our map object..
+		mgLineSegment *TestLine;
+
+		TestLine = MapObjectShape->ReturnElementReference();
+
+		// Collect unique points in a line by storing them in a binary tree, which we will then
+		// dump to a linked list and process. ( This ensures we only test each point once, our binary tree's
+		// don't contain duplicate numbers ).
+
+		// [--WORK--]
+	}
+}
+
 mgCollisionDetection::mgCollisionDetection()
 {
 	MovingObject = nullptr;
