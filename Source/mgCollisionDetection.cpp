@@ -19,6 +19,7 @@ void mgCollisionDetection::CollisionSetup(mgMapObject *MovingObject, mgVector Mo
 
 	// Make sure our lists are clean.
 	MapElements.ClearList();
+	CollisionLines.ClearList();
 }
 
 void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
@@ -46,6 +47,31 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 			ElementReference = MapReference->ReturnMapBlockReference(RangeY, RangeX);
 
 			MapElements.AddElementReference(ElementReference, false); 
+		}
+	}
+}
+
+void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
+{
+	MapElements.ResetIterator(); // Just ensuring that we are at the beginning of the list.
+
+	// Let's go through all of our Map Elements and get their list of lines and add it to a master list
+	// of collision lines.
+	for (int ElementListIterator = 0; ElementListIterator < MapElements.NumberOfElements(); ElementListIterator++)
+	{
+		mgMapElement *ElementReference;
+		mgLinkedList<mgLineSegment> *ElementShape;
+
+		ElementReference = MapElements.ReturnElementReference();
+		ElementShape = ElementReference->BlockGeometry();
+
+		for (int LineIterator = 0; LineIterator < ElementShape->NumberOfElements(); LineIterator++)
+		{
+			mgLineSegment *LineSegRef;
+
+			LineSegRef = ElementShape->ReturnElementReference();
+
+			CollisionLines.AddElementReference(LineSegRef, false);
 		}
 	}
 }

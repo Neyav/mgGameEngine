@@ -47,6 +47,7 @@ class mgCollisionDetection
 	mgVector RemainingMovement;
 
 	mgLinkedList<mgMapElement> MapElements;
+	mgLinkedList<mgLineSegment> CollisionLines;
 
 	public:
 
@@ -54,6 +55,7 @@ class mgCollisionDetection
 
 	void CollisionSetup(mgMapObject *MovingObject, mgVector Movement); // Stage One
 	void SetupDetectionArea(unsigned int Range); // Stage Two
+	void AggregateCollisionLines(void); // Stage Three
 
 	mgCollisionDetection();
 };
