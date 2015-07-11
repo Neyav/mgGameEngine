@@ -163,6 +163,11 @@ mgVector mgVector::operator-(const mgVector& other)
 	return product;
 }
 
+void mgVector::ReverseDirection(void)
+{ // Really simple, and the magnitude remains unchanged.
+	Y = -Y;
+	X = -X;
+}
 
 void mgVector::NormalizeVector(double MagnitudeOverride)
 {
@@ -196,6 +201,19 @@ void mgVector::VectorFromCoord(double Y1, double X1, double Y2, double X2)
 	// Set out vector to the difference between the two points
 	Y = Y2 - Y1;
 	X = X2 - X1;
+
+	// Normalize it.
+	if (AutoNormalize)
+		NormalizeVector();
+	else
+		CalculateMagnitude();
+}
+
+void mgVector::VectorFromCoord(mgPoint StartCoord, mgPoint EndCoord)
+{
+	// Set out vector to the difference between the two points
+	Y = EndCoord.Y - StartCoord.Y;
+	X = EndCoord.X - StartCoord.X;
 
 	// Normalize it.
 	if (AutoNormalize)

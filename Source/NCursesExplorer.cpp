@@ -11,6 +11,8 @@
 #include <math.h>
 #include "mgVectorPoint.h"
 #include "mgMapDataHandler.h"
+#include "mgMapObject.h"
+#include "mgCollisionDetection.h"
 #include "mgRayTracer.h"
 #include "mgRandomMazeGenerator.h"
 
@@ -188,6 +190,11 @@ int main(void)
 		mgVector Movement; // Just incase we need to move
 		mgMapElement *MapBlock; // Incase we want to change a tile
 
+/* COLLISION DETECTION TESTS
+		mgCollisionDetection CollisionTest;
+		mgMapObject TestObject;
+*/
+
 		switch (getch())
 		{
 		case 68: // D/d for turn RIGHT
@@ -202,7 +209,18 @@ int main(void)
 		case 119:
 			Movement.Magnitude = 0.2; // Our movement "speed"
 			Movement.VectorFromDegrees(ViewAngle);
+/* COLLISION DETECTION TESTS
+			TestObject.Position = ViewPort;
+			TestObject.ObjectSize = 0.3;
+			
+			CollisionTest.MapReference = &World;
 
+			CollisionTest.CollisionSetup(&TestObject, Movement);
+			CollisionTest.SetupDetectionArea(2);
+			CollisionTest.AggregateCollisionLines();
+			CollisionTest.PerformCollisionTests();
+
+*/
 			ViewPort.Y += Movement.Y;
 			ViewPort.X += Movement.X;
 			break;

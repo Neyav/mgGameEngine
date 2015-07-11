@@ -106,6 +106,45 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 	}
 
 	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
+
+	PointList.ResetIterator(); // Just to be safe.
+	CollisionLines.ResetIterator();
+
+	for (int Iterator = 0; Iterator < PointList.NumberOfElements(); Iterator++)
+	{ // For each point in our object.
+		mgLineSegment MovementCollisionLine;
+		mgPoint TestPoint;
+
+		TestPoint = PointList.ReturnElement();
+
+		MovementCollisionLine.ImportLine(TestPoint, RemainingMovement);
+		
+		for (int Iterator2 = 0; Iterator2 < CollisionLines.NumberOfElements(); Iterator2++)
+		{ // For each line in the Detection Area
+			mgLineCollisionResults TestResults;
+			mgLineSegment *LineReference;
+
+			LineReference = CollisionLines.ReturnElementReference();
+
+			TestResults = MovementCollisionLine.CollisionTest(LineReference);
+
+			if (TestResults.Collision)
+			{ // We have a collision.
+				mgDetectedCollision Collision;
+
+				Collision.PointOfCollision = TestResults.CollisionPoint;
+				Collision.CollisionLine = LineReference;
+
+				// Now we need to figure out the vector that will pull us out of this collision.
+				Collision.CollisionCorrection.AutoNormalize = false; // We need the defined magnitude.
+				Collision.CollisionCorrection.VectorFromCoord(MovementCollisionLine.SegmentEnd, TestResults.CollisionPoint);
+
+				std::cout << "Detected Collision" << std::endl;
+
+				DetectedCollisions.AddElement(Collision);
+			}
+		}
+	}
 }
 
 mgCollisionDetection::mgCollisionDetection()

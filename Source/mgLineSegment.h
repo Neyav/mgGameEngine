@@ -52,6 +52,7 @@ public:
 	mgMapObject *LineSegmentOwner;
 
 	void ImportLine(mgPoint Origin, mgVector Direction, double Length);
+	void ImportLine(mgPoint Origin, mgVector Direction);
 	void ImportLine(mgPoint LineStart, mgPoint LineEnd);
 	mgVector NormalFacingPosition(mgPoint Position);
 	mgLineCollisionResults CollisionTest(mgLineSegment *Against);

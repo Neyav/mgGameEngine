@@ -56,10 +56,13 @@ public:
 	mgVector operator+(const mgVector& other); // addition
 	mgVector operator-(const mgVector& other); // subtraction
 
+	void ReverseDirection(void);
+
 	// Class functions
 	void NormalizeVector(double MagnitudeOverride);
 	void NormalizeVector(void);
 	void CalculateMagnitude(void);
+	void VectorFromCoord(mgPoint StartCoord, mgPoint EndCoord);
 	void VectorFromCoord(double Y1, double X1, double Y2, double X2);
 	void VectorFromPoints(mgPoint Start, mgPoint End);
 	void VectorFromRadians(double Radians);

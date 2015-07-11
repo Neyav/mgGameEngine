@@ -16,6 +16,16 @@ void mgLineSegment::ImportLine(mgPoint Origin, mgVector Direction, double Length
 	SegmentEnd.X = Origin.X + Direction.X;
 }
 
+// This one uses the magnitude of the vector as the length.
+void mgLineSegment::ImportLine(mgPoint Origin, mgVector Direction)
+{
+	SegmentStart = Origin;
+	SegmentLength = Direction.Magnitude;
+
+	SegmentEnd.Y = Origin.Y + Direction.Y;
+	SegmentEnd.X = Origin.X + Direction.X;
+}
+
 void mgLineSegment::ImportLine(mgPoint LineStart, mgPoint LineEnd)
 {
 	SegmentStart.Y = LineStart.Y;

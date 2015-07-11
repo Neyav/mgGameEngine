@@ -10,8 +10,8 @@ mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapEl
 	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(STRIP) --strip-all mgConsoleTest
 
-NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRayTracer.o mgRandomMazeGenerator.o 
-	$(CC) -o NCursesExplorer NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRandomMazeGenerator.o mgRayTracer.o -lncurses
+NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRayTracer.o mgRandomMazeGenerator.o mgCollisionDetection.o mgMapObject.o
+	$(CC) -o NCursesExplorer NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRandomMazeGenerator.o mgRayTracer.o mgCollisionDetection.o mgMapObject.o -lncurses
 	$(STRIP) --strip-all NCursesExplorer
 
 NCursesExplorer.o: Source/NCursesExplorer.cpp
