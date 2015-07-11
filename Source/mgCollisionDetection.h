@@ -44,7 +44,7 @@ struct mgDetectedCollision
 	mgPoint PointOfCollision;
 	mgLineSegment *CollisionLine;
 	mgVector CollisionCorrection;
-}
+};
 
 class mgCollisionDetection
 {

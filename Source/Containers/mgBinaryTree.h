@@ -68,14 +68,17 @@ public:
 #ifdef REBALANCETREE
 	mgSortedList<TemplateObject> BinaryTreeList;
 
-	void NodeToList(mgBinaryTreenode<TemplateObject> *Node);
 	void SplitListSection(int LeftBorder, int RightBorder);
 	void ReBalanceTree(void);
 #endif
 
+	void NodeToList(mgBinaryTreenode<TemplateObject> *Node, mgLinkedList<TemplateObject> *ListReference);
+
 	virtual void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
 	unsigned int Elements(void);
+
+	void ClearTree(void);
 
 #ifdef BINARYTREEDUMP
 	unsigned int DepthValues[1000];
@@ -88,18 +91,19 @@ public:
 	~mgBinaryTree();
 };
 
-#ifdef REBALANCETREE
 template <typename TemplateObject>
-void mgBinaryTree<TemplateObject>::NodeToList(mgBinaryTreenode<TemplateObject> *Node)
+void mgBinaryTree<TemplateObject>::NodeToList(mgBinaryTreenode<TemplateObject> *Node, mgLinkedList<TemplateObject> *ListReference)
 {
 	if (Node == nullptr)
 		return; // unwind
 
-	this->BinaryTreeList.AddElement(Node->Element); // Add a copy of the element to our sorted list.
+	ListReference->AddElement(Node->Element); // Add a copy of the element to our sorted list.
 
-	this->NodeToList(Node->Greater);
-	this->NodeToList(Node->Lesser);
+	this->NodeToList(Node->Greater, ListReference);
+	this->NodeToList(Node->Lesser, ListReference);
 }
+
+#ifdef REBALANCETREE
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::SplitListSection(int LeftBorder, int RightBorder)
 {
@@ -124,7 +128,7 @@ void mgBinaryTree<TemplateObject>::ReBalanceTree(void)
 {
 	this->BinaryTreeList.ClearList(); // Make sure our list is empty before we begin adding things to it.
 
-	this->NodeToList(Root); // Recursively dump the entire tree to our sorted list.
+	this->NodeToList(Root, &this->BinaryTreeList); // Recursively dump the entire tree to our sorted list.
 
 	if (this->Root != nullptr)
 		delete this->Root; // Kill the tree.
@@ -224,6 +228,15 @@ template <typename TemplateObject>
 unsigned int mgBinaryTree<TemplateObject>::Elements(void)
 {
 	return ElementCount;
+}
+
+template <typename TemplateObject>
+void mgBinaryTree<TemplateObject>::ClearTree(void)
+{
+	if (Root != nullptr)
+		delete Root;
+
+	this->ElementCount = 0;
 }
 
 template <typename TemplateObject>

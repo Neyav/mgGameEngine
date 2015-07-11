@@ -9,6 +9,7 @@
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
 #include "Containers/mgLinkedList.h"
+#include "Containers/mgRBTBinaryTree.h"
 
 
 // Setup the collision detection
@@ -79,6 +80,8 @@ void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
 void mgCollisionDetection::PerformCollisionTests(void) // Stage Four 
 {
 	mgLinkedList<mgLineSegment> *MapObjectShape;
+	mgRBTBinaryTree<mgPoint> PointTree;
+	mgLinkedList<mgPoint> PointList;
 
 	MapObjectShape = MovingObject->ObjectGeometry();
 
@@ -98,8 +101,11 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 		// dump to a linked list and process. ( This ensures we only test each point once, our binary tree's
 		// don't contain duplicate numbers ).
 
-		// [--WORK--]
+		PointTree.AddElement(TestLine->SegmentStart);
+		PointTree.AddElement(TestLine->SegmentEnd);
 	}
+
+	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
 }
 
 mgCollisionDetection::mgCollisionDetection()
