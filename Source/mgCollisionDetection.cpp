@@ -66,13 +66,16 @@ void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
 		ElementReference = MapElements.ReturnElementReference();
 		ElementShape = ElementReference->BlockGeometry();
 
-		for (int LineIterator = 0; LineIterator < ElementShape->NumberOfElements(); LineIterator++)
+		if (ElementShape != nullptr)
 		{
-			mgLineSegment *LineSegRef;
+			for (int LineIterator = 0; LineIterator < ElementShape->NumberOfElements(); LineIterator++)
+			{
+				mgLineSegment *LineSegRef;
 
-			LineSegRef = ElementShape->ReturnElementReference();
+				LineSegRef = ElementShape->ReturnElementReference();
 
-			CollisionLines.AddElementReference(LineSegRef, false);
+				CollisionLines.AddElementReference(LineSegRef, false);
+			}
 		}
 	}
 }
