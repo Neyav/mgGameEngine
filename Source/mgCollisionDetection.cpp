@@ -47,7 +47,8 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 
 			ElementReference = MapReference->ReturnMapBlockReference(RangeY, RangeX);
 
-			MapElements.AddElementReference(ElementReference, false); 
+			if (ElementReference != nullptr) // This can happen.
+				MapElements.AddElementReference(ElementReference, false); 
 		}
 	}
 }
@@ -111,7 +112,6 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
 
 	PointList.ResetIterator(); // Just to be safe.
-	CollisionLines.ResetIterator();
 
 	for (int Iterator = 0; Iterator < PointList.NumberOfElements(); Iterator++)
 	{ // For each point in our object.
@@ -121,6 +121,8 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 		TestPoint = PointList.ReturnElement();
 
 		MovementCollisionLine.ImportLine(TestPoint, RemainingMovement);
+
+		CollisionLines.ResetIterator(); // Start at the beginning of the list.
 		
 		for (int Iterator2 = 0; Iterator2 < CollisionLines.NumberOfElements(); Iterator2++)
 		{ // For each line in the Detection Area
@@ -142,12 +144,13 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 				Collision.CollisionCorrection.AutoNormalize = false; // We need the defined magnitude.
 				Collision.CollisionCorrection.VectorFromCoord(MovementCollisionLine.SegmentEnd, TestResults.CollisionPoint);
 
-				std::cout << "Detected Collision" << std::endl;
-
 				DetectedCollisions.AddElement(Collision);
+				exit(0);
 			}
 		}
 	}
+
+	// Part Two: Test from the world inwards.
 }
 
 mgCollisionDetection::mgCollisionDetection()
