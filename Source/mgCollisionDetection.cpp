@@ -143,6 +143,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 				// Now we need to figure out the vector that will pull us out of this collision.
 				Collision.CollisionCorrection.AutoNormalize = false; // We need the defined magnitude.
 				Collision.CollisionCorrection.VectorFromCoord(MovementCollisionLine.SegmentEnd, TestResults.CollisionPoint);
+				Collision.Collision = true;
 
 				DetectedCollisions.AddElement(Collision);
 			}
@@ -218,11 +219,44 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 				// Now we need to figure out the vector that will pull us out of this collision.
 				Collision.CollisionCorrection.AutoNormalize = false; // We need the defined magnitude.
 				Collision.CollisionCorrection.VectorFromCoord(TestResults.CollisionPoint, MovementCollisionLine.SegmentEnd);
+				Collision.Collision = true;
 
 				DetectedCollisions.AddElement(Collision);
 			}
 		}
 	}
+}
+
+mgDetectedCollision mgCollisionDetection::CollisionTest(mgMapObject *MovingObject, mgVector Movement, unsigned int Range)
+{
+	mgDetectedCollision FirstCollision;
+	
+	FirstCollision.Collision = false; // If there wasn't a collision at all.
+
+	// Perform steps One through Four
+	this->CollisionSetup(MovingObject, Movement);
+	this->SetupDetectionArea(2);
+	this->AggregateCollisionLines();
+	this->PerformCollisionTestsP1();
+	this->PerformCollisionTestsP2();
+
+	// Now we have a list of all of our collisions, if this list is empty, we have no collisions, otherwise we need to know
+	// which collision has the biggest CollisionCorrection, as that would be the first impact.
+	DetectedCollisions.ResetIterator(); // Just to be safe.
+
+	for (int Iterator = 0; Iterator < DetectedCollisions.NumberOfElements(); Iterator++)
+	{
+		mgDetectedCollision Collision;
+
+		Collision = DetectedCollisions.ReturnElement();
+
+		if (FirstCollision.Collision == false) // This is the first collision
+			FirstCollision = Collision;
+		else if (Collision.CollisionCorrection.Magnitude > FirstCollision.CollisionCorrection.Magnitude) // This Collision has a bigger correction.
+			FirstCollision = Collision;
+	}
+
+	return FirstCollision;
 }
 
 mgCollisionDetection::mgCollisionDetection()

@@ -33,6 +33,7 @@ int main(void)
 	mgMapDataHandler World; // Gameworld.
 	mgRandomMazeGenerator Generator; // Random number generator.
 	mgRayTracer RenderTracer; // Our tracer.
+	mgMapObject Player; // Us
 
 	// Make a 50x50 world by default.
 	World.InitalizeMapData(MAPSIZEY, MAPSIZEX);
@@ -43,12 +44,12 @@ int main(void)
 
 	RenderTracer.MapReference = &World;
 
-	// Your position in this world
-	mgPoint ViewPort;
 	int ViewAngle = 90;
 
-	ViewPort.Y = 1.5;
-	ViewPort.X = 1.5;
+	// Setup our player
+	Player.Position.Y = 1.5;
+	Player.Position.X = 1.5;
+	Player.ObjectSize = 0.3;
 
 	initscr();
 	noecho();
@@ -87,7 +88,7 @@ int main(void)
 
 			RenderVector.VectorFromDegrees(NewAngle);
 
-			TraceResults = RenderTracer.OccluderPoint(ViewPort, RenderVector);
+			TraceResults = RenderTracer.OccluderPoint(Player.Position, RenderVector);
 
 			// Necessary to convert to a flat view plane so we don't get fish eye view.
 			TraceResults.RayDistance = TraceResults.RayDistance * cos(AngleDifference * ((double)mgPI / (double)180));
@@ -139,7 +140,7 @@ int main(void)
 				else
 				{ // Draw surface
 				ViewVector.VectorFromDegrees(ViewAngle);
-				DotProduct = ViewVector * ColumnDepthMap[RenderColumn].ImpactLine->NormalFacingPosition(ViewPort);
+				DotProduct = ViewVector * ColumnDepthMap[RenderColumn].ImpactLine->NormalFacingPosition(Player.Position);
 
 				// The DotProduct represents the proportionate facing of two Vectors
 				// -1 means they are facing each other. 1 They are looking in the same direction.
@@ -169,20 +170,20 @@ int main(void)
 
 		// Display a "minimap"
 		int ScreenY = 0;
-		for (int MMY = floor(ViewPort.Y) - 2; MMY < floor(ViewPort.Y + 3); MMY++)
+		for (int MMY = floor(Player.Position.Y) - 3; MMY < floor(Player.Position.Y + 4); MMY++)
 		{
-		int ScreenX = 0;
-		for (int MMX = floor(ViewPort.X) - 2; MMX < floor(ViewPort.X + 3); MMX++)
-		{
-		if (MMY == floor(ViewPort.Y) && MMX == floor(ViewPort.X))
-			mvprintw(ScreenY, ScreenX, "[YOU]");
-		else if (World.IsBlockClippable(MMY, MMX))
-			mvprintw(ScreenY, ScreenX, "[XXX]");
-		else
-			mvprintw(ScreenY, ScreenX, "[   ]");
-		ScreenX += 5;
-		}
-		ScreenY++;
+			int ScreenX = 0;
+			for (int MMX = floor(Player.Position.X) - 3; MMX < floor(Player.Position.X + 4); MMX++)
+			{
+				if (MMY == floor(Player.Position.Y) && MMX == floor(Player.Position.X))
+					mvprintw(ScreenY, ScreenX, "[YOU]");
+				else if (World.IsBlockClippable(MMY, MMX))
+					mvprintw(ScreenY, ScreenX, "[XXX]");
+				else
+					mvprintw(ScreenY, ScreenX, "[   ]");
+				ScreenX += 5;
+			}
+			ScreenY++;
 		}
 
 		refresh();
@@ -190,9 +191,7 @@ int main(void)
 		mgVector Movement; // Just incase we need to move
 		mgMapElement *MapBlock; // Incase we want to change a tile
 
-		mgCollisionDetection CollisionTest;
-		mgMapObject TestObject;
-
+		Movement.Magnitude = 0;
 
 		switch (getch())
 		{
@@ -208,32 +207,17 @@ int main(void)
 		case 119:
 			Movement.Magnitude = 0.2; // Our movement "speed"
 			Movement.VectorFromDegrees(ViewAngle);
-
-			TestObject.Position = ViewPort;
-			TestObject.ObjectSize = 0.3;
 			
-			CollisionTest.MapReference = &World;
-
-			CollisionTest.CollisionSetup(&TestObject, Movement);
-			CollisionTest.SetupDetectionArea(2);
-			CollisionTest.AggregateCollisionLines();
-			CollisionTest.PerformCollisionTestsP1();
-			CollisionTest.PerformCollisionTestsP2();
-
-			ViewPort.Y += Movement.Y;
-			ViewPort.X += Movement.X;
 			break;
 		case 83: // D/d for Backwards
 		case 115:
 			Movement.Magnitude = -0.2; // Backwards "speed"
 			Movement.VectorFromDegrees(ViewAngle);
 
-			ViewPort.Y += Movement.Y;
-			ViewPort.X += Movement.X;
 			break;
 		case 67: // C/c for change tile
 		case 99:
-			MapBlock = World.ReturnMapBlockReference(floor(ViewPort.Y), floor(ViewPort.X));
+			MapBlock = World.ReturnMapBlockReference(floor(Player.Position.Y), floor(Player.Position.X));
 			if (MapBlock == NULL)
 				break;
 			if (MapBlock->BlockType == MAP_BLOCKWALL)
@@ -258,6 +242,27 @@ int main(void)
 			ExitProgram = true;
 			break;
 		}
+
+		if (Movement.Y != 0 || Movement.X != 0) // There is attempted movement.
+		{
+			// Let's check for collisions first.
+			mgCollisionDetection CollisionTest;
+			mgDetectedCollision Results;
+
+			CollisionTest.MapReference = &World;
+			Results = CollisionTest.CollisionTest(&Player, Movement, 2);
+
+			if (Results.Collision == false) // No collision
+			{
+				Player.Position.Y += Movement.Y;
+				Player.Position.X += Movement.X;
+			}
+			else
+			{	// Handle it.
+
+			}
+		}
+	
 	}
 
 	endwin();

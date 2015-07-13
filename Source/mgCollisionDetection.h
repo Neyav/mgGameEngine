@@ -44,6 +44,7 @@ struct mgDetectedCollision
 	mgPoint PointOfCollision;
 	mgLineSegment *CollisionLine;
 	mgVector CollisionCorrection;
+	bool Collision;
 };
 
 // This is used so we don't lose track of the collision object when we do the trace from the world against the object.
@@ -103,6 +104,7 @@ class mgCollisionDetection
 	void AggregateCollisionLines(void); // Stage Three
 	void PerformCollisionTestsP1(void); // Stage Four: Part One
 	void PerformCollisionTestsP2(void); // Stage Four: Part Two
+	mgDetectedCollision CollisionTest(mgMapObject *MovingObject, mgVector Movement, unsigned int Range); // Stage Five
 
 	mgCollisionDetection();
 };

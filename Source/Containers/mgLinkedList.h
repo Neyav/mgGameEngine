@@ -210,6 +210,8 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(vo
 	}
 
 	LinkedList = nullptr;
+
+	Elements = 0; 
 }
 
 template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
