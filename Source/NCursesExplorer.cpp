@@ -218,6 +218,7 @@ int main(void)
 			CollisionTest.SetupDetectionArea(2);
 			CollisionTest.AggregateCollisionLines();
 			CollisionTest.PerformCollisionTestsP1();
+			CollisionTest.PerformCollisionTestsP2();
 
 			ViewPort.Y += Movement.Y;
 			ViewPort.X += Movement.X;
