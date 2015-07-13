@@ -190,10 +190,9 @@ int main(void)
 		mgVector Movement; // Just incase we need to move
 		mgMapElement *MapBlock; // Incase we want to change a tile
 
-/* COLLISION DETECTION TESTS
 		mgCollisionDetection CollisionTest;
 		mgMapObject TestObject;
-*/
+
 
 		switch (getch())
 		{
@@ -209,7 +208,7 @@ int main(void)
 		case 119:
 			Movement.Magnitude = 0.2; // Our movement "speed"
 			Movement.VectorFromDegrees(ViewAngle);
-/* COLLISION DETECTION TESTS
+
 			TestObject.Position = ViewPort;
 			TestObject.ObjectSize = 0.3;
 			
@@ -218,9 +217,8 @@ int main(void)
 			CollisionTest.CollisionSetup(&TestObject, Movement);
 			CollisionTest.SetupDetectionArea(2);
 			CollisionTest.AggregateCollisionLines();
-			CollisionTest.PerformCollisionTests();
+			CollisionTest.PerformCollisionTestsP1();
 
-*/
 			ViewPort.Y += Movement.Y;
 			ViewPort.X += Movement.X;
 			break;

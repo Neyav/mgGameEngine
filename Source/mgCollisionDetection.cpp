@@ -16,7 +16,7 @@
 void mgCollisionDetection::CollisionSetup(mgMapObject *MovingObject, mgVector Movement) // Stage One
 {
 	this->MovingObject = MovingObject;
-	RemainingMovement = Movement;
+	AttemptedMovement = Movement;
 
 	// Make sure our lists are clean.
 	MapElements.ClearList();
@@ -81,7 +81,8 @@ void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
 	}
 }
 
-void mgCollisionDetection::PerformCollisionTests(void) // Stage Four 
+// Tests from the Map Object against the world.
+void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 {
 	mgLinkedList<mgLineSegment> *MapObjectShape;
 	mgRBTBinaryTree<mgPoint> PointTree;
@@ -94,7 +95,6 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 	if (MapObjectShape == nullptr)
 		return; // Object has no shape, cannot collide.
 
-	// Part One: Test from our MapObject outwards.
 	for (int Iterator = 0; Iterator < MapObjectShape->NumberOfElements(); Iterator++)
 	{ // For each line in the shape of our map object..
 		mgLineSegment *TestLine;
@@ -120,7 +120,7 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 
 		TestPoint = PointList.ReturnElement();
 
-		MovementCollisionLine.ImportLine(TestPoint, RemainingMovement);
+		MovementCollisionLine.ImportLine(TestPoint, AttemptedMovement);
 
 		CollisionLines.ResetIterator(); // Start at the beginning of the list.
 		
@@ -151,6 +151,12 @@ void mgCollisionDetection::PerformCollisionTests(void) // Stage Four
 	}
 
 	// Part Two: Test from the world inwards.
+}
+
+// Tests from the world against the mapobject
+void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
+{
+
 }
 
 mgCollisionDetection::mgCollisionDetection()
