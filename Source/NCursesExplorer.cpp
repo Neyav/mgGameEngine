@@ -243,7 +243,7 @@ int main(void)
 			break;
 		}
 
-		if (Movement.Y != 0 || Movement.X != 0) // There is attempted movement.
+		while (Movement.Y != 0 || Movement.X != 0) // There is attempted movement.
 		{
 			// Let's check for collisions first.
 			mgCollisionDetection CollisionTest;
@@ -256,10 +256,31 @@ int main(void)
 			{
 				Player.Position.Y += Movement.Y;
 				Player.Position.X += Movement.X;
+
+				Movement.Y = Movement.X = 0; // We completed the move.
 			}
 			else
-			{	// Handle it.
+			{	// Handle it.				
+				mgVector Projected;
+				double dotproduct;
 
+				// Push us 0.0000001 units away from the wall. Moments like this make me regret using
+				// double point precision and not a fixed fractional unit size like everyone else does. sigh.
+				Results.CollisionCorrection.NormalizeVector(Results.CollisionCorrection.Magnitude + 0.0000001);
+
+				// Complete the movement in a manner that doesn't have us clip through the wall.
+				Movement = Movement + Results.CollisionCorrection;
+
+				Player.Position.Y += Movement.Y;
+				Player.Position.X += Movement.X;
+
+				Movement = Results.CollisionCorrection; // The remainder of the movement we want to attempt.
+				Movement.ReverseDirection(); // We want this to go back into the wall we collided with.
+
+				// Lose all velocity in the direction of the wall normal by projecting the direction onto it.
+				dotproduct = Movement * Results.CollisionNormal;
+				Projected = Results.CollisionNormal * dotproduct;
+				Movement = Movement - Projected;
 			}
 		}
 	

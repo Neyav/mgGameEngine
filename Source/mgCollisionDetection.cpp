@@ -143,6 +143,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 				// Now we need to figure out the vector that will pull us out of this collision.
 				Collision.CollisionCorrection.AutoNormalize = false; // We need the defined magnitude.
 				Collision.CollisionCorrection.VectorFromCoord(MovementCollisionLine.SegmentEnd, TestResults.CollisionPoint);
+				Collision.CollisionNormal = LineReference->NormalFacingPosition(TestPoint); // Get the normal of the colliding wall.
 				Collision.Collision = true;
 
 				DetectedCollisions.AddElement(Collision);
@@ -219,6 +220,10 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 				// Now we need to figure out the vector that will pull us out of this collision.
 				Collision.CollisionCorrection.AutoNormalize = false; // We need the defined magnitude.
 				Collision.CollisionCorrection.VectorFromCoord(TestResults.CollisionPoint, MovementCollisionLine.SegmentEnd);
+				// This one is a bit different because a wall point is colliding with the side of the objects body, so we need the
+				// object body's line normal reversed to be our Collision Normal.
+				Collision.CollisionNormal = LineReference->NormalFacingPosition(TestCollisionPoint.Position);
+				Collision.CollisionNormal.ReverseDirection();
 				Collision.Collision = true;
 
 				DetectedCollisions.AddElement(Collision);
