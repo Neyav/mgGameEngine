@@ -11,6 +11,13 @@
 #include "Containers/mgLinkedList.h"
 #include "Containers/mgRBTBinaryTree.h"
 
+//
+// =------------------------------------=
+// = mgCollisionDetection C++ class     =
+// =------------------------------------=
+//
+// This class tests a MapObject that is moving against the world and reports back the results of the
+// nature of the collision, and information relevant to moving the object to a safe position.
 
 // Setup the collision detection
 void mgCollisionDetection::CollisionSetup(mgMapObject *MovingObject, mgVector Movement) // Stage One
