@@ -50,7 +50,7 @@ mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, -ObjectSize, -ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 	}
 
-	ObjectShape->ResetIterator(); // We presume this list is going to be used, and so we want it at the beginning.
+	ObjectShape->JumptoStart(); // We presume this list is going to be used, and so we want it at the beginning.
 
 	return ObjectShape;
 }

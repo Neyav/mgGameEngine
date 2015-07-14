@@ -62,7 +62,7 @@ void mgVisibilityMap::CalculateVisibility(mgPoint CheckPosition)
 
 		// Uses the PositionsChecked list to determine results, and therefore doesn't need the information stored in mgTraceResults
 		VisibilityTracer.OccluderPoint(CheckPosition, CheckDirection);
-		VisibilityTracer.PositionsChecked.ResetIterator(); // Make sure we're starting at the beginning.
+		VisibilityTracer.PositionsChecked.JumptoStart(); // Make sure we're starting at the beginning.
 
 		while (!VisibilityTracer.PositionsChecked.IteratorAtEnd())
 		{

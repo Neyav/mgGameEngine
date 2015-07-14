@@ -70,7 +70,7 @@ mgLinkedList<mgLineSegment> *mgMapElement::BlockGeometry(void)
 		GenerateBlockGeometry();
 
 	if (BlockShape != nullptr)
-		BlockShape->ResetIterator();
+		BlockShape->JumptoStart();
 
 	return BlockShape;
 }

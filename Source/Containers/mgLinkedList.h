@@ -64,7 +64,7 @@ public:
 	// Functions
 	virtual void AddElement(TemplateClass ElementToAdd);
 	virtual void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
-	void ResetIterator(void);
+	void JumptoStart(void);
 	void ClearList(void);
 	TemplateClass ReturnElement(void);
 	TemplateClass *ReturnElementReference(void);
@@ -137,7 +137,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementRe
 	Elements++;
 }
 
-template <typename TemplateClass> void mgLinkedList<TemplateClass>::ResetIterator(void)
+template <typename TemplateClass> void mgLinkedList<TemplateClass>::JumptoStart(void)
 {
 	Iterator = LinkedList;
 }

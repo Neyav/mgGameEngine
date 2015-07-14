@@ -37,7 +37,7 @@ mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 			BlockLineList = BlockReference->BlockGeometry(); 
 			if (BlockLineList != nullptr) // Empty blocks don't contain geometry, make sure this isn't one of those before attempting
 			{							// to add that geometry to our occluder list.
-				BlockLineList->ResetIterator();
+				BlockLineList->JumptoStart();
 
 				for (int Iterator = 0; Iterator < BlockLineList->NumberOfElements(); Iterator++)
 				{

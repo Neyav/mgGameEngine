@@ -62,7 +62,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 
 void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
 {
-	MapElements.ResetIterator(); // Just ensuring that we are at the beginning of the list.
+	MapElements.JumptoStart(); // Just ensuring that we are at the beginning of the list.
 
 	// Let's go through all of our Map Elements and get their list of lines and add it to a master list
 	// of collision lines.
@@ -118,7 +118,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
 
-	PointList.ResetIterator(); // Just to be safe.
+	PointList.JumptoStart(); // Just to be safe.
 
 	for (int Iterator = 0; Iterator < PointList.NumberOfElements(); Iterator++)
 	{ // For each point in our object.
@@ -129,7 +129,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 		MovementCollisionLine.ImportLine(TestPoint, AttemptedMovement);
 
-		CollisionLines.ResetIterator(); // Start at the beginning of the list.
+		CollisionLines.JumptoStart(); // Start at the beginning of the list.
 		
 		for (int Iterator2 = 0; Iterator2 < CollisionLines.NumberOfElements(); Iterator2++)
 		{ // For each line in the Detection Area
@@ -174,7 +174,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 	if (MapObjectShape == nullptr)
 		return; // Object has no shape, cannot collide.
 
-	CollisionLines.ResetIterator(); // Start at the beginning of the list.
+	CollisionLines.JumptoStart(); // Start at the beginning of the list.
 	for (int Iterator = 0; Iterator < CollisionLines.NumberOfElements(); Iterator++)
 	{ // For each line in the shape of our map object..
 		mgLineSegment *TestLine;
@@ -196,7 +196,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 
 	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
 
-	PointList.ResetIterator(); // Just to be safe.
+	PointList.JumptoStart(); // Just to be safe.
 
 	for (int Iterator = 0; Iterator < PointList.NumberOfElements(); Iterator++)
 	{ // For each point in our object.
@@ -207,7 +207,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 
 		MovementCollisionLine.ImportLine(TestCollisionPoint.Position, ReversedMovement);
 
-		MapObjectShape->ResetIterator(); // Start at the beginning of the list.
+		MapObjectShape->JumptoStart(); // Start at the beginning of the list.
 		for (int Iterator2 = 0; Iterator2 < MapObjectShape->NumberOfElements(); Iterator2++)
 		{ // For each line in the Detection Area
 			mgLineCollisionResults TestResults;
@@ -254,7 +254,7 @@ mgDetectedCollision mgCollisionDetection::CollisionTest(mgMapObject *MovingObjec
 
 	// Now we have a list of all of our collisions, if this list is empty, we have no collisions, otherwise we need to know
 	// which collision has the biggest CollisionCorrection, as that would be the first impact.
-	DetectedCollisions.ResetIterator(); // Just to be safe.
+	DetectedCollisions.JumptoStart(); // Just to be safe.
 
 	for (int Iterator = 0; Iterator < DetectedCollisions.NumberOfElements(); Iterator++)
 	{
