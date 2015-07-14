@@ -7,6 +7,7 @@
 #include "mgCollisionDetection.h"
 #include "mgLineSegment.h"
 #include "mgVisibilityMap.h"
+#include "mgMapObject.h"
 #include "Containers/mgLinkedList.h"
 #include "Containers/mgBinaryTree.h"
 #include "Containers/mgAVLBinaryTree.h"
@@ -226,7 +227,6 @@ void mgStressTest::TEST_mgMapElement(void)
 
 	testelement = new mgMapElement;
 
-
 	Timer.StartTimer();
 	for (unsigned int iterator = 0; iterator < 10000000; iterator++)
 		testList = testelement->BlockGeometry();
@@ -243,6 +243,7 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	mgBinaryTree<int> BinaryTree;
 	mgAVLBinaryTree<int> AVLBinaryTree;
 	mgRBTBinaryTree<int> RBTBinaryTree;
+	volatile bool a;
 
 	std::cout << "[---void mgStressTest::TEST_mgBinaryTree(void)---]" << std::endl;
 
@@ -290,7 +291,6 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StartTimer();
 	for (int i = 0; i < 10000; i++)
 	{
-		volatile bool a;
 		a = BinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
@@ -302,7 +302,6 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StartTimer();
 	for (int i = 0; i < 10000; i++)
 	{
-		volatile bool a;
 		a = RBTBinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
@@ -314,7 +313,6 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.StartTimer();
 	for (int i = 0; i < 10000; i++)
 	{
-		volatile bool a;
 		a = AVLBinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
@@ -336,7 +334,6 @@ void mgStressTest::TEST_mgBinaryTree(void)
 
 	for (int i = 0; i < 10000; i++)
 	{
-		volatile bool a;
 		a = BinaryTree.IsElementPresent(i);
 	}
 	Timer.StopTimer();
@@ -349,7 +346,47 @@ void mgStressTest::TEST_mgBinaryTree(void)
 
 void mgStressTest::TEST_mgCollisionDetection(void)
 {
+	mgMapDataHandler TestMap;
+	mgMapElement *MapElement;
+	mgMapObject TestObject;
+	mgCollisionDetection CollisionTest;
+	mgDetectedCollision Results;
+	volatile bool a;
 
+	std::cout << "[---void mgStressTest::TEST_mgCollisionDetection(void)---]" << std::endl;
+
+	TestMap.InitalizeMapData(10, 10); // Simple 10 by 10 map as that's all we'll need.
+	CollisionTest.MapReference = &TestMap;
+
+	// Clear out some spots in the middle of the map, 4,4 to 5,5 will be hollow.
+	for (unsigned int Y = 4; Y < 6; Y++)
+		for (unsigned int X = 4; X < 6; X++)
+		{
+			MapElement = TestMap.ReturnMapBlockReference(Y, X);
+			MapElement->BlockType = MAP_BLOCKFLOOR;
+		}
+
+	TestObject.ObjectSize = 0.3; // The size of our map object.
+	TestObject.Position.Y = 4.5;
+	TestObject.Position.X = 4.5; // The position on the map.
+
+	Timer.Description = "Collision Test: 360 degrees - Magnitude 5";
+
+	Timer.StartTimer();
+	for (int i = 0; i < 360; i++)
+	{
+		mgVector Movement;
+
+		Movement.Magnitude = 5;
+		Movement.VectorFromDegrees(i); // Create our movement vector;
+
+		Results = CollisionTest.CollisionTest(&TestObject, Movement, 6);
+		a = Results.Collision;
+	}
+	Timer.StopTimer();
+
+	Timer.ConsoleOutputResults();
+	Timer.ConsoleOutputIterationResults(360);
 }
 
 mgStressTest::mgStressTest()

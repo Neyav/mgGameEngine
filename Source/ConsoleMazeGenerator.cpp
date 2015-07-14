@@ -337,13 +337,14 @@ int main(int argc, char* argv[])
 	{
 		char selection;
 
-		std::cout << "---[ Stress Test Selection ]---" << std::endl;
-		std::cout << "---[ 1) mgMapDataHandler   ]---" << std::endl;
-		std::cout << "---[ 2) mgVector           ]---" << std::endl;
-		std::cout << "---[ 3) mgVisibilityMap    ]---" << std::endl;
-		std::cout << "---[ 4) mgMapElement       ]---" << std::endl;
-		std::cout << "---[ 5) mgBinaryTree       ]---" << std::endl;
-		std::cout << "---[                       ]---" << std::endl;
+		std::cout << "---[ Stress Test Selection  ]---" << std::endl;
+		std::cout << "---[ 1) mgMapDataHandler    ]---" << std::endl;
+		std::cout << "---[ 2) mgVector            ]---" << std::endl;
+		std::cout << "---[ 3) mgVisibilityMap     ]---" << std::endl;
+		std::cout << "---[ 4) mgMapElement        ]---" << std::endl;
+		std::cout << "---[ 5) mgBinaryTree        ]---" << std::endl;
+		std::cout << "---[ 6) mgCollisionDetection]---" << std::endl;
+		std::cout << "---[                        ]---" << std::endl;
 		std::cout << "---Any other key skips tests---" << std::endl;
 		std::cout << "---: ";
 		std::cin >> selection;
@@ -364,6 +365,9 @@ int main(int argc, char* argv[])
 			break;
 		case '5':
 			test.TEST_mgBinaryTree();
+			break;
+		case '6':
+			test.TEST_mgCollisionDetection();
 			break;
 		default:
 			stresstest = false;
