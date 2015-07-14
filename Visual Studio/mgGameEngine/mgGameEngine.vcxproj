@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8E5B7E3F-8360-4757-B12E-D1C507C715AB}</ProjectGuid>
+    <RootNamespace>mgGameEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\</OutDir>
+    <TargetName>DevelopmentConsole</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\Containers\mgAVLBinaryTree.h" />
+    <ClInclude Include="..\..\Source\Containers\mgBinaryTree.h" />
+    <ClInclude Include="..\..\Source\Containers\mgLinkedList.h" />
+    <ClInclude Include="..\..\Source\Containers\mgRBTBinaryTree.h" />
+    <ClInclude Include="..\..\Source\Containers\mgSortedList.h" />
+    <ClInclude Include="..\..\Source\mgCollisionDetection.h" />
+    <ClInclude Include="..\..\Source\mgLineSegment.h" />
+    <ClInclude Include="..\..\Source\mgMapDataHandler.h" />
+    <ClInclude Include="..\..\Source\mgMapElement.h" />
+    <ClInclude Include="..\..\Source\mgMapObject.h" />
+    <ClInclude Include="..\..\Source\mgPathSolutionGenerator.h" />
+    <ClInclude Include="..\..\Source\mgRandomMazeGenerator.h" />
+    <ClInclude Include="..\..\Source\mgRayTracer.h" />
+    <ClInclude Include="..\..\Source\mgStressTest.h" />
+    <ClInclude Include="..\..\Source\mgVectorPoint.h" />
+    <ClInclude Include="..\..\Source\mgVisibilityMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\ConsoleMazeGenerator.cpp" />
+    <ClCompile Include="..\..\Source\mgCollisionDetection.cpp" />
+    <ClCompile Include="..\..\Source\mgLineSegment.cpp" />
+    <ClCompile Include="..\..\Source\mgMapDataHandler.cpp" />
+    <ClCompile Include="..\..\Source\mgMapElement.cpp" />
+    <ClCompile Include="..\..\Source\mgMapObject.cpp" />
+    <ClCompile Include="..\..\Source\mgPathSolutionGenerator.cpp" />
+    <ClCompile Include="..\..\Source\mgRandomMazeGenerator.cpp" />
+    <ClCompile Include="..\..\Source\mgRayTracer.cpp" />
+    <ClCompile Include="..\..\Source\mgStressTest.cpp" />
+    <ClCompile Include="..\..\Source\mgVectorPoint.cpp" />
+    <ClCompile Include="..\..\Source\mgVisibilityMap.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
