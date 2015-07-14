@@ -4,9 +4,10 @@
 
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
-#include "Containers/mgLinkedList.h"
+#include "mgCollisionDetection.h"
 #include "mgLineSegment.h"
 #include "mgVisibilityMap.h"
+#include "Containers/mgLinkedList.h"
 #include "Containers/mgBinaryTree.h"
 #include "Containers/mgAVLBinaryTree.h"
 #include "Containers/mgRBTBinaryTree.h"
@@ -343,6 +344,11 @@ void mgStressTest::TEST_mgBinaryTree(void)
 	Timer.ConsoleOutputResults();
 	Timer.ConsoleOutputIterationResults(10000);
 #endif
+
+}
+
+void mgStressTest::TEST_mgCollisionDetection(void)
+{
 
 }
 

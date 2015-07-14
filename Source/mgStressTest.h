@@ -4,6 +4,7 @@
 #include "mgMapDataHandler.h"
 #include "mgVectorPoint.h"
 #include "mgVisibilityMap.h"
+#include "mgCollisionDetection.h"
 #include "Containers/mgLinkedList.h"
 #include "Containers/mgBinaryTree.h"
 #include "mgLineSegment.h"
@@ -36,6 +37,7 @@ public:
 	void TEST_mgVisibilityMap(void);
 	void TEST_mgMapElement(void);
 	void TEST_mgBinaryTree(void);
+	void TEST_mgCollisionDetection(void);
 
 	mgStressTest();
 };
