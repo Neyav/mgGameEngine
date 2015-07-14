@@ -82,7 +82,10 @@ void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
 
 				LineSegRef = ElementShape->ReturnElementReference();
 
-				CollisionLines.AddElementReference(LineSegRef, false);
+				// Only add the line to this list if it's facing the same direction as the attempted movement, because
+				// otherwise a collision should be impossible.
+				if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0)
+					CollisionLines.AddElementReference(LineSegRef, false);
 			}
 		}
 	}
