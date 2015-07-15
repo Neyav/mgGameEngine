@@ -63,7 +63,6 @@ class mgCollisionDetection
 	mgMapObject *MovingObject;
 	mgVector AttemptedMovement;
 
-	mgLinkedList<mgMapElement> MapElements;
 	mgLinkedList<mgLineSegment> CollisionLines;
 	mgLinkedList<mgDetectedCollision> DetectedCollisions;
 
@@ -73,7 +72,6 @@ class mgCollisionDetection
 
 	void CollisionSetup(mgMapObject *MovingObject, mgVector Movement); // Stage One
 	void SetupDetectionArea(unsigned int Range); // Stage Two
-	void AggregateCollisionLines(void); // Stage Three
 	void PerformCollisionTestsP1(void); // Stage Four: Part One
 	void PerformCollisionTestsP2(void); // Stage Four: Part Two
 	mgDetectedCollision CollisionTest(mgMapObject *MovingObject, mgVector Movement, unsigned int Range); // Stage Five

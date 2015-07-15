@@ -26,7 +26,6 @@ void mgCollisionDetection::CollisionSetup(mgMapObject *MovingObject, mgVector Mo
 	AttemptedMovement = Movement;
 
 	// Make sure our lists are clean.
-	MapElements.ClearList();
 	CollisionLines.ClearList();
 }
 
@@ -55,40 +54,28 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 			ElementReference = MapReference->ReturnMapBlockReference(RangeY, RangeX);
 
 			if (ElementReference != nullptr) // This can happen.
-				MapElements.AddElementReference(ElementReference, false); 
-		}
-	}
-}
-
-void mgCollisionDetection::AggregateCollisionLines(void) // Stage Three
-{
-	MapElements.JumptoStart(); // Just ensuring that we are at the beginning of the list.
-
-	// Let's go through all of our Map Elements and get their list of lines and add it to a master list
-	// of collision lines.
-	for (int ElementListIterator = 0; ElementListIterator < MapElements.NumberOfElements(); ElementListIterator++)
-	{
-		mgMapElement *ElementReference;
-		mgLinkedList<mgLineSegment> *ElementShape;
-
-		ElementReference = MapElements.ReturnElementReference();
-		ElementShape = ElementReference->BlockGeometry();
-
-		if (ElementShape != nullptr)
-		{
-			for (int LineIterator = 0; LineIterator < ElementShape->NumberOfElements(); LineIterator++)
 			{
-				mgLineSegment *LineSegRef;
+				mgLinkedList<mgLineSegment> *ElementShape;
 
-				LineSegRef = ElementShape->ReturnElementReference();
+				ElementShape = ElementReference->BlockGeometry();
 
-				// Only add the line to this list if it's facing the same direction as the attempted movement, because
-				// otherwise a collision should be impossible.
-				if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0)
-					CollisionLines.AddElementReference(LineSegRef, false);
-			}
-		}
-	}
+				if (ElementShape != nullptr)
+				{
+					for (int LineIterator = 0; LineIterator < ElementShape->NumberOfElements(); LineIterator++)
+					{
+						mgLineSegment *LineSegRef;
+
+						LineSegRef = ElementShape->ReturnElementReference();
+
+						// Only add the line to this list if it's facing the same direction as the attempted movement, because
+						// otherwise a collision should be impossible.
+						if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0)
+							CollisionLines.AddElementReference(LineSegRef, false);
+					}
+				} // if (ElementShape != nullptr)
+			} // if (ElementReference != nullptr)
+		} // for (int RangeX...
+	} // for (int RangeY...
 }
 
 // Tests from the Map Object against the world.
@@ -251,7 +238,6 @@ mgDetectedCollision mgCollisionDetection::CollisionTest(mgMapObject *MovingObjec
 	// Perform steps One through Four
 	this->CollisionSetup(MovingObject, Movement);
 	this->SetupDetectionArea(2);
-	this->AggregateCollisionLines();
 	this->PerformCollisionTestsP1();
 	this->PerformCollisionTestsP2();
 
