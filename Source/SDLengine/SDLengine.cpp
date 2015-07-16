@@ -14,6 +14,6 @@ int main ( void )
 
 	while(1)
 	{
-		printf("loop\n");
+		RenderEngine.UpdateScreen();
 	}
 }
