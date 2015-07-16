@@ -1,9 +1,10 @@
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <string>
 #include <stdio.h>
 
 #include "SETextureHandler.h"
+#include "SERenderHandler.h"
 
 bool SETextureHandler::loadFromFile( std::string filename )
 {
@@ -11,7 +12,7 @@ bool SETextureHandler::loadFromFile( std::string filename )
 
 	SDL_Texture *newTexture = NULL;
 
-	SDL_Surface* loadedSurface = IMG_Load( filename.c_str() );
+	SDL_Surface *loadedSurface = IMG_Load( filename.c_str() );
 	if ( loadedSurface == NULL ) // NULL because this library is a C library
 	{
 		printf("Unable to load image %s -> [SDL_image error: %s]\n", filename.c_str(), IMG_GetError() );
@@ -22,7 +23,7 @@ bool SETextureHandler::loadFromFile( std::string filename )
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		// Create texture from surface pixels
-		newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
+		newTexture = SDL_CreateTextureFromSurface( Renderer->Renderer, loadedSurface );
 		if ( newTexture == NULL )
 		{
 			printf("Unable to create texture from %s -> [SDL Error: %s]\n", filename.c_str(), SDL_GetError() );
@@ -79,7 +80,7 @@ void SETextureHandler::render( int x, int y, SDL_Rect* clip )
 	}
 
 	// Render to screen
-	SDL_RenderCopy( gRenderer, hwTexture, clip, &renderQuad );
+	SDL_RenderCopy( Renderer->Renderer, hwTexture, clip, &renderQuad );
 }
 
 int SETextureHandler::getWidth()
@@ -92,11 +93,13 @@ int SETextureHandler::getHeight()
 	return Height;
 }
 
-SETextureHandler::SETextureHandler()
+SETextureHandler::SETextureHandler(SERenderHandler *TextureRenderer)
 {
 	// Init
 	hwTexture = NULL;
 	Width = Height = 0;
+
+	Renderer = TextureRenderer;
 }
 
 SETextureHandler::~SETextureHandler()

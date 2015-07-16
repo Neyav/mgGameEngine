@@ -1,14 +1,18 @@
 #ifndef SETEXTUREHANDLER_H
 #define SETEXTUREHANDLER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <string>
+
+#include "SERenderHandler.h"
 
 class SETextureHandler
 {
 private:
-	SDL_Texture* hwTexture;	// The texture
+	SERenderHandler *Renderer; // This textures renderer.
+
+	SDL_Texture *hwTexture;	// The texture
 	int Width, Height;	// Texture dimensions
 public:
 	bool loadFromFile( std::string filename );		// Loads image
@@ -22,7 +26,7 @@ public:
 	int getWidth();
 	int getHeight();
 
-	SETextureHandler();
+	SETextureHandler(SERenderHandler *TextureRenderer);
 	~SETextureHandler();
 };
 #endif

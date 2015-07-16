@@ -1,18 +1,23 @@
-# Compiler.. In this case it's langc's c++ compiler that ships standard
-# with FreeBSD 10
+# Build parameters
 CC = c++
 STRIP = strip
 RM = rm
 
 CFLAGS = -std=c++11 -O2
 
+# The default build target. This is the console test engine.
 mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(STRIP) --strip-all mgConsoleTest
 
+# NCursesExplorer build target. This is a NCurses based first person renderer for debug purposes
 NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRayTracer.o mgRandomMazeGenerator.o mgCollisionDetection.o mgMapObject.o
 	$(CC) -o NCursesExplorer NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRandomMazeGenerator.o mgRayTracer.o mgCollisionDetection.o mgMapObject.o -lncurses
 	$(STRIP) --strip-all NCursesExplorer
+
+# SDLengine build target. This is a SDL2 based renderer for the engine. Top down view.
+SDLengine: SDLengine.o SETextureHandler.o SERenderHandler.o
+	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o -lSDL2 -lSDL2_image
 
 NCursesExplorer.o: Source/NCursesExplorer.cpp
 	$(CC) $(CFLAGS) -o NCursesExplorer.o -c Source/NCursesExplorer.cpp
@@ -52,6 +57,17 @@ mgRayTracer.o: Source/mgRayTracer.cpp Source/mgRayTracer.h
 
 mgCollisionDetection.o: Source/mgCollisionDetection.cpp Source/mgCollisionDetection.h
 	$(CC) $(CFLAGS) -o mgCollisionDetection.o -c Source/mgCollisionDetection.cpp
+
+# [SDL ENGINE]
+SETextureHandler.o: Source/SDLengine/SETextureHandler.cpp Source/SDLengine/SETextureHandler.h
+	$(CC) $(CFLAGS) -o SETextureHandler.o -c Source/SDLengine/SETextureHandler.cpp
+
+SERenderHandler.o: Source/SDLengine/SERenderHandler.cpp Source/SDLengine/SERenderHandler.h
+	$(CC) $(CFLAGS) -o SERenderHandler.o -c Source/SDLengine/SERenderHandler.cpp
+
+SDLengine.o: Source/SDLengine/SDLengine.cpp
+	$(CC) $(CFLAGS) -o SDLengine.o -c Source/SDLengine/SDLengine.cpp
+#-[End SDL Engine]
 
 clean:
 	$(RM) *.o
