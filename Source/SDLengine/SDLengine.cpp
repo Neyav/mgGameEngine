@@ -12,8 +12,12 @@ int main ( void )
 
 	RenderEngine.InitWindow(800,600, "SDL Engine test");
 
+	SETextureHandler FloorTexture(&RenderEngine); // Cannot be called until after the Renderer has been setup.
+	FloorTexture.loadFromFile("SDLenginefloor.png");
+
 	while(1)
-	{
+	{		
+		FloorTexture.render(200,200);
 		RenderEngine.UpdateScreen();
 	}
 }
