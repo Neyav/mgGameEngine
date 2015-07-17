@@ -70,8 +70,6 @@ public:
 	TemplateClass *ReturnElementReference(void);
 	int NumberOfElements(void);
 	bool IteratorAtEnd(void);
-	mgLinkedListElement<TemplateClass> *ReturnIterator(void);
-	mgLinkedListElement<TemplateClass> *ReturnHeadIterator(void);
 
 	mgLinkedList();
 	~mgLinkedList();
@@ -188,16 +186,6 @@ template <typename TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEn
 		return true;
 
 	return false;
-}
-
-template <typename TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnIterator(void)
-{
-	return Iterator;
-}
-
-template <typename TemplateClass> mgLinkedListElement<TemplateClass> *mgLinkedList<TemplateClass>::ReturnHeadIterator(void)
-{
-	return LinkedList;
 }
 
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
