@@ -9,15 +9,23 @@
 int main ( void )
 {
 	SERenderHandler RenderEngine;
+	int i = 0;
 
-	RenderEngine.InitWindow(800,600, "SDL Engine test");
+	RenderEngine.InitWindow(1024,748, "SDL Engine test");
 
 	SETextureHandler FloorTexture(&RenderEngine); // Cannot be called until after the Renderer has been setup.
+	SETextureHandler WallTexture(&RenderEngine);
 	FloorTexture.loadFromFile("SDLenginefloor.png");
+	WallTexture.loadFromFile("SDLenginewall.png");
 
 	while(1)
-	{		
-		FloorTexture.render(200,200);
+	{
+		RenderEngine.ClearScreen();
+		i++;
+		if (i > 700)
+			i = 0;	
+		FloorTexture.render(i,i);
+		WallTexture.render(700-i,700-i);
 		RenderEngine.UpdateScreen();
 	}
 }
