@@ -120,36 +120,6 @@ bool mgMapDataHandler::IsBlockClippable(int PosY, int PosX)
 	return false;
 }
 
-bool mgMapDataHandler::WillObjectFit(double PosY, double PosX, float ObjectSize)
-{
-	int UnifiedPosition = (floor(PosY) * MapSizeX) + floor(PosX);
-
-	if (!PositionBoundsCheck(floor(PosY), floor(PosX)))
-		return false;
-
-	if (InternalMapData[UnifiedPosition].MapBlock->BlockType == MAP_BLOCKWALL)
-		return false;
-
-	// We've exausted all simple methods of ruling this position out, time to work on the more complicated ones.
-	double TestY[4]; // 0 = Up, 1 = Down, 2 = Left, 3 = Right
-	double TestX[4];
-
-	TestY[2] = TestY[0] = PosY + ObjectSize;
-	TestY[3] = TestY[1] = PosY - ObjectSize;
-	TestX[0] = TestX[1] = PosX + ObjectSize;
-	TestX[2] = TestX[3] = PosX - ObjectSize;
-
-	for (int Iterator = 0; Iterator < 4; Iterator++)
-	{
-		UnifiedPosition = (floor(TestY[Iterator]) * MapSizeX) + floor(TestY[Iterator]);
-
-		if (InternalMapData[UnifiedPosition].MapBlock->BlockType == MAP_BLOCKWALL)
-			return false;
-	}
-
-	return true;
-}
-
 mgMapElement *mgMapDataHandler::ReturnMapBlockReference(int PosY, int PosX)
 {
 	int UnifiedPosition = (PosY * MapSizeX) + PosX;
