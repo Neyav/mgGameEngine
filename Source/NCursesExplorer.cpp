@@ -1,10 +1,10 @@
-// =-------------------------------------------------------------------------------------------------=
-// = NCursesExplorer -> This file was mostly written in nano on FreeBSD 10.1. Not an ideal setup, I  =
-// =                    am aware, but I wanted to play around with it. It is nice to get interactive =
-// =                    results from this project finally, and also to have such a tool for          =
-// =                    diagnostic purposes. Excuse code messiness. It also shows how easy this      =
-// =                    engine is to program for, definitely an intended result. Happy. :)           =
-// =-------------------------------------------------------------------------------------------------=
+// =-----------------------------------------------------------------------------------------------------=
+// = NCursesExplorer -> This file was originally written in nano on FreeBSD 10.1. Not an ideal setup, I  =
+// =                    am aware, but I wanted to play around with it. It is nice to get interactive 	 =
+// =                    results from this project finally, and also to have such a tool for         	 =
+// =                    diagnostic purposes. Excuse code messiness. It also shows how easy this      	 =
+// =                    engine is to program for, definitely an intended result. Happy. :)           	 =
+// =-----------------------------------------------------------------------------------------------------=
 
 #include <ncurses.h>
 #include <stdlib.h>
@@ -35,14 +35,14 @@ int main(void)
 	mgRayTracer RenderTracer; // Our tracer.
 	mgMapObject Player; // Us
 
-	// Make a 50x50 world by default.
+	// Make our world.
 	World.InitalizeMapData(MAPSIZEY, MAPSIZEX);
 
 	// Generate a random maze in the world.
 	Generator.Map = &World;
 	Generator.GenerateMaze(1,1);
 
-	RenderTracer.MapReference = &World;
+	RenderTracer.MapReference = &World; // Link our world to the Ray Tracer
 
 	int ViewAngle = 90;
 
