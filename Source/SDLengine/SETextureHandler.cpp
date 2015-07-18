@@ -70,8 +70,8 @@ void SETextureHandler::setAlpha( Uint8 alpha )
 // Size override incase you want to scale an image to a specific size.
 void SETextureHandler::setSize( int Width, int Height )
 {
-	Width = Width;
-	Height = Height;
+	this->Width = Width;
+	this->Height = Height;
 }
 
 void SETextureHandler::render( int x, int y, SDL_Rect* clip )
