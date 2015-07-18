@@ -20,6 +20,7 @@ public:
 	void setColour( Uint8 red, Uint8 green, Uint8 blue );	// Colour modulation
 	void setBlendMode( SDL_BlendMode blending );		// Blending
 	void setAlpha( Uint8 alpha );				// Alpha modulation
+	void setSize(int Width, int Height);			// Size of image
 	void render( int x, int y, SDL_Rect* clip = NULL );	// Renders texture
 
 	// Gets image dimensions

@@ -67,6 +67,13 @@ void SETextureHandler::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( hwTexture, alpha );
 }
 
+// Size override incase you want to scale an image to a specific size.
+void SETextureHandler::setSize( int Width, int Height )
+{
+	Width = Width;
+	Height = Height;
+}
+
 void SETextureHandler::render( int x, int y, SDL_Rect* clip )
 {
 	// Set Rendering space and render to screen
