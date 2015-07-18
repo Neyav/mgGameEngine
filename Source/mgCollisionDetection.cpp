@@ -1,6 +1,5 @@
 #include <math.h>
 #include <stdlib.h>
-#include <iostream>
 
 #include "mgCollisionDetection.h"
 #include "mgMapObject.h"
@@ -61,7 +60,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 
 				if (ElementShape != nullptr)
 				{
-					for (int LineIterator = 0; LineIterator < ElementShape->NumberOfElements(); LineIterator++)
+					while (!ElementShape->IteratorAtEnd())
 					{
 						mgLineSegment *LineSegRef;
 
@@ -92,7 +91,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 	if (MapObjectShape == nullptr)
 		return; // Object has no shape, cannot collide.
 
-	for (int Iterator = 0; Iterator < MapObjectShape->NumberOfElements(); Iterator++)
+	while (!MapObjectShape->IteratorAtEnd())
 	{ // For each line in the shape of our map object..
 		mgLineSegment *TestLine;
 
@@ -110,7 +109,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 	PointList.JumptoStart(); // Just to be safe.
 
-	for (int Iterator = 0; Iterator < PointList.NumberOfElements(); Iterator++)
+	while (!PointList.IteratorAtEnd())
 	{ // For each point in our object.
 		mgLineSegment MovementCollisionLine;
 		mgPoint TestPoint;
@@ -121,7 +120,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 		CollisionLines.JumptoStart(); // Start at the beginning of the list.
 		
-		for (int Iterator2 = 0; Iterator2 < CollisionLines.NumberOfElements(); Iterator2++)
+		while (!CollisionLines.IteratorAtEnd())
 		{ // For each line in the Detection Area
 			mgLineCollisionResults TestResults;
 			mgLineSegment *LineReference;
@@ -165,7 +164,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 		return; // Object has no shape, cannot collide.
 
 	CollisionLines.JumptoStart(); // Start at the beginning of the list.
-	for (int Iterator = 0; Iterator < CollisionLines.NumberOfElements(); Iterator++)
+	while (!CollisionLines.IteratorAtEnd())
 	{ // For each line in the shape of our map object..
 		mgLineSegment *TestLine;
 		mgCollisionPoint a, b;
@@ -188,7 +187,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 
 	PointList.JumptoStart(); // Just to be safe.
 
-	for (int Iterator = 0; Iterator < PointList.NumberOfElements(); Iterator++)
+	while (!PointList.IteratorAtEnd())
 	{ // For each point in our object.
 		mgLineSegment MovementCollisionLine;
 		mgCollisionPoint TestCollisionPoint;
@@ -198,7 +197,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 		MovementCollisionLine.ImportLine(TestCollisionPoint.Position, ReversedMovement);
 
 		MapObjectShape->JumptoStart(); // Start at the beginning of the list.
-		for (int Iterator2 = 0; Iterator2 < MapObjectShape->NumberOfElements(); Iterator2++)
+		while (!MapObjectShape->IteratorAtEnd())
 		{ // For each line in the Detection Area
 			mgLineCollisionResults TestResults;
 			mgLineSegment *LineReference;
@@ -212,7 +211,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 				mgDetectedCollision Collision;
 
 				Collision.PointOfCollision = TestResults.CollisionPoint;
-				Collision.CollisionLine = TestCollisionPoint.LineReference; // The line that the test point belonged too.
+				Collision.CollisionLine = TestCollisionPoint.LineReference; // The line that the test point belonged to.
 
 				// Now we need to figure out the vector that will pull us out of this collision.
 				Collision.CollisionCorrection.AutoNormalize = false; // We need the defined magnitude.
@@ -245,7 +244,7 @@ mgDetectedCollision mgCollisionDetection::CollisionTest(mgMapObject *MovingObjec
 	// which collision has the biggest CollisionCorrection, as that would be the first impact.
 	DetectedCollisions.JumptoStart(); // Just to be safe.
 
-	for (int Iterator = 0; Iterator < DetectedCollisions.NumberOfElements(); Iterator++)
+	while (!DetectedCollisions.IteratorAtEnd())
 	{
 		mgDetectedCollision Collision;
 
