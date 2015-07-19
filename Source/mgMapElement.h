@@ -31,7 +31,7 @@ public:
 
 	void SetBlockType(BlockDefine NewType);
 	void GenerateBlockGeometry(void);
-	mgLinkedList<mgLineSegment> *BlockGeometry(void);
+	mgListIterator<mgLineSegment> BlockGeometry(void);
 
 	mgMapElement();
 	~mgMapElement();

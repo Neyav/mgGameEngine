@@ -15,6 +15,10 @@
 	-Chris Laverdure, arrogant engineer of re-inventing the wheel.
 */
 
+// ------------------- mgLinkedListElement
+// - This is the container for each element in a linked list.
+// -
+
 template <typename TemplateClass>
 class mgLinkedListElement
 {
@@ -49,6 +53,11 @@ template <typename TemplateClass> mgLinkedListElement<TemplateClass>::~mgLinkedL
 		delete Element; // We own it, we clear it.
 }
 
+// ------------------- mgLinkedList
+// - This is the linked list itself.
+// -
+
+template <typename TemplateClass> class mgListIterator;
 
 template <typename TemplateClass> class mgLinkedList
 {
@@ -64,12 +73,10 @@ public:
 	// Functions
 	virtual void AddElement(TemplateClass ElementToAdd);
 	virtual void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
-	void JumptoStart(void);
 	void ClearList(void);
-	TemplateClass ReturnElement(void);
-	TemplateClass *ReturnElementReference(void);
 	int NumberOfElements(void);
-	bool IteratorAtEnd(void);
+
+	mgListIterator<TemplateClass> ListIterator(void);
 
 	mgLinkedList();
 	~mgLinkedList();
@@ -135,59 +142,6 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementRe
 	Elements++;
 }
 
-template <typename TemplateClass> void mgLinkedList<TemplateClass>::JumptoStart(void)
-{
-	Iterator = LinkedList;
-}
-
-template <typename TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void)
-{
-	if (Iterator != nullptr)
-	{
-		TemplateClass CopyOfObject;
-
-		CopyOfObject = *Iterator->Element;
-		Iterator = Iterator->Next;
-		return CopyOfObject;
-	}
-	else
-	{
-		// You should be checking for the end of the list if you are using this function. Exit hard and painfully because this error could crop up somewhere else
-		// in a more ambigious manner if we don't fix the problem now.
-
-		std::cout << "template <class TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void) -- Attempt to read past end of list." << std::endl;
-
-		exit(-1);
-	}
-}
-
-template <typename TemplateClass> TemplateClass *mgLinkedList<TemplateClass>::ReturnElementReference(void)
-{
-	if (Iterator == nullptr)
-		return nullptr;
-	else
-	{
-		mgLinkedListElement<TemplateClass> *ReturnObject;
-		ReturnObject = Iterator;
-		Iterator = Iterator->Next;
-		return ReturnObject->Element;
-	}
-}
-
-
-template <typename TemplateClass> int mgLinkedList<TemplateClass>::NumberOfElements(void)
-{
-	return Elements;
-}
-
-template <typename TemplateClass> bool mgLinkedList<TemplateClass>::IteratorAtEnd(void)
-{
-	if (Iterator == nullptr)
-		return true;
-
-	return false;
-}
-
 template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(void)
 {
 	if (LinkedList != nullptr)
@@ -200,6 +154,20 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::ClearList(vo
 	LinkedList = nullptr;
 
 	Elements = 0; 
+}
+
+template <typename TemplateClass>
+mgListIterator<TemplateClass> mgLinkedList<TemplateClass>::ListIterator(void)
+{
+	mgListIterator<TemplateClass> NewListIterator(this);
+
+	return NewListIterator;
+}
+
+template <typename TemplateClass> 
+int mgLinkedList<TemplateClass>::NumberOfElements(void)
+{
+	return Elements;
 }
 
 template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
@@ -216,23 +184,42 @@ template <typename TemplateClass> mgLinkedList<TemplateClass>::~mgLinkedList()
 	this->ClearList();
 }
 
+// ------------------- mgListIterator
+// - This is the iterator for reading from a linked list.
+// -
+
 template <typename TemplateClass> class mgListIterator
 {
 private:
 	mgLinkedListElement<TemplateClass> *Iterator;
 	mgLinkedList<TemplateClass> *MasterList;
 public:
+	void LinktoList(mgLinkedList<TemplateClass> *List);
+
 	TemplateClass ReturnElement(void);
 	TemplateClass *ReturnElementReference(void);
 	int NumberOfElements(void);
+	bool IteratorAtEnd(void);
 	void JumptoStart(void);
 
 	mgListIterator(mgLinkedList<TemplateClass> *MasterList)
 	{
 		this->MasterList = MasterList;
-		Iterator = MasterList->LinkedList;
+		this->Iterator = MasterList->LinkedList;
+	}
+	mgListIterator()
+	{
+		this->MasterList = nullptr;
+		this->Iterator = nullptr;
 	}
 };
+
+template <typename TemplateClass>
+void mgListIterator<TemplateClass>::LinktoList(mgLinkedList<TemplateClass> *List)
+{
+	this->MasterList = List;
+	this->Iterator = MasterList->LinkedList;
+}
 
 template <typename TemplateClass>
 TemplateClass mgListIterator<TemplateClass>::ReturnElement(void)
@@ -250,7 +237,7 @@ TemplateClass mgListIterator<TemplateClass>::ReturnElement(void)
 		// You should be checking for the end of the list if you are using this function. Exit hard and painfully because this error could crop up somewhere else
 		// in a more ambigious manner if we don't fix the problem now.
 
-		std::cout << "template <class TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void) -- Attempt to read past end of list." << std::endl;
+		std::cout << "template <class TemplateClass> TemplateClass mgListIterator<TemplateClass>::ReturnElement(void) -- Attempt to read past end of list." << std::endl;
 
 		exit(-1);
 	}
@@ -271,7 +258,7 @@ TemplateClass *mgListIterator<TemplateClass>::ReturnElementReference(void)
 		// You should be checking for the end of the list if you are using this function. Exit hard and painfully because this error could crop up somewhere else
 		// in a more ambigious manner if we don't fix the problem now.
 
-		std::cout << "template <class TemplateClass> TemplateClass mgLinkedList<TemplateClass>::ReturnElement(void) -- Attempt to read past end of list." << std::endl;
+		std::cout << "template <class TemplateClass> TemplateClass mgListIterator<TemplateClass>::ReturnElement(void) -- Attempt to read past end of list." << std::endl;
 
 		exit(-1);
 	}
@@ -280,12 +267,27 @@ TemplateClass *mgListIterator<TemplateClass>::ReturnElementReference(void)
 template <typename TemplateClass> 
 int mgListIterator<TemplateClass>::NumberOfElements(void)
 {
-	return MasterList->Elements;
+	if (MasterList != nullptr)
+		return MasterList->Elements;
+	else
+		return 0;
+}
+
+template <typename TemplateClass>
+bool mgListIterator<TemplateClass>::IteratorAtEnd(void)
+{
+	if (Iterator == nullptr)
+		return true;
+	else
+		return false;
 }
 
 template <typename TemplateClass> 
 void mgListIterator<TemplateClass>::JumptoStart(void)
 {
-	Iterator = MasterList->LinkedList;
+	if (MasterList != nullptr)
+		Iterator = MasterList->LinkedList;
+	else
+		Iterator = nullptr;
 }
 #endif

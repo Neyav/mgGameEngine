@@ -58,17 +58,18 @@ void mgVisibilityMap::CalculateVisibility(mgPoint CheckPosition)
 	// Spin in a 360 degree angle checking visibility for this block against all those around it
 	for (int CheckAngle = 0; CheckAngle < 360; CheckAngle++)
 	{
+		mgListIterator<mgPoint> PositionsList;
 		CheckDirection.VectorFromDegrees(CheckAngle);
 
 		// Uses the PositionsChecked list to determine results, and therefore doesn't need the information stored in mgTraceResults
 		VisibilityTracer.OccluderPoint(CheckPosition, CheckDirection);
-		VisibilityTracer.PositionsChecked.JumptoStart(); // Make sure we're starting at the beginning.
+		PositionsList.LinktoList(&VisibilityTracer.PositionsChecked); // Make sure we're starting at the beginning.
 
-		while (!VisibilityTracer.PositionsChecked.IteratorAtEnd())
+		while (!PositionsList.IteratorAtEnd())
 		{
 			mgPoint CheckedListItem;
 
-			CheckedListItem = VisibilityTracer.PositionsChecked.ReturnElement();
+			CheckedListItem = PositionsList.ReturnElement();
 
 			AddVisiblePoint(CheckedListItem);
 		}

@@ -27,7 +27,7 @@ mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 	{
 		for (int CheckX = floor(Position.X) - 1; CheckX < floor(Position.X) + 2; CheckX++)
 		{
-			mgLinkedList<mgLineSegment> *BlockLineList;
+			mgListIterator<mgLineSegment> BlockLineList;
 			mgMapElement *BlockReference;
 
 			BlockReference = MapReference->ReturnMapBlockReference(CheckY, CheckX);
@@ -35,19 +35,15 @@ mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 				continue;
 			
 			BlockLineList = BlockReference->BlockGeometry(); 
-			if (BlockLineList != nullptr) // Empty blocks don't contain geometry, make sure this isn't one of those before attempting
-			{							// to add that geometry to our occluder list.
-				BlockLineList->JumptoStart();
 
-				for (int Iterator = 0; Iterator < BlockLineList->NumberOfElements(); Iterator++)
-				{
-					mgLineSegment *CopiedLine;
+			while (!BlockLineList.IteratorAtEnd())
+			{
+				mgLineSegment *CopiedLine;
 
-					CopiedLine = BlockLineList->ReturnElementReference();
+				CopiedLine = BlockLineList.ReturnElementReference();
 
-					// False because we do not own the reference, reference is owned by the MapElement.
-					OccluderLineList->AddElementReference(CopiedLine, false);
-				}
+				// False because we do not own the reference, reference is owned by the MapElement.
+				OccluderLineList->AddElementReference(CopiedLine, false);
 			}
 
 			// TODO: Add object line data here checking here.
@@ -83,6 +79,7 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 	{
 		mgPoint MapBlock;
 		mgLinkedList<mgLineSegment> *LineSegmentList;
+		mgListIterator<mgLineSegment> LineSegmentIterator;
 		mgLineSegment *LineReference;
 		mgLineSegment TestLine;
 
@@ -101,18 +98,17 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 
 		// We have our grid position in the map, now we need to build the walls of any nearby blocks as linesegments in a list.
 		LineSegmentList = BuildOccluderLines(MapBlock);
+		LineSegmentIterator.LinktoList(LineSegmentList);
 
 		// Let's go through the lines, one by one, finding the closing occluding point.
-		LineReference = LineSegmentList->ReturnElementReference();
-		while (LineReference != nullptr)
+		while (!LineSegmentIterator.IteratorAtEnd())
 		{
 			mgLineCollisionResults TestResults;
 
+			LineReference = LineSegmentIterator.ReturnElementReference();
+
 			if (!LineReference->ObstructsVision) // This line doesn't block vision, ignore it for our raytrace.
-			{
-				LineReference = LineSegmentList->ReturnElementReference();
 				continue;
-			}
 
 			TestResults = TestLine.CollisionTest(LineReference);
 
@@ -135,7 +131,6 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 					Results.RayDistance = distance;
 				}
 			}
-			LineReference = LineSegmentList->ReturnElementReference();
 		}
 
 		TracerPosition = TestLine.SegmentEnd;

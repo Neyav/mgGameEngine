@@ -64,15 +64,17 @@ void mgMapElement::GenerateBlockGeometry(void)
 	}
 }
 
-mgLinkedList<mgLineSegment> *mgMapElement::BlockGeometry(void)
+mgListIterator<mgLineSegment> mgMapElement::BlockGeometry(void)
 {
+	mgListIterator<mgLineSegment> ListIterator;
+
 	if (BlockShape == nullptr)
 		GenerateBlockGeometry();
 
 	if (BlockShape != nullptr)
-		BlockShape->JumptoStart();
+		ListIterator.LinktoList(BlockShape);
 
-	return BlockShape;
+	return ListIterator;
 }
 
 // As new elements are added to the map element be sure to represent them here if you want them to persist through block copying.

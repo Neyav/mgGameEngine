@@ -54,24 +54,21 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 
 			if (ElementReference != nullptr) // This can happen.
 			{
-				mgLinkedList<mgLineSegment> *ElementShape;
+				mgListIterator<mgLineSegment> ElementShape;
 
 				ElementShape = ElementReference->BlockGeometry();
 
-				if (ElementShape != nullptr)
+				while (!ElementShape.IteratorAtEnd())
 				{
-					while (!ElementShape->IteratorAtEnd())
-					{
-						mgLineSegment *LineSegRef;
+					mgLineSegment *LineSegRef;
 
-						LineSegRef = ElementShape->ReturnElementReference();
+					LineSegRef = ElementShape.ReturnElementReference();
 
-						// Only add the line to this list if it's facing the same direction as the attempted movement, because
-						// otherwise a collision should be impossible.
-						if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0)
-							CollisionLines.AddElementReference(LineSegRef, false);
-					}
-				} // if (ElementShape != nullptr)
+					// Only add the line to this list if it's facing the same direction as the attempted movement, because
+					// otherwise a collision should be impossible.
+					if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0)
+						CollisionLines.AddElementReference(LineSegRef, false);
+				}
 			} // if (ElementReference != nullptr)
 		} // for (int RangeX...
 	} // for (int RangeY...
@@ -80,7 +77,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 // Tests from the Map Object against the world.
 void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 {
-	mgLinkedList<mgLineSegment> *MapObjectShape;
+	mgListIterator<mgLineSegment> MapObjectShape;
 	mgRBTBinaryTree<mgPoint> PointTree;
 	mgLinkedList<mgPoint> PointList;
 
@@ -88,14 +85,11 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 	DetectedCollisions.ClearList(); // Make sure our list is empty. We need a clean test.
 
-	if (MapObjectShape == nullptr)
-		return; // Object has no shape, cannot collide.
-
-	while (!MapObjectShape->IteratorAtEnd())
+	while (!MapObjectShape.IteratorAtEnd())
 	{ // For each line in the shape of our map object..
 		mgLineSegment *TestLine;
 
-		TestLine = MapObjectShape->ReturnElementReference();
+		TestLine = MapObjectShape.ReturnElementReference();
 
 		// Collect unique points in a line by storing them in a binary tree, which we will then
 		// dump to a linked list and process. ( This ensures we only test each point once, our binary tree's
@@ -107,25 +101,25 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
 
-	PointList.JumptoStart(); // Just to be safe.
+	mgListIterator<mgPoint> PointListIterator(&PointList);
 
-	while (!PointList.IteratorAtEnd())
+	while (!PointListIterator.IteratorAtEnd())
 	{ // For each point in our object.
 		mgLineSegment MovementCollisionLine;
 		mgPoint TestPoint;
 
-		TestPoint = PointList.ReturnElement();
+		TestPoint = PointListIterator.ReturnElement();
 
 		MovementCollisionLine.ImportLine(TestPoint, AttemptedMovement);
 
-		CollisionLines.JumptoStart(); // Start at the beginning of the list.
+		mgListIterator<mgLineSegment> CollisionLinesIterator(&CollisionLines);
 		
-		while (!CollisionLines.IteratorAtEnd())
+		while (!CollisionLinesIterator.IteratorAtEnd())
 		{ // For each line in the Detection Area
 			mgLineCollisionResults TestResults;
 			mgLineSegment *LineReference;
 
-			LineReference = CollisionLines.ReturnElementReference();
+			LineReference = CollisionLinesIterator.ReturnElementReference();
 
 			TestResults = MovementCollisionLine.CollisionTest(LineReference);
 
@@ -151,25 +145,21 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 // Tests from the world against the mapobject
 void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 {
-	mgLinkedList<mgLineSegment> *MapObjectShape;
+	mgListIterator<mgLineSegment> MapObjectShape;
 	mgRBTBinaryTree<mgCollisionPoint> PointTree;
 	mgLinkedList<mgCollisionPoint> PointList;
 	mgVector ReversedMovement = AttemptedMovement;
 
 	ReversedMovement.ReverseDirection(); // Reverse the direction of the vector.
 
-	MapObjectShape = MovingObject->ObjectGeometry();
+	mgListIterator<mgLineSegment> CollisionLinesIterator(&CollisionLines);
 
-	if (MapObjectShape == nullptr)
-		return; // Object has no shape, cannot collide.
-
-	CollisionLines.JumptoStart(); // Start at the beginning of the list.
-	while (!CollisionLines.IteratorAtEnd())
+	while (!CollisionLinesIterator.IteratorAtEnd())
 	{ // For each line in the shape of our map object..
 		mgLineSegment *TestLine;
 		mgCollisionPoint a, b;
 
-		TestLine = CollisionLines.ReturnElementReference();
+		TestLine = CollisionLinesIterator.ReturnElementReference();
 
 		// Collect unique points in a line by storing them in a binary tree, which we will then
 		// dump to a linked list and process. ( This ensures we only test each point once, our binary tree's
@@ -185,24 +175,26 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 
 	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
 
-	PointList.JumptoStart(); // Just to be safe.
+	mgListIterator<mgCollisionPoint> PointListIterator(&PointList);
 
-	while (!PointList.IteratorAtEnd())
+	MapObjectShape = MovingObject->ObjectGeometry();
+
+	while (!PointListIterator.IteratorAtEnd())
 	{ // For each point in our object.
 		mgLineSegment MovementCollisionLine;
 		mgCollisionPoint TestCollisionPoint;
 
-		TestCollisionPoint = PointList.ReturnElement();
+		TestCollisionPoint = PointListIterator.ReturnElement();
 
 		MovementCollisionLine.ImportLine(TestCollisionPoint.Position, ReversedMovement);
 
-		MapObjectShape->JumptoStart(); // Start at the beginning of the list.
-		while (!MapObjectShape->IteratorAtEnd())
+		MapObjectShape.JumptoStart(); // Back to the front.
+		while (!MapObjectShape.IteratorAtEnd())
 		{ // For each line in the Detection Area
 			mgLineCollisionResults TestResults;
 			mgLineSegment *LineReference;
 
-			LineReference = MapObjectShape->ReturnElementReference();
+			LineReference = MapObjectShape.ReturnElementReference();
 
 			TestResults = MovementCollisionLine.CollisionTest(LineReference);
 
@@ -231,6 +223,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 mgDetectedCollision mgCollisionDetection::CollisionTest(mgMapObject *MovingObject, mgVector Movement, unsigned int Range)
 {
 	mgDetectedCollision FirstCollision;
+	mgListIterator<mgDetectedCollision> DetectedCollisionsIterator;
 	
 	FirstCollision.Collision = false; // If there wasn't a collision at all.
 
@@ -242,13 +235,13 @@ mgDetectedCollision mgCollisionDetection::CollisionTest(mgMapObject *MovingObjec
 
 	// Now we have a list of all of our collisions, if this list is empty, we have no collisions, otherwise we need to know
 	// which collision has the biggest CollisionCorrection, as that would be the first impact.
-	DetectedCollisions.JumptoStart(); // Just to be safe.
+	DetectedCollisionsIterator.LinktoList(&DetectedCollisions);
 
-	while (!DetectedCollisions.IteratorAtEnd())
+	while (!DetectedCollisionsIterator.IteratorAtEnd())
 	{
 		mgDetectedCollision Collision;
 
-		Collision = DetectedCollisions.ReturnElement();
+		Collision = DetectedCollisionsIterator.ReturnElement();
 
 		if (FirstCollision.Collision == false) // This is the first collision
 			FirstCollision = Collision;

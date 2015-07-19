@@ -4,10 +4,11 @@
 #include "Containers/mgLinkedList.h"
 #include "mgLineSegment.h"
 
-mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
+mgListIterator<mgLineSegment> mgMapObject::ObjectGeometry(void)
 {
 	mgLineSegment *LineSegmentReference = nullptr;
 	mgPoint LineStart, LineEnd;
+	mgListIterator<mgLineSegment> ListIterator;
 
 	// First check to see if any geometry has been generated, if it hasn't generate it.
 	// If the geometry has been generated, then move it around our origin point.
@@ -50,9 +51,9 @@ mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 		ObjectShape->AddElementReference(mgDefineLine( ObjectSize, -ObjectSize, -ObjectSize, -ObjectSize, Position, LINEFACE_RIGHT, nullptr, this), true);
 	}
 
-	ObjectShape->JumptoStart(); // We presume this list is going to be used, and so we want it at the beginning.
+	ListIterator.LinktoList(ObjectShape);
 
-	return ObjectShape;
+	return ListIterator;
 }
 
 mgMapObject::mgMapObject()

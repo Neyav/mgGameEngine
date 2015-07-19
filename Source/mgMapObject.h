@@ -29,7 +29,7 @@ public:
 	double ObjectSize; // Used to scale and define the geometry generated
 
 	// Functions for the map object.
-	mgLinkedList<mgLineSegment> *ObjectGeometry(void);
+	mgListIterator<mgLineSegment> ObjectGeometry(void);
 
 	mgMapObject();
 	~mgMapObject();

@@ -205,14 +205,14 @@ void mgStressTest::TEST_mgVisibilityMap(void)
 void mgStressTest::TEST_mgMapElement(void)
 {
 	mgMapElement *testelement;
-	mgLinkedList<mgLineSegment> *testList;
+	mgListIterator<mgLineSegment> testList;
 
 	std::cout << "[---void mgStressTest::TEST_mgMapElement(void)---]" << std::endl;
 
-	Timer.Description = "Create, return shape, and delete x 10m";
+	Timer.Description = "Create, return shape, and delete x 1m";
 	Timer.StartTimer();
 
-	for (unsigned int iterator = 0; iterator < 10000000; iterator++)
+	for (unsigned int iterator = 0; iterator < 1000000; iterator++)
 	{
 		testelement = new mgMapElement;
 		testList = testelement->BlockGeometry();
@@ -221,14 +221,14 @@ void mgStressTest::TEST_mgMapElement(void)
 
 	Timer.StopTimer();
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(10000000);
+	Timer.ConsoleOutputIterationResults(1000000);
 
-	Timer.Description = ".BlockGeometry() x 10m";
+	Timer.Description = ".BlockGeometry() x 1m";
 
 	testelement = new mgMapElement;
 
 	Timer.StartTimer();
-	for (unsigned int iterator = 0; iterator < 10000000; iterator++)
+	for (unsigned int iterator = 0; iterator < 1000000; iterator++)
 		testList = testelement->BlockGeometry();
 	Timer.StopTimer();	
 
