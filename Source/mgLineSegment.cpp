@@ -117,6 +117,8 @@ mgLineSegment::mgLineSegment()
 
 	ObstructsMovement = true;
 	ObstructsVision = true;
+
+	SegmentLength = 0;
 }
 
 // Pushed into a function to eliminate redundant code when creating line segments. 

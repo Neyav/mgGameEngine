@@ -58,7 +58,7 @@ mgLinkedList<mgLineSegment> *mgMapObject::ObjectGeometry(void)
 mgMapObject::mgMapObject()
 {
 	ObjectShape = nullptr;
-	ObjectSize = DEFAULTOBJECTSIZE;
+	GeoSize = ObjectSize = DEFAULTOBJECTSIZE;
 }
 
 mgMapObject::~mgMapObject()

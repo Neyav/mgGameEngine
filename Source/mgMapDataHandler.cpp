@@ -143,6 +143,7 @@ int mgMapDataHandler::mapsizeX(void)
 mgMapDataHandler::mgMapDataHandler()
 {
 	InternalMapData = nullptr;
+	MapSizeY = MapSizeX = 0; // There is no maze yet.
 }
 
 mgMapDataHandler::~mgMapDataHandler()

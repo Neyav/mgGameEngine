@@ -13,7 +13,9 @@ struct PathFindingNode_s mgPathSolutionGenerator::MapProcessCycle()
 	struct PathFindingNode_s Results;
 	int NewY[4], NewX[4];
 
+	// Inital Init of Results fields.
 	Results.Completed = false;
+	Results.Y1 = Results.X1 = Results.Y2 = Results.X2 = 0;
 
 	if (PathFindingCurrents.TO == 0 || PathFindingCurrents.FROM == 0)
 	{		// TODO: Find a better way of handling this within the class. It essentially means there are no paths between the two points.
@@ -80,7 +82,6 @@ struct PathFindingNode_s mgPathSolutionGenerator::MapProcessCycle()
 	PathFindingCurrents.TO--;
 	PathFindingCurrents.FROM++;
 
-	Results.Completed = false;
 	return Results;
 }
 

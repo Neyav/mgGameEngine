@@ -70,7 +70,7 @@ void RenderPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Map,
 		}
 	}
 
-	delete ColumnDepthMap;
+	delete[] ColumnDepthMap;
 }
 
 void DisplayMap(int SpecialY, int SpecialX, mgVisibilityMap *DisplayedVisibilityMap, mgMapDataHandler *DisplayedMap, mgPathSolutionGenerator *PathMap)

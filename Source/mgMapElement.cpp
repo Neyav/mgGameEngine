@@ -88,6 +88,8 @@ mgMapElement::mgMapElement()
 {
 	BlockType = MAP_BLOCKWALL;
 	BlockShape = nullptr;
+	for (int x = 0; x < 4; x++)
+		Adjacent[x] = nullptr;
 }
 
 mgMapElement::~mgMapElement()

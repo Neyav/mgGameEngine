@@ -178,6 +178,12 @@ void mgVector::NormalizeVector(double MagnitudeOverride)
 
 	Magnitude = MagnitudeOverride;
 
+	if ( Magnitude == 0 )
+	{ // We know the answer, why risk a divide by zero.
+		Y = X = 0;
+		return;
+	}
+
 	Normalizer = sqrt(Y * Y + X * X) / MagnitudeOverride;
 
 	Y = Y / Normalizer;
@@ -187,6 +193,12 @@ void mgVector::NormalizeVector(double MagnitudeOverride)
 void mgVector::NormalizeVector(void)
 {
 	double Normalizer;
+
+	if ( Magnitude == 0 )
+	{ // We know the answer, why risk a divide by zero.
+		Y = X = 0;
+		return;
+	}
 
 	Normalizer = sqrt(Y * Y + X * X) / Magnitude;
 
