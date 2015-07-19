@@ -63,7 +63,6 @@ template <typename TemplateClass> class mgLinkedList
 {
 public:
 	mgLinkedListElement<TemplateClass> *LinkedList;
-	mgLinkedListElement<TemplateClass> *Iterator;
 
 	int Elements;
 
@@ -120,7 +119,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElement(T
 	if (LinkedList != nullptr) 
 		LinkedList->Previous = LinkedListEntry;
 
-	LinkedList = Iterator = LinkedListEntry;
+	LinkedList = LinkedListEntry;
 
 	Elements++;
 }
@@ -137,7 +136,7 @@ template <typename TemplateClass> void mgLinkedList<TemplateClass>::AddElementRe
 	if (LinkedList != nullptr) 	
 		LinkedList->Previous = LinkedListEntry;
 
-	LinkedList = Iterator = LinkedListEntry;
+	LinkedList = LinkedListEntry;
 
 	Elements++;
 }
@@ -173,7 +172,6 @@ int mgLinkedList<TemplateClass>::NumberOfElements(void)
 template <typename TemplateClass> mgLinkedList<TemplateClass>::mgLinkedList()
 {
 	LinkedList = nullptr;
-	Iterator = nullptr;
 
 	Elements = 0;
 }
