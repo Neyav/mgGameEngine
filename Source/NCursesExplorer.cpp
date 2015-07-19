@@ -103,13 +103,12 @@ int main(void)
 		// on my PC while X.Org and KDE compiled/installed... Retro.... :D
 		for (int RenderRow = 0; RenderRow < MaxY; RenderRow++)
 		{
+		move(RenderRow, 0);
 		for (int RenderColumn = 0; RenderColumn < MaxX; RenderColumn++)
 		{
 			double Height = (double)MaxY / ColumnDepthMap[RenderColumn].RayDistance;
 			double Top = ((double)MaxY - Height) / 2;
 			double Bottom = (double)MaxY - (((double)MaxY - Height) / 2);
-
-			move(RenderRow, RenderColumn);
 
 			if (!ColumnDepthMap[RenderColumn].CompleteScan)
 			{ // An incomplete scan means the results are indeterminate.
