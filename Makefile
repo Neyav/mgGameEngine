@@ -16,8 +16,8 @@ NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapEleme
 	$(STRIP) --strip-all NCursesExplorer
 
 # SDLengine build target. This is a SDL2 based renderer for the engine. Top down view.
-SDLengine: SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
-	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -lSDL2 -lSDL2_image
+SDLengine: SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -lSDL2 -lSDL2_image
 	$(STRIP) --strip-all SDLengine
 
 NCursesExplorer.o: Source/NCursesExplorer.cpp
