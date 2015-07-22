@@ -68,6 +68,7 @@ public:
 #ifdef REBALANCETREE
 	mgSortedList<TemplateObject> BinaryTreeList;
 
+	void NodeToSortedList(mgBinaryTreenode<TemplateObject> *Node, mgSortedList<TemplateObject> *ListReference);
 	void SplitListSection(int LeftBorder, int RightBorder);
 	void ReBalanceTree(void);
 #endif
@@ -103,6 +104,18 @@ void mgBinaryTree<TemplateObject>::NodeToList(mgBinaryTreenode<TemplateObject> *
 	this->NodeToList(Node->Lesser, ListReference);
 }
 
+template <typename TemplateObject>
+void mgBinaryTree<TemplateObject>::NodeToSortedList(mgBinaryTreenode<TemplateObject> *Node, mgSortedList<TemplateObject> *ListReference)
+{
+	if (Node == nullptr)
+		return; // unwind
+
+	ListReference->AddElement(Node->Element); // Add a copy of the element to our sorted list.
+
+	this->NodeToSortedList(Node->Greater, ListReference);
+	this->NodeToSortedList(Node->Lesser, ListReference);
+}
+
 #ifdef REBALANCETREE
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::SplitListSection(int LeftBorder, int RightBorder)
@@ -128,7 +141,7 @@ void mgBinaryTree<TemplateObject>::ReBalanceTree(void)
 {
 	this->BinaryTreeList.ClearList(); // Make sure our list is empty before we begin adding things to it.
 
-	this->NodeToList(Root, &this->BinaryTreeList); // Recursively dump the entire tree to our sorted list.
+	this->NodeToSortedList(Root, &this->BinaryTreeList); // Recursively dump the entire tree to our sorted list.
 
 	if (this->Root != nullptr)
 		delete this->Root; // Kill the tree.

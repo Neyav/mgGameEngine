@@ -4,20 +4,21 @@ STRIP = strip
 RM = rm
 
 CFLAGS = -std=c++11 -O2
+LINKERFLAGS = -lm -lstdc++
 
 # The default build target. This is the console test engine.
 mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
-	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+	$(CC) -o mgConsoleTest ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o $(LINKERFLAGS)
 	$(STRIP) --strip-all mgConsoleTest
 
 # NCursesExplorer build target. This is a NCurses based first person renderer for debug purposes
 NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRayTracer.o mgRandomMazeGenerator.o mgCollisionDetection.o mgMapObject.o
-	$(CC) -o NCursesExplorer NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRandomMazeGenerator.o mgRayTracer.o mgCollisionDetection.o mgMapObject.o -lncurses
+	$(CC) -o NCursesExplorer NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgVectorPoint.o mgRandomMazeGenerator.o mgRayTracer.o mgCollisionDetection.o mgMapObject.o -lncurses $(LINKERFLAGS)
 	$(STRIP) --strip-all NCursesExplorer
 
 # SDLengine build target. This is a SDL2 based renderer for the engine. Top down view.
 SDLengine: SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
-	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -lSDL2 -lSDL2_image
+	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -lSDL2 -lSDL2_image $(LINKERFLAGS)
 	$(STRIP) --strip-all SDLengine
 
 NCursesExplorer.o: Source/NCursesExplorer.cpp

@@ -5,14 +5,9 @@
 #include <iostream>
 
 /*
-	Now, why in the name of sweet little baby Jesus would I go ahead and use C++ features like objects and templates
-	to create a linked list template class when SUCH a thing already exists as part of the C++ STD Library?
+	C++ Class and Template based Linked List.
 
-	The answer is two-fold. Primarily because it was faster for me to write my own class that did exactly what I needed it to
-	do and was expandable in EXACTLY the ways I need to expand it than it was for me to relearn how to use STD::list. Secondarily
-	I am exactly that arrogant and pompous and, for fucks sake, I LIKE MY OWN Linked List implementation, so BUGGER OFF!!!
-
-	-Chris Laverdure, arrogant engineer of re-inventing the wheel.
+		-Chris Laverdure
 */
 
 // ------------------- mgLinkedListElement
@@ -70,8 +65,8 @@ public:
 	TemplateClass *operator[] (const int IndexNumber);
 
 	// Functions
-	virtual void AddElement(TemplateClass ElementToAdd);
-	virtual void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
+	void AddElement(TemplateClass ElementToAdd);
+	void AddElementReference(TemplateClass *ElementToAdd, bool Ownership);
 	void ClearList(void);
 	int NumberOfElements(void);
 
