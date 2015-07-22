@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <math.h>
 
 #include "mgVectorPoint.h"
@@ -17,6 +18,16 @@
 
 std::ofstream Outputfile("Maze.txt");
 std::ofstream HTMLOutput("Maze.html");
+
+// A work around for minGW not having std::to_string
+std::string intTOstring(int Number)
+{
+	std::ostringstream os;
+
+	os << Number;
+
+	return os.str();
+}
 
 void RenderPosition(mgPoint Position, double RenderAngle, mgMapDataHandler *Map, int Rows, int Columns, double FOV)
 {
@@ -290,7 +301,7 @@ void CustomPositionRenders(mgMapDataHandler *MapData)
 	} while (!validPos);
 
 	std::string FileName;
-	FileName = "FPS" + std::to_string((int)floor(InputPosition.Y)) + "-" + std::to_string((int)floor(InputPosition.X)) + "-" + std::to_string((int)angle) + ".HTML";
+	FileName = "FPS" + intTOstring((int)floor(InputPosition.Y)) + "-" + intTOstring((int)floor(InputPosition.X)) + "-" + intTOstring((int)angle) + ".HTML";
 
 	std::ofstream FPSOutput(FileName);
 
