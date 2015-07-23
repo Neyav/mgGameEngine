@@ -49,8 +49,10 @@ void RenderDisplay ( mgPoint Position, double zoom )
 	int StartX = CenterX - (int)(TilesX / 2); 
 	int StopX = CenterX + (int)(TilesX / 2);
 
-	int PixelY = (CenterY * TileY + YPixelOffset) - ((CenterY - StartY) * TileY);
-	int PixelX = (CenterX * TileX + XPixelOffset) - ((CenterX - StartX) * TileX);
+	int PixelY = (SCREENHEIGHT / 2) - ((CenterY - StartY) * TileY) - YPixelOffset;
+	int PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
+
+	GameworldFloor.setSize(TileY, TileX); // scale texture
 
 	// Render the floor tiles	
 	for (int RenderY = StartY; RenderY <= StopY; RenderY++)
@@ -60,7 +62,7 @@ void RenderDisplay ( mgPoint Position, double zoom )
 			GameworldFloor.render(PixelY, PixelX);
 			PixelX += TileX;
 		}
-		PixelX = (CenterX * TileX + XPixelOffset) - ((CenterX - StartX) * TileX);
+		PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
 		PixelY += TileY;
 	}
 }
@@ -68,6 +70,12 @@ void RenderDisplay ( mgPoint Position, double zoom )
 int main ( void )
 {
 	int i = 0;
+	mgPoint Position;
+	bool zoomup = true;
+	double zoom = 1;
+
+	Position.Y = 5.5;
+	Position.X = 4.3;
 	
 	RenderEngine = new SERenderHandler;
 	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, "SDL Engine test");
@@ -77,12 +85,26 @@ int main ( void )
 
 	while(1)
 	{
-		mgPoint Position;
-		Position.Y = 5.5;
-		Position.X = 4.3;
+		Position.Y += 0.01;
+		Position.X += 0.03;
+
+		if (zoomup)
+		{
+			zoom += 0.01;
+
+			if (zoom > 2)
+				zoomup = false;
+		}
+		else
+		{
+			zoom -= 0.1;
+
+			if (zoom < 0.5)
+				zoomup = true;
+		}
 
 		RenderEngine->ClearScreen();
-		RenderDisplay(Position, 1);
+		RenderDisplay(Position, zoom);
 		RenderEngine->UpdateScreen();
 	}
 }

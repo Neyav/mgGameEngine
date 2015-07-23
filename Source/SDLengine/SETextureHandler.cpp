@@ -76,7 +76,7 @@ void SETextureHandler::setSize( int Width, int Height )
 	this->Height = Height;
 }
 
-void SETextureHandler::render( int x, int y, SDL_Rect* clip )
+void SETextureHandler::render( int y, int x, SDL_Rect* clip )
 {
 	// Set Rendering space and render to screen
 	SDL_Rect renderQuad = {x, y, Width, Height };
