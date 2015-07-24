@@ -130,6 +130,22 @@ void RenderDisplay ( mgPoint Position, double zoom )
 	}
 }
 
+mgMapObject *spawnMapObject( double Y, double X, unsigned int Type, double size )
+{
+	mgMapObject *newObject;
+
+	newObject = new mgMapObject;
+
+	newObject->Position.Y = Y;
+	newObject->Position.X = X;
+	newObject->ObjectType = Type;
+	newObject->ObjectSize = size;
+
+	MOBJList.AddElementReference(newObject, true); // Add our new object to the map object list.
+
+	return newObject;
+}
+
 void initGameWorld ( void )
 {
 	mgRandomMazeGenerator RandomGenerator;
@@ -143,26 +159,13 @@ void initGameWorld ( void )
 
 	RandomGenerator.Map = GameWorld;
 	RandomGenerator.GenerateMaze(1, 1); // Generate our maze.
-
-	// Setup the player.
-	StartingPlayer.Position.Y = 1.5;
-	StartingPlayer.Position.X = 1.5;
-	StartingPlayer.ObjectType = MOBJ_PLAYER;
-	StartingPlayer.ObjectSize = 0.25; // Our player image is 64 pixels, or, half a tile. ( object size is radius not diameter)
-
-	MOBJList.AddElement(StartingPlayer); // Add the player to our list.
 }
 
 int main ( void )
 {
-	mgPoint Position;
-	double zoom = 1;
-	bool zoomin = true;
 	bool exitApplication = false; 	// True if we are quitting.
 	SDL_Event eventHandler; 	// SDL Event handler
-
-	Position.Y = 2;
-	Position.X = 3.2;
+	mgMapObject *LocalPlayer = nullptr;
 
 	RenderEngine = new SERenderHandler;
 	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, "SDL Engine test");
@@ -172,11 +175,12 @@ int main ( void )
 	MOBJ_PlayerSprite.loadFromFile("SDLplayer.png", RenderEngine);
 
 	initGameWorld();
+	LocalPlayer = spawnMapObject(1.5, 1.5, MOBJ_PLAYER, 0.25);
 
 	while( !exitApplication )
 	{
 		RenderEngine->ClearScreen();
-		RenderDisplay(Position, zoom);
+		RenderDisplay(LocalPlayer->Position, 1);
 		RenderEngine->UpdateScreen();
 
 		while ( SDL_PollEvent( &eventHandler ) != 0 )
@@ -185,19 +189,6 @@ int main ( void )
 			{ // Quit request
 				exitApplication = true;
 			}
-		}
-
-		if (zoomin)
-		{
-			zoom += 0.01;
-			if (zoom > 2.5)
-				zoomin = false;
-		}
-		else
-		{
-			zoom -= 0.015;
-			if (zoom < 0.3)
-				zoomin = true;
 		}
 	}
 }
