@@ -116,6 +116,7 @@ void RenderDisplay ( mgPoint Position, double zoom )
 					case MOBJ_PLAYER:
 						MOBJ_PlayerSprite.setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
 						MOBJ_PlayerSprite.render(offsetY, offsetX);
+						break;
 					default:
 						break; // No sprite.
 					}
