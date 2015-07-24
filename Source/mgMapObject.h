@@ -7,6 +7,8 @@
 
 #define DEFAULTOBJECTSIZE 0.2
 
+#define MOBJ_UNDEFINED 0 // The default map object.
+
 // =------------------------------------=
 // = mgMapObject C++ class              =
 // =------------------------------------=
@@ -26,6 +28,7 @@ public:
 	double GeoSize;
 
 	// Information defining the map object.
+	unsigned int ObjectType;
 	double ObjectSize; // Used to scale and define the geometry generated
 
 	// Functions for the map object.

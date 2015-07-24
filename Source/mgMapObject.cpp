@@ -60,6 +60,7 @@ mgMapObject::mgMapObject()
 {
 	ObjectShape = nullptr;
 	GeoSize = ObjectSize = DEFAULTOBJECTSIZE;
+	ObjectType = MOBJ_UNDEFINED;
 }
 
 mgMapObject::~mgMapObject()
