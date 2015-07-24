@@ -158,6 +158,8 @@ int main ( void )
 	mgPoint Position;
 	double zoom = 1;
 	bool zoomin = true;
+	bool exitApplication = false; 	// True if we are quitting.
+	SDL_Event eventHandler; 	// SDL Event handler
 
 	Position.Y = 2;
 	Position.X = 3.2;
@@ -171,11 +173,19 @@ int main ( void )
 
 	initGameWorld();
 
-	while(1)
+	while( !exitApplication )
 	{
 		RenderEngine->ClearScreen();
 		RenderDisplay(Position, zoom);
 		RenderEngine->UpdateScreen();
+
+		while ( SDL_PollEvent( &eventHandler ) != 0 )
+		{
+			if ( eventHandler.type == SDL_QUIT )
+			{ // Quit request
+				exitApplication = true;
+			}
+		}
 
 		if (zoomin)
 		{
