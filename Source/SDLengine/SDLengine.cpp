@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include <iostream>
 #include <math.h>
 #include <string>
 
@@ -15,6 +16,7 @@
 #include "../mgMapObject.h"
 #include "../mgVectorPoint.h"
 #include "../mgLineSegment.h"
+#include "../mgCollisionDetection.h"
 
 // Screen resolution
 int SCREENWIDTH = 1280;
@@ -190,5 +192,82 @@ int main ( void )
 				exitApplication = true;
 			}
 		}
+
+		const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+		mgVector MovementDirection;
+
+		// -- Keyboard movement
+		if( currentKeyStates[ SDL_SCANCODE_UP ] )
+		{
+			MovementDirection.Y = -1; 
+		}
+		else if ( currentKeyStates[ SDL_SCANCODE_DOWN ] )
+		{
+			MovementDirection.Y = 1;
+		}
+
+		if ( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
+		{
+			MovementDirection.X = 1;
+		}
+		else if ( currentKeyStates[ SDL_SCANCODE_LEFT ] )
+		{
+			MovementDirection.X = -1;
+		}
+
+		// Add momentum to player
+		LocalPlayer->AddMomentum ( 0.15, MovementDirection );
+
+		// TODO: THIS SECTION NEEDS TO BE MOVED INTO ITS OWN FILE AND MADE TO APPLY TO ALL MOBILE MOBJS
+
+		mgVector Movement = LocalPlayer->Momentum;	
+
+		// Attempt movement
+		while (Movement.Y != 0 || Movement.X != 0) // There is attempted movement.
+		{
+			// Let's check for collisions first.
+			mgCollisionDetection CollisionTest;
+			mgDetectedCollision Results;
+
+			CollisionTest.MapReference = GameWorld;
+			Results = CollisionTest.CollisionTest(LocalPlayer, Movement, 2);
+
+			if (Results.Collision == false) // No collision
+			{
+				LocalPlayer->Position.Y += Movement.Y;
+				LocalPlayer->Position.X += Movement.X;
+
+				Movement.Y = Movement.X = 0; // We completed the move.
+			}
+			else
+			{	// Handle it.				
+				mgVector Projected;
+				double dotproduct;
+
+				// Push us 0.0000001 units away from the wall. Moments like this make me regret using
+				// double point precision and not a fixed fractional unit size like everyone else does. sigh.
+				Results.CollisionCorrection.NormalizeVector(Results.CollisionCorrection.Magnitude + 0.0000001);
+
+				// Complete the movement in a manner that doesn't have us clip through the wall.
+				Movement = Movement + Results.CollisionCorrection;
+
+				LocalPlayer->Position.Y += Movement.Y;
+				LocalPlayer->Position.X += Movement.X;
+
+				Movement = Results.CollisionCorrection; // The remainder of the movement we want to attempt.
+				Movement.ReverseDirection(); // We want this to go back into the wall we collided with.
+
+				// Lose all velocity in the direction of the wall normal by projecting the direction onto it.
+				dotproduct = Movement * Results.CollisionNormal;
+				Projected = Results.CollisionNormal * dotproduct;
+				Movement = Movement - Projected;
+			}
+		}
+
+		// ATROPHY MOMENTUM
+		LocalPlayer->Momentum = LocalPlayer->Momentum * 0.9;
+
+		if (LocalPlayer->Momentum.Magnitude < 0.001 )
+			LocalPlayer->Momentum.Y = LocalPlayer->Momentum.X = LocalPlayer->Momentum.Magnitude = 0;
 	}
 }

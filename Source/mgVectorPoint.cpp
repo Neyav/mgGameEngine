@@ -145,7 +145,7 @@ mgVector mgVector::operator+(const mgVector& other)
 	product.Y = Y + other.Y;
 	product.X = X + other.X;
 
-	product.Magnitude = Magnitude + other.Magnitude;
+	product.CalculateMagnitude();
 
 	return product;
 }
@@ -158,10 +158,7 @@ mgVector mgVector::operator-(const mgVector& other)
 	product.Y = Y - other.Y;
 	product.X = X - other.X;
 
-	product.Magnitude = Magnitude - other.Magnitude;
-
-	if (product.Magnitude < 0)
-		product.Magnitude = -product.Magnitude; // No such thing as a negative magnitude here.
+	product.CalculateMagnitude();
 
 	return product;
 }

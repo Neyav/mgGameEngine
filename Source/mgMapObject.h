@@ -33,6 +33,7 @@ public:
 
 	// Functions for the map object.
 	mgListIterator<mgLineSegment> ObjectGeometry(void);
+	void AddMomentum ( double speed, mgVector Direction );
 
 	mgMapObject();
 	~mgMapObject();

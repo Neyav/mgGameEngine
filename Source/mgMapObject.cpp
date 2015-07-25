@@ -56,11 +56,32 @@ mgListIterator<mgLineSegment> mgMapObject::ObjectGeometry(void)
 	return ListIterator;
 }
 
+void mgMapObject::AddMomentum ( double speed, mgVector Direction )
+{
+	double canMove;
+
+	if (Direction.Y == 0 && Direction.X == 0)
+		return; // No movement.
+
+	Direction.NormalizeVector( speed );
+	Direction = Direction - this->Momentum;
+
+	canMove = Direction.Magnitude;
+
+	if ( canMove > 0.15 ) // Maximum movement speed.
+		canMove = 0.15;
+
+	this->Momentum = this->Momentum + Direction * canMove;
+}
+
 mgMapObject::mgMapObject()
 {
 	ObjectShape = nullptr;
 	GeoSize = ObjectSize = DEFAULTOBJECTSIZE;
 	ObjectType = MOBJ_UNDEFINED;
+
+	this->Momentum.AutoNormalize = false; // Momentum is not normalized.
+	this->Momentum.Magnitude = 0;
 }
 
 mgMapObject::~mgMapObject()
