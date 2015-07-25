@@ -246,7 +246,7 @@ int main ( void )
 
 				// Push us 0.0000001 units away from the wall. Moments like this make me regret using
 				// double point precision and not a fixed fractional unit size like everyone else does. sigh.
-				Results.CollisionCorrection.NormalizeVector(Results.CollisionCorrection.Magnitude + 0.0000001);
+				Results.CollisionCorrection.NormalizeVector(Results.CollisionCorrection.Magnitude + 0.00001);
 
 				// Complete the movement in a manner that doesn't have us clip through the wall.
 				Movement = Movement + Results.CollisionCorrection;

@@ -66,8 +66,22 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 
 					// Only add the line to this list if it's facing the same direction as the attempted movement, because
 					// otherwise a collision should be impossible.
-					if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0)
-						CollisionLines.AddElementReference(LineSegRef, false);
+					if (!(AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0))
+						continue;
+
+/*					
+					// If both the points in the line are in the wrong direction of the movement collision is also impossible
+					if ( AttemptedMovement.Y > 0 && LineSegRef->SegmentStart.Y < MovingObject->Position.Y && LineSegRef->SegmentEnd.Y < MovingObject->Position.Y)
+						continue;
+					if ( AttemptedMovement.Y < 0 && LineSegRef->SegmentStart.Y > MovingObject->Position.Y && LineSegRef->SegmentEnd.Y > MovingObject->Position.Y)
+						continue;
+					if ( AttemptedMovement.X > 0 && LineSegRef->SegmentStart.X < MovingObject->Position.X && LineSegRef->SegmentEnd.X < MovingObject->Position.X)
+						continue;
+					if ( AttemptedMovement.X < 0 && LineSegRef->SegmentStart.X > MovingObject->Position.X && LineSegRef->SegmentEnd.X > MovingObject->Position.X)
+						continue;
+*/
+
+					CollisionLines.AddElementReference(LineSegRef, false);
 				}
 			} // if (ElementReference != nullptr)
 		} // for (int RangeX...
