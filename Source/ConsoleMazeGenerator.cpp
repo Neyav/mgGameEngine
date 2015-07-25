@@ -279,7 +279,7 @@ void CustomPositionRenders(mgMapDataHandler *MapData)
 		std::cin >> InputPosition.X;
 
 		// If the position is just an integer then assume they want it put in the center of the block.
-		if (InputPosition.Y == floor(InputPosition.Y) && InputPosition.X == floor(InputPosition.X))
+		if (InputPosition.Y == mgFloor(InputPosition.Y) && InputPosition.X == mgFloor(InputPosition.X))
 		{
 			InputPosition.Y += .5;
 			InputPosition.X += .5;
@@ -287,7 +287,7 @@ void CustomPositionRenders(mgMapDataHandler *MapData)
 
 		MapGrid(MapData, InputPosition);
 
-		if (MapData->IsBlockClippable(floor(InputPosition.Y), floor(InputPosition.X)))
+		if (MapData->IsBlockClippable(mgFloor(InputPosition.Y), mgFloor(InputPosition.X)))
 		{
 			std::cout << "Input position is inside a wall or off the map, try another..." << std::endl;
 			continue;
@@ -301,7 +301,7 @@ void CustomPositionRenders(mgMapDataHandler *MapData)
 	} while (!validPos);
 
 	std::string FileName;
-	FileName = "FPS" + intTOstring((int)floor(InputPosition.Y)) + "-" + intTOstring((int)floor(InputPosition.X)) + "-" + intTOstring((int)angle) + ".HTML";
+	FileName = "FPS" + intTOstring(mgFloor(InputPosition.Y)) + "-" + intTOstring(mgFloor(InputPosition.X)) + "-" + intTOstring((int)angle) + ".HTML";
 
 	std::ofstream FPSOutput(FileName);
 

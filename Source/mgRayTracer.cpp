@@ -23,9 +23,9 @@ mgLinkedList<mgLineSegment> *mgRayTracer::BuildOccluderLines(mgPoint Position)
 
 	OccluderLineList = new mgLinkedList < mgLineSegment > ;
 
-	for (int CheckY = floor(Position.Y) - 1; CheckY < floor(Position.Y) + 2; CheckY++)
+	for (int CheckY = mgFloor(Position.Y) - 1; CheckY < mgFloor(Position.Y) + 2; CheckY++)
 	{
-		for (int CheckX = floor(Position.X) - 1; CheckX < floor(Position.X) + 2; CheckX++)
+		for (int CheckX = mgFloor(Position.X) - 1; CheckX < mgFloor(Position.X) + 2; CheckX++)
 		{
 			mgListIterator<mgLineSegment> BlockLineList;
 			mgMapElement *BlockReference;
@@ -87,8 +87,8 @@ mgTraceResults mgRayTracer::OccluderPoint(mgPoint Origin, mgVector Direction)
 
 		TestLine.ImportLine(TracerPosition, Direction, 1); // We are testing one block at a time, so move one blocks distance per check.
 
-		MapBlock.Y = floor(TracerPosition.Y);
-		MapBlock.X = floor(TracerPosition.X);
+		MapBlock.Y = mgFloor(TracerPosition.Y);
+		MapBlock.X = mgFloor(TracerPosition.X);
 
 		// If we're maintaining a list, add this point to the list.
 		if (ListPositions)

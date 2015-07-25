@@ -34,7 +34,7 @@ void mgVisibilityMap::AddVisiblePoint(int AddY, int AddX)
 
 void mgVisibilityMap::AddVisiblePoint(mgPoint Point)
 {
-	AddVisiblePoint(floor(Point.Y), floor(Point.X)); // Seems a little rediculous but whatever.
+	AddVisiblePoint(mgFloor(Point.Y), mgFloor(Point.X)); // Seems a little rediculous but whatever.
 }
 
 int mgVisibilityMap::MappedItems(void)

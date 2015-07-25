@@ -1,7 +1,15 @@
 #ifndef MGVECTORPOINTH
 #define MGVECTORPOINTH
 
+// Helper Math functions. Too few for their own file.
+
 #define mgPI 3.14159265359
+
+// floor function call is slow. Implement faster version.
+inline int mgFloor(double value)
+{
+    return (int) value - (value<0); 
+}
 
 // =------------------------------------=
 // = mgPoint C++ class                  =

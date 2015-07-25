@@ -49,14 +49,14 @@ SETextureHandler MOBJ_PlayerSprite;
 void RenderDisplay ( mgPoint Position, double zoom )
 {
 	// Setup the tunables based on what we know so we display what we want.
-	int TileY = (int)floor(TILEY * zoom);
-	int TileX = (int)floor(TILEX * zoom); // Default texture size of a tile
+	int TileY = mgFloor(TILEY * zoom);
+	int TileX = mgFloor(TILEX * zoom); // Default texture size of a tile
 
-	int WalloffsetY = (int)floor(TILEYOFFSET * zoom);
-	int WalloffsetX = (int)floor(TILEXOFFSET * zoom);
+	int WalloffsetY = mgFloor(TILEYOFFSET * zoom);
+	int WalloffsetX = mgFloor(TILEXOFFSET * zoom);
 
-	int CenterY = (int) floor(Position.Y);
-	int CenterX = (int) floor(Position.X);
+	int CenterY = mgFloor(Position.Y);
+	int CenterX = mgFloor(Position.X);
 
 	int YPixelOffset = (int)((double)TileY * (double)(Position.Y - CenterY)); // The offset is the size of a tile * the fractional portion of the position.
 	int XPixelOffset = (int)((double)TileX * (double)(Position.X - CenterX));
@@ -107,7 +107,7 @@ void RenderDisplay ( mgPoint Position, double zoom )
 				int offsetY = PixelY;
 				int offsetX = PixelX;
 
-				if ((int)floor(WorkingObject->Position.Y) == RenderY && (int)floor(WorkingObject->Position.X) == RenderX)
+				if (mgFloor(WorkingObject->Position.Y) == RenderY && mgFloor(WorkingObject->Position.X) == RenderX)
 				{  // Our MOBJ is on this block.
 					// Determine our render position.
 					offsetY += (int)((double)(WorkingObject->Position.Y - (double)RenderY - WorkingObject->ObjectSize) * TileY);

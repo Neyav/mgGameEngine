@@ -169,12 +169,12 @@ int main(void)
 
 		// Display a "minimap"
 		int ScreenY = 0;
-		for (int MMY = floor(Player.Position.Y) - 3; MMY < floor(Player.Position.Y + 4); MMY++)
+		for (int MMY = mgFloor(Player.Position.Y) - 3; MMY < mgFloor(Player.Position.Y + 4); MMY++)
 		{
 			int ScreenX = 0;
-			for (int MMX = floor(Player.Position.X) - 3; MMX < floor(Player.Position.X + 4); MMX++)
+			for (int MMX = mgFloor(Player.Position.X) - 3; MMX < mgFloor(Player.Position.X + 4); MMX++)
 			{
-				if (MMY == floor(Player.Position.Y) && MMX == floor(Player.Position.X))
+				if (MMY == mgFloor(Player.Position.Y) && MMX == mgFloor(Player.Position.X))
 					mvprintw(ScreenY, ScreenX, "[YOU]");
 				else if (World.IsBlockClippable(MMY, MMX))
 					mvprintw(ScreenY, ScreenX, "[XXX]");
@@ -216,7 +216,7 @@ int main(void)
 			break;
 		case 67: // C/c for change tile
 		case 99:
-			MapBlock = World.ReturnMapBlockReference(floor(Player.Position.Y), floor(Player.Position.X));
+			MapBlock = World.ReturnMapBlockReference(mgFloor(Player.Position.Y), mgFloor(Player.Position.X));
 			if (MapBlock == NULL)
 				break;
 			if (MapBlock->BlockType == MAP_BLOCKWALL)
