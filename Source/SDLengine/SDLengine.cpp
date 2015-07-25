@@ -19,8 +19,8 @@
 #include "../mgCollisionDetection.h"
 
 // Screen resolution
-int SCREENWIDTH = 1280;
-int SCREENHEIGHT = 720;
+int SCREENWIDTH = 1920;
+int SCREENHEIGHT = 1080;
 
 // Tile size
 #define TILEY 128
