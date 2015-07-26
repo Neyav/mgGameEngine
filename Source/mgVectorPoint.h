@@ -11,6 +11,22 @@ inline int mgFloor(double value)
     return (int) value - (value<0); 
 }
 
+inline double mgSmallestValue(double value1, double value2)
+{
+	if ( value1 > value2 )
+		return value2;
+	else
+		return value1;
+}
+
+inline double mgLargestValue(double value1, double value2)
+{
+	if ( value1 < value2 )
+		return value2;
+	else
+		return value1;
+}
+
 // =------------------------------------=
 // = mgPoint C++ class                  =
 // =------------------------------------=

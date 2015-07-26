@@ -61,25 +61,68 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 				while (!ElementShape.IteratorAtEnd())
 				{
 					mgLineSegment *LineSegRef;
+					bool exitLoop = true; // Must be proven false.
 
 					LineSegRef = ElementShape.ReturnElementReference();
+
+					// Now we will attempt to prove that this line cannot possibly be collided with on our current trajectory
+					// from our current position. These checks are significantly cheaper than the line intersection check, so
+					// while that check is inevitable, we want to as much as possible eliminate using it.
 
 					// Only add the line to this list if it's facing the same direction as the attempted movement, because
 					// otherwise a collision should be impossible.
 					if (!(AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0))
 						continue;
 
-/*					
 					// If both the points in the line are in the wrong direction of the movement collision is also impossible
-					if ( AttemptedMovement.Y > 0 && LineSegRef->SegmentStart.Y < MovingObject->Position.Y && LineSegRef->SegmentEnd.Y < MovingObject->Position.Y)
-						continue;
-					if ( AttemptedMovement.Y < 0 && LineSegRef->SegmentStart.Y > MovingObject->Position.Y && LineSegRef->SegmentEnd.Y > MovingObject->Position.Y)
-						continue;
-					if ( AttemptedMovement.X > 0 && LineSegRef->SegmentStart.X < MovingObject->Position.X && LineSegRef->SegmentEnd.X < MovingObject->Position.X)
-						continue;
-					if ( AttemptedMovement.X < 0 && LineSegRef->SegmentStart.X > MovingObject->Position.X && LineSegRef->SegmentEnd.X > MovingObject->Position.X)
-						continue;
-*/
+					// If only ONE of the exitLoop tests passes, the line is in the same direction as the movement from us
+					// and we can't exclude it on that basis alone.
+					if ( AttemptedMovement.Y > 0 ) 
+					{
+						if ( LineSegRef->SegmentStart.Y > MovingObject->Position.Y + MovingObject->ObjectSize && 
+							LineSegRef->SegmentEnd.Y > MovingObject->Position.Y + MovingObject->ObjectSize)
+							exitLoop = false;
+
+						if ( MovingObject->Position.Y + MovingObject->ObjectSize + AttemptedMovement.Y <
+							mgSmallestValue( LineSegRef->SegmentStart.Y, LineSegRef->SegmentEnd.Y ) )
+							continue; // It is beyond the range of our movements, don't add it.
+					}
+					else if ( AttemptedMovement.Y < 0 )
+					{
+						if ( LineSegRef->SegmentStart.Y < MovingObject->Position.Y - MovingObject->ObjectSize &&
+							LineSegRef->SegmentEnd.Y < MovingObject->Position.Y - MovingObject->ObjectSize)
+							exitLoop = false;
+
+						if ( MovingObject->Position.Y - MovingObject->ObjectSize + AttemptedMovement.Y >
+							mgLargestValue( LineSegRef->SegmentStart.Y, LineSegRef->SegmentEnd.Y ) )
+							continue; // It is beyond the range of our movements, don't add it.
+					}
+
+
+					if ( AttemptedMovement.X > 0 )
+					{ 
+						if ( LineSegRef->SegmentStart.X > MovingObject->Position.X + MovingObject->ObjectSize && 
+							LineSegRef->SegmentEnd.X > MovingObject->Position.X + MovingObject->ObjectSize)
+							exitLoop = false;
+
+						if ( MovingObject->Position.X + MovingObject->ObjectSize + AttemptedMovement.X <
+							mgSmallestValue( LineSegRef->SegmentStart.X, LineSegRef->SegmentEnd.X ) )
+							continue; // It is beyond the range of our movements, don't add it.
+					}
+					else if ( AttemptedMovement.X < 0 )
+					{
+						if ( LineSegRef->SegmentStart.X < MovingObject->Position.X - MovingObject->ObjectSize &&
+							LineSegRef->SegmentEnd.X < MovingObject->Position.X - MovingObject->ObjectSize)
+							exitLoop = false;
+
+						if ( MovingObject->Position.X - MovingObject->ObjectSize + AttemptedMovement.X >
+							mgLargestValue( LineSegRef->SegmentStart.X, LineSegRef->SegmentEnd.X ) )
+							continue; // It is beyond the range of our movements, don't add it.
+
+					}
+
+					if ( exitLoop )
+						continue; // None of the past checks were proven true, which means these objects are behind us.
 
 					CollisionLines.AddElementReference(LineSegRef, false);
 				}
