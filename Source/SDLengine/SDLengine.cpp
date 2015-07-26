@@ -8,6 +8,7 @@
 // SDLengine includes
 #include "SERenderHandler.h"
 #include "SETextureHandler.h"
+#include "GameGlobals.h"
 
 // mgGameEngine includes
 #include "../mgMapDataHandler.h"
@@ -17,21 +18,11 @@
 #include "../mgVectorPoint.h"
 #include "../mgLineSegment.h"
 #include "../mgCollisionDetection.h"
+#include "../Containers/mgLinkedList.h"
 
 // Screen resolution
 int SCREENWIDTH = 1920;
 int SCREENHEIGHT = 1080;
-
-// Tile size
-#define TILEY 128
-#define TILEX 128
-
-// Wall offset
-#define TILEYOFFSET 28
-#define TILEXOFFSET 28
-
-// MapObject Defines
-#define MOBJ_PLAYER 1
 
 // Global Variables
 SERenderHandler *RenderEngine = nullptr;
@@ -199,7 +190,7 @@ int main ( void )
 		// -- Keyboard movement
 		if( currentKeyStates[ SDL_SCANCODE_UP ] )
 		{
-			MovementDirection.Y = -1; 
+			MovementDirection.Y = -1;
 		}
 		else if ( currentKeyStates[ SDL_SCANCODE_DOWN ] )
 		{
