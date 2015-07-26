@@ -4,27 +4,13 @@
 // Helper Math functions. Too few for their own file.
 
 #define mgPI 3.14159265359
+#define mgSmallestValue(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define mgLargestValue(X, Y) (((X) < (Y)) ? (Y) : (X))
 
 // floor function call is slow. Implement faster version.
 inline int mgFloor(double value)
 {
     return (int) value - (value<0); 
-}
-
-inline double mgSmallestValue(double value1, double value2)
-{
-	if ( value1 > value2 )
-		return value2;
-	else
-		return value1;
-}
-
-inline double mgLargestValue(double value1, double value2)
-{
-	if ( value1 < value2 )
-		return value2;
-	else
-		return value1;
 }
 
 // =------------------------------------=
