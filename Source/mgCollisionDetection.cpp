@@ -69,9 +69,9 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 					// from our current position. These checks are significantly cheaper than the line intersection check, so
 					// while that check is inevitable, we want to as much as possible eliminate using it.
 
-					// Only add the line to this list if it's facing the same direction as the attempted movement, because
-					// otherwise a collision should be impossible.
-					if (!(AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) <= 0))
+					// Only add the line to this list if it's facing the opposite direction as the attempted movement, because
+					// otherwise a collision should be impossible. Positive dot product means the two are going in the same direction.
+					if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) >= 0)
 						continue;
 
 					// If both the points in the line are in the wrong direction of the movement collision is also impossible
@@ -148,6 +148,12 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 		// dump to a linked list and process. ( This ensures we only test each point once, our binary tree's
 		// don't contain duplicate numbers ).
 
+		// If this lines facing is predetermined and its normal is facing away from the attempted movement it
+		// is assumed that it cannot be a factor in a collision.
+		if (AttemptedMovement * TestLine->NormalFacingPosition(MovingObject->Position) <= 0
+				&& TestLine->Facing != LINEFACE_UNDEFINED)
+			continue;
+
 		PointTree.AddElement(TestLine->SegmentStart);
 		PointTree.AddElement(TestLine->SegmentEnd);
 	}
@@ -202,13 +208,14 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 	mgRBTBinaryTree<mgCollisionPoint> PointTree;
 	mgLinkedList<mgCollisionPoint> PointList;
 	mgVector ReversedMovement = AttemptedMovement;
+	mgLinkedList<mgLineSegment> IgnoredLines;
 
 	ReversedMovement.ReverseDirection(); // Reverse the direction of the vector.
 
 	mgListIterator<mgLineSegment> CollisionLinesIterator(&CollisionLines);
 
 	while (!CollisionLinesIterator.IteratorAtEnd())
-	{ // For each line in the shape of our map object..
+	{ // For each line in the environment that wasn't excluded from testing
 		mgLineSegment *TestLine;
 		mgCollisionPoint a, b;
 
@@ -232,8 +239,18 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 
 	MapObjectShape = MovingObject->ObjectGeometry();
 
+	while (!MapObjectShape.IteratorAtEnd())
+	{
+		mgLineSegment *LineRef = MapObjectShape.ReturnElementReference();
+
+		// I need to make a function for normals that doesn't require the position. It isn't used in tests where the line has a determined facing.
+		if (LineRef->Facing != LINEFACE_UNDEFINED &&
+			AttemptedMovement * LineRef->NormalFacingPosition(MovingObject->Position) <= 0)
+			IgnoredLines.AddElementReference(LineRef, false); // This line is facing away from the movement and therefore cannot be a factor in our tests.
+	}
+
 	while (!PointListIterator.IteratorAtEnd())
-	{ // For each point in our object.
+	{ // For each point in our list
 		mgLineSegment MovementCollisionLine;
 		mgCollisionPoint TestCollisionPoint;
 
@@ -246,8 +263,24 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 		{ // For each line in the Detection Area
 			mgLineCollisionResults TestResults;
 			mgLineSegment *LineReference;
+			mgListIterator<mgLineSegment> IgnoreList(&IgnoredLines);
+			bool skipLine = false; // true if we have a match on an ignored line.
 
 			LineReference = MapObjectShape.ReturnElementReference();
+
+			while (!IgnoreList.IteratorAtEnd())
+			{
+				mgLineSegment *ignoredLineRef = IgnoreList.ReturnElementReference();
+
+				if ( ignoredLineRef == LineReference )
+				{
+					skipLine = true;
+					break;
+				}
+			}
+
+			if (skipLine)
+				continue;
 
 			TestResults = MovementCollisionLine.CollisionTest(LineReference);
 
