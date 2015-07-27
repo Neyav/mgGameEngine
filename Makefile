@@ -17,7 +17,7 @@ NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapEleme
 	$(STRIP) --strip-all NCursesExplorer
 
 # SDLengine build target. This is a SDL2 based renderer for the engine. Top down view.
-SDLengine: SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+SDLengine: SDLengine.o SEViewDisplay.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
 	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -lSDL2 -lSDL2_image $(LINKERFLAGS)
 	$(STRIP) --strip-all SDLengine
 
@@ -66,6 +66,9 @@ SETextureHandler.o: Source/SDLengine/SETextureHandler.cpp Source/SDLengine/SETex
 
 SERenderHandler.o: Source/SDLengine/SERenderHandler.cpp Source/SDLengine/SERenderHandler.h
 	$(CC) $(CFLAGS) -o SERenderHandler.o -c Source/SDLengine/SERenderHandler.cpp
+
+SEViewDisplay.o: Source/SDLengine/SEViewDisplay.cpp Source/SDLengine/SEViewDisplay.h
+	$(CC) $(CFLAGS) -o SEViewDisplay.o -c Source/SDLengine/SEViewDisplay.cpp
 
 SDLengine.o: Source/SDLengine/SDLengine.cpp
 	$(CC) $(CFLAGS) -o SDLengine.o -c Source/SDLengine/SDLengine.cpp

@@ -58,7 +58,47 @@ bool SERenderHandler::InitWindow(int Width, int Height, std::string Title)
 		}
 	}
 
+	if ( success )
+	{
+		ScreenWidth = Width;
+		ScreenHeight = Height;
+	}
+
 	return success;
+}
+
+bool SERenderHandler::setupViewPort(float startposy, float startposx, float endposy, float endposx)
+{
+	int starty = (int)(ScreenHeight * startposy);
+	int startx = (int)(ScreenWidth * startposx);
+	int endy = (int)(ScreenHeight * endposy);
+	int endx = (int)(ScreenWidth * endposx);
+	SDL_Rect newViewport;
+	
+	if (startx >= endx)
+		return false;
+
+	if (starty >= endy)
+		return false;
+
+	newViewport.x = startx;
+	newViewport.y = starty;
+	newViewport.w = endx - startx;
+	newViewport.h = endy - starty;
+
+	SDL_RenderSetViewport( this->Renderer, &newViewport );
+
+	return true;
+}
+
+int SERenderHandler::getHeight()
+{
+	return ScreenHeight;
+}
+
+int SERenderHandler::getWidth()
+{
+	return ScreenWidth;
 }
 
 void SERenderHandler::ClearScreen(void)
@@ -76,6 +116,7 @@ SERenderHandler::SERenderHandler()
 {
 	Renderer = NULL;
 	Window = NULL;
+	ScreenWidth = ScreenHeight = 0;
 }
 
 SERenderHandler::~SERenderHandler()

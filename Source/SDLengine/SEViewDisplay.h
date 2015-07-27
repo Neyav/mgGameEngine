@@ -13,12 +13,14 @@ class SEViewDisplay
 	SERenderHandler *Renderer;
 	mgMapDataHandler *GameWorld;
 
+	mgLinkedList<mgMapObject> *MOBJList;
+
 	public:
 
-	void Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler);
-	void setupView(int starty, int startx, int endy, int endx);
+	void Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler, mgLinkedList<mgMapObject> *MOBJList);
+	void RenderWorld(mgPoint Position, double zoom);
 
 	SEViewDisplay();
-}
+};
 
 #endif
