@@ -36,10 +36,26 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 		Range = 2; // The smallest range at which it will function properly.
 
 	// Grab our position from MovingObject and offset it by range.
-	RangeStartY = mgFloor(MovingObject->Position.Y) - (Range - 1);
-	RangeStartX = mgFloor(MovingObject->Position.X) - (Range - 1);
-	RangeStopY = mgFloor(MovingObject->Position.Y) + (Range - 1);
-	RangeStopX = mgFloor(MovingObject->Position.X) + (Range - 1);
+	if ( AttemptedMovement.Y > 0 )
+	{
+		RangeStartY = mgFloor(MovingObject->Position.Y - MovingObject->ObjectSize);
+		RangeStopY = mgFloor(MovingObject->Position.Y) + (Range - 1);
+	}
+	else
+	{	
+		RangeStartY = mgFloor(MovingObject->Position.Y) - (Range - 1);
+		RangeStopY = mgFloor(MovingObject->Position.Y + MovingObject->ObjectSize);
+	}
+	if ( AttemptedMovement.X > 0 )
+	{
+		RangeStartX = mgFloor(MovingObject->Position.Y - MovingObject->ObjectSize);
+		RangeStopX = mgFloor(MovingObject->Position.X) + (Range - 1);
+	}
+	else
+	{	
+		RangeStartX = mgFloor(MovingObject->Position.X) - (Range - 1);
+		RangeStopX = mgFloor(MovingObject->Position.X + MovingObject->ObjectSize);
+	}
 
 	// Move over the blocks in this range and add them to our list of Map Elements we need to check.
 	// TODO: Add MapObjects to a list if they fall within this range as well.
