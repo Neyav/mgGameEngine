@@ -79,7 +79,8 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 					// and we can't exclude it on that basis alone.
 					if ( AttemptedMovement.Y > 0 ) 
 					{
-						if ( mgSmallestValue(LineSegRef->SegmentStart.Y, LineSegRef->SegmentEnd.Y ) < MovingObject->Position.Y + MovingObject->ObjectSize ) 
+						// If this line is in front of our movements we can't do the exitLoop exclusion
+						if ( mgLargestValue(LineSegRef->SegmentStart.Y, LineSegRef->SegmentEnd.Y ) > MovingObject->Position.Y - MovingObject->ObjectSize ) 
 							exitLoop = false;
 
 						if ( MovingObject->Position.Y + MovingObject->ObjectSize + AttemptedMovement.Y <
@@ -88,7 +89,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 					}
 					else if ( AttemptedMovement.Y < 0 )
 					{
-						if ( mgLargestValue(LineSegRef->SegmentStart.Y, LineSegRef->SegmentEnd.Y ) > MovingObject->Position.Y - MovingObject->ObjectSize )
+						if ( mgSmallestValue(LineSegRef->SegmentStart.Y, LineSegRef->SegmentEnd.Y ) < MovingObject->Position.Y + MovingObject->ObjectSize )
 							exitLoop = false;
 
 						if ( MovingObject->Position.Y - MovingObject->ObjectSize + AttemptedMovement.Y >
@@ -99,7 +100,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 
 					if ( AttemptedMovement.X > 0 )
 					{ 
-						if ( mgSmallestValue(LineSegRef->SegmentStart.X, LineSegRef->SegmentEnd.X ) < MovingObject->Position.X + MovingObject->ObjectSize )
+						if ( mgLargestValue(LineSegRef->SegmentStart.X, LineSegRef->SegmentEnd.X ) > MovingObject->Position.X - MovingObject->ObjectSize )
 							exitLoop = false;
 
 						if ( MovingObject->Position.X + MovingObject->ObjectSize + AttemptedMovement.X <
@@ -108,7 +109,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 					}
 					else if ( AttemptedMovement.X < 0 )
 					{
-						if ( mgLargestValue(LineSegRef->SegmentStart.X, LineSegRef->SegmentEnd.X ) > MovingObject->Position.X - MovingObject->ObjectSize )
+						if ( mgSmallestValue(LineSegRef->SegmentStart.X, LineSegRef->SegmentEnd.X ) < MovingObject->Position.X + MovingObject->ObjectSize )
 							exitLoop = false;
 
 						if ( MovingObject->Position.X - MovingObject->ObjectSize + AttemptedMovement.X >
