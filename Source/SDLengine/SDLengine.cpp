@@ -97,6 +97,8 @@ int main(int argc, char *argv[])
 
 	while( !exitApplication )
 	{
+		mgVector MovementDirection;
+
 		ViewDisplay.RenderWorld( LocalPlayer->Position, 1 );		
 		RenderEngine->UpdateScreen();
 
@@ -109,7 +111,19 @@ int main(int argc, char *argv[])
 		}
 
 		const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-		mgVector MovementDirection;
+
+		// -- Mouse movement
+		if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
+		{
+			int y, x;
+			SDL_GetMouseState( &x, &y );
+
+			y -= RenderEngine->getHeight() / 2;
+			x -= RenderEngine->getWidth() / 2;
+
+			MovementDirection.Y = y;
+			MovementDirection.X = x;
+		}
 
 		// -- Keyboard movement
 		if( currentKeyStates[ SDL_SCANCODE_UP ] )

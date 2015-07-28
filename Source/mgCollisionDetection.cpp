@@ -48,7 +48,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 	}
 	if ( AttemptedMovement.X > 0 )
 	{
-		RangeStartX = mgFloor(MovingObject->Position.Y - MovingObject->ObjectSize);
+		RangeStartX = mgFloor(MovingObject->Position.X - MovingObject->ObjectSize);
 		RangeStopX = mgFloor(MovingObject->Position.X) + (Range - 1);
 	}
 	else
@@ -87,7 +87,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 
 					// Only add the line to this list if it's facing the opposite direction as the attempted movement, because
 					// otherwise a collision should be impossible. Positive dot product means the two are going in the same direction.
-					if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) >= 0)
+					if (AttemptedMovement * LineSegRef->NormalFacingPosition(MovingObject->Position) > 0)
 						continue;
 
 					// If both the points in the line are in the wrong direction of the movement collision is also impossible
@@ -167,7 +167,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 		// If this lines facing is predetermined and its normal is facing away from the attempted movement it
 		// is assumed that it cannot be a factor in a collision.
-		if (AttemptedMovement * TestLine->NormalFacingPosition(MovingObject->Position) <= 0
+		if (AttemptedMovement * TestLine->NormalFacingPosition(MovingObject->Position) < 0
 				&& TestLine->Facing != LINEFACE_UNDEFINED)
 			continue;
 
@@ -262,7 +262,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 
 		// I need to make a function for normals that doesn't require the position. It isn't used in tests where the line has a determined facing.
 		if (LineRef->Facing != LINEFACE_UNDEFINED &&
-			AttemptedMovement * LineRef->NormalFacingPosition(MovingObject->Position) <= 0)
+			AttemptedMovement * LineRef->NormalFacingPosition(MovingObject->Position) < 0)
 			IgnoredLines.AddElementReference(LineRef, false); // This line is facing away from the movement and therefore cannot be a factor in our tests.
 	}
 
