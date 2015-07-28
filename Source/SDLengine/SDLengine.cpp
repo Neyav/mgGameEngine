@@ -1,9 +1,14 @@
+#ifdef _WIN32
+#include <SDL.h>
+#include <SDL_image.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#endif
 #include <stdio.h>
 #include <iostream>
 #include <math.h>
-#include <string>
+#include <string> 
 
 // SDLengine includes
 #include "SERenderHandler.h"
@@ -22,17 +27,17 @@
 #include "../Containers/mgLinkedList.h"
 
 // Screen resolution
-int SCREENWIDTH = 1920;
-int SCREENHEIGHT = 1080;
+int SCREENWIDTH = 1280;
+int SCREENHEIGHT = 720;
 
 // Global Variables
 SERenderHandler *RenderEngine = nullptr;
 mgMapDataHandler *GameWorld = nullptr;
-mgLinkedList<mgMapObject> MOBJList;
+mgLinkedList<mgMapObject> *MOBJList = nullptr;
 // TEXTURES
-SETextureHandler GameworldFloor;
-SETextureHandler GameworldWall;
-SETextureHandler MOBJ_PlayerSprite;
+SETextureHandler *GameworldFloor = nullptr;
+SETextureHandler *GameworldWall = nullptr;
+SETextureHandler *MOBJ_PlayerSprite = nullptr;
 // [END] Global Variables
 
 mgMapObject *spawnMapObject( double Y, double X, unsigned int Type, double size )
@@ -46,7 +51,7 @@ mgMapObject *spawnMapObject( double Y, double X, unsigned int Type, double size 
 	newObject->ObjectType = Type;
 	newObject->ObjectSize = size;
 
-	MOBJList.AddElementReference(newObject, true); // Add our new object to the map object list.
+	MOBJList->AddElementReference(newObject, true); // Add our new object to the map object list.
 
 	return newObject;
 }
@@ -66,7 +71,7 @@ void initGameWorld ( void )
 	RandomGenerator.GenerateMaze(1, 1); // Generate our maze.
 }
 
-int main ( void )
+int main(int argc, char *argv[])
 {
 	SEViewDisplay ViewDisplay;	// Responsible for our game camera rendering.
 	bool exitApplication = false; 	// True if we are quitting.
@@ -76,14 +81,19 @@ int main ( void )
 	RenderEngine = new SERenderHandler;
 	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, "SDL Engine test");
 
-	GameworldFloor.loadFromFile("SDLenginefloor.png", RenderEngine);
-	GameworldWall.loadFromFile("SDLenginewall.png", RenderEngine);
-	MOBJ_PlayerSprite.loadFromFile("SDLplayer.png", RenderEngine);
+	MOBJList = new mgLinkedList < mgMapObject > ;
+	GameworldFloor = new SETextureHandler;
+	GameworldWall = new SETextureHandler;
+	MOBJ_PlayerSprite = new SETextureHandler;
+
+	GameworldFloor->loadFromFile("SDLenginefloor.png", RenderEngine);
+	GameworldWall->loadFromFile("SDLenginewall.png", RenderEngine);
+	MOBJ_PlayerSprite->loadFromFile("SDLplayer.png", RenderEngine);
 
 	initGameWorld();
 	LocalPlayer = spawnMapObject(1.5, 1.5, MOBJ_PLAYER, 0.25);
 
-	ViewDisplay.Initialize( RenderEngine, GameWorld, &MOBJList );
+	ViewDisplay.Initialize( RenderEngine, GameWorld, MOBJList );
 
 	while( !exitApplication )
 	{
@@ -175,4 +185,6 @@ int main ( void )
 		if (LocalPlayer->Momentum.Magnitude < 0.001 )
 			LocalPlayer->Momentum.Y = LocalPlayer->Momentum.X = LocalPlayer->Momentum.Magnitude = 0;
 	}
+
+	return 0;
 }

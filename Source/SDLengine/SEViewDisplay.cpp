@@ -10,9 +10,9 @@
 // Almost all of these should be handled better. TODO!!! Make a Texture handler that returns textures based on a reference ID.
 // Global Variables
 // TEXTURES
-extern SETextureHandler GameworldFloor;
-extern SETextureHandler GameworldWall;
-extern SETextureHandler MOBJ_PlayerSprite;
+extern SETextureHandler *GameworldFloor;
+extern SETextureHandler *GameworldWall;
+extern SETextureHandler *MOBJ_PlayerSprite;
 
 /************************************************
  *		SEViewDisplay			*
@@ -56,15 +56,15 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 	int PixelY = (SCREENHEIGHT / 2) - ((CenterY - StartY) * TileY) - YPixelOffset;
 	int PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
 
-	GameworldFloor.setSize(TileY, TileX); // scale texture
-	GameworldWall.setSize(TileY + WalloffsetY, TileX + WalloffsetX);
+	GameworldFloor->setSize(TileY, TileX); // scale texture
+	GameworldWall->setSize(TileY + WalloffsetY, TileX + WalloffsetX);
 
 	// Render the floor tiles	
 	for (int RenderY = StartY; RenderY <= StopY; RenderY++)
 	{
 		for (int RenderX = StartX; RenderX <= StopX; RenderX++)
 		{
-			GameworldFloor.render(PixelY, PixelX);
+			GameworldFloor->render(PixelY, PixelX);
 			PixelX += TileX;
 		}
 		PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
@@ -82,7 +82,7 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 			mgListIterator<mgMapObject> MOBJ_Iterator(MOBJList);
 
 			if (GameWorld->IsBlockClippable(RenderY, RenderX)) // Simple check to see if it's a wall, we should really be doing a check for map element type.
-				GameworldWall.render(PixelY - WalloffsetY, PixelX - WalloffsetX);
+				GameworldWall->render(PixelY - WalloffsetY, PixelX - WalloffsetX);
 
 			// Check our map object list to see if any map objects reside here.
 			while (!MOBJ_Iterator.IteratorAtEnd())
@@ -100,8 +100,8 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 					switch (WorkingObject->ObjectType)
 					{
 					case MOBJ_PLAYER:
-						MOBJ_PlayerSprite.setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
-						MOBJ_PlayerSprite.render(offsetY, offsetX);
+						MOBJ_PlayerSprite->setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
+						MOBJ_PlayerSprite->render(offsetY, offsetX);
 						break;
 					default:
 						break; // No sprite.
