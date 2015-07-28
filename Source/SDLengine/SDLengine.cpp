@@ -7,6 +7,7 @@
 
 // SDLengine includes
 #include "SERenderHandler.h"
+#include "SEViewDisplay.h"
 #include "SETextureHandler.h"
 #include "GameGlobals.h"
 
@@ -33,95 +34,6 @@ SETextureHandler GameworldFloor;
 SETextureHandler GameworldWall;
 SETextureHandler MOBJ_PlayerSprite;
 // [END] Global Variables
-
-// --- RenderDisplay
-// - Renders the game world from Position.
-// - Meeeeeeat and perterders
-void RenderDisplay ( mgPoint Position, double zoom )
-{
-	// Setup the tunables based on what we know so we display what we want.
-	int TileY = mgFloor(TILEY * zoom);
-	int TileX = mgFloor(TILEX * zoom); // Default texture size of a tile
-
-	int WalloffsetY = mgFloor(TILEYOFFSET * zoom);
-	int WalloffsetX = mgFloor(TILEXOFFSET * zoom);
-
-	int CenterY = mgFloor(Position.Y);
-	int CenterX = mgFloor(Position.X);
-
-	int YPixelOffset = (int)((double)TileY * (double)(Position.Y - CenterY)); // The offset is the size of a tile * the fractional portion of the position.
-	int XPixelOffset = (int)((double)TileX * (double)(Position.X - CenterX));
-
-	int TilesY = (int)(SCREENHEIGHT / TileY) + 2;
-	int TilesX = (int)(SCREENWIDTH / TileX) + 2; // The number of tiles we're going to render.
-
-	int StartY = CenterY - (int)(TilesY / 2); 
-	int StopY = CenterY + (int)(TilesY / 2);
-	int StartX = CenterX - (int)(TilesX / 2); 
-	int StopX = CenterX + (int)(TilesX / 2);
-
-	int PixelY = (SCREENHEIGHT / 2) - ((CenterY - StartY) * TileY) - YPixelOffset;
-	int PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
-
-	GameworldFloor.setSize(TileY, TileX); // scale texture
-	GameworldWall.setSize(TileY + WalloffsetY, TileX + WalloffsetX);
-
-	// Render the floor tiles	
-	for (int RenderY = StartY; RenderY <= StopY; RenderY++)
-	{
-		for (int RenderX = StartX; RenderX <= StopX; RenderX++)
-		{
-			GameworldFloor.render(PixelY, PixelX);
-			PixelX += TileX;
-		}
-		PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
-		PixelY += TileY;
-	}
-
-	PixelY = (SCREENHEIGHT / 2) - ((CenterY - StartY) * TileY) - YPixelOffset;
-	PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
-
-	// Render the wall tiles and any objects
-	for (int RenderY = StartY; RenderY <= StopY; RenderY++)
-	{
-		for (int RenderX = StartX; RenderX <= StopX; RenderX++)
-		{
-			mgListIterator<mgMapObject> MOBJ_Iterator(&MOBJList);
-
-			if (GameWorld->IsBlockClippable(RenderY, RenderX)) // Simple check to see if it's a wall, we should really be doing a check for map element type.
-				GameworldWall.render(PixelY - WalloffsetY, PixelX - WalloffsetX);
-
-			// Check our map object list to see if any map objects reside here.
-			while (!MOBJ_Iterator.IteratorAtEnd())
-			{
-				mgMapObject *WorkingObject = MOBJ_Iterator.ReturnElementReference();
-				int offsetY = PixelY;
-				int offsetX = PixelX;
-
-				if (mgFloor(WorkingObject->Position.Y) == RenderY && mgFloor(WorkingObject->Position.X) == RenderX)
-				{  // Our MOBJ is on this block.
-					// Determine our render position.
-					offsetY += (int)((double)(WorkingObject->Position.Y - (double)RenderY - WorkingObject->ObjectSize) * TileY);
-					offsetX += (int)((double)(WorkingObject->Position.X - (double)RenderX - WorkingObject->ObjectSize) * TileX);
-
-					switch (WorkingObject->ObjectType)
-					{
-					case MOBJ_PLAYER:
-						MOBJ_PlayerSprite.setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
-						MOBJ_PlayerSprite.render(offsetY, offsetX);
-						break;
-					default:
-						break; // No sprite.
-					}
-				}
-			}
-
-			PixelX += TileX;
-		}
-		PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
-		PixelY += TileY;
-	}
-}
 
 mgMapObject *spawnMapObject( double Y, double X, unsigned int Type, double size )
 {
@@ -156,6 +68,7 @@ void initGameWorld ( void )
 
 int main ( void )
 {
+	SEViewDisplay ViewDisplay;	// Responsible for our game camera rendering.
 	bool exitApplication = false; 	// True if we are quitting.
 	SDL_Event eventHandler; 	// SDL Event handler
 	mgMapObject *LocalPlayer = nullptr;
@@ -170,10 +83,11 @@ int main ( void )
 	initGameWorld();
 	LocalPlayer = spawnMapObject(1.5, 1.5, MOBJ_PLAYER, 0.25);
 
+	ViewDisplay.Initialize( RenderEngine, GameWorld, &MOBJList );
+
 	while( !exitApplication )
 	{
-		RenderEngine->ClearScreen();
-		RenderDisplay(LocalPlayer->Position, 1);
+		ViewDisplay.RenderWorld( LocalPlayer->Position, 1 );		
 		RenderEngine->UpdateScreen();
 
 		while ( SDL_PollEvent( &eventHandler ) != 0 )
