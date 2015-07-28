@@ -47,3 +47,32 @@ Temporary Items
 .apdisk
 *.log
 Visual Studio/mgGameEngine/mgGameEngine.sdf
+Visual Studio/mgGameEngine/mgGameEngine.sdf
+Visual Studio/mgGameEngine/mgGameEngine.sdf
+*.sdf
+*.suo
+*.obj
+*.log
+*.lastbuildstate
+Windows Binaries/DevelopmentConsole.exe
+Windows Binaries/DevelopmentConsole.pdb
+Windows Binaries/SDLengine.exe
+Windows Binaries/SDLengine.pdb
+Windows Binaries/TreeOutput.txt
+Visual Studio/mgGameEngine/Release/mgGameEngine.tlog/cl.command.1.tlog
+Visual Studio/mgGameEngine/Release/mgGameEngine.tlog/CL.read.1.tlog
+Visual Studio/mgGameEngine/Release/mgGameEngine.tlog/CL.write.1.tlog
+Visual Studio/mgGameEngine/Release/mgGameEngine.tlog/link.command.1.tlog
+Visual Studio/mgGameEngine/Release/mgGameEngine.log
+Visual Studio/mgGameEngine/Release/mgGameEngine.tlog/link.read.1.tlog
+Visual Studio/mgGameEngine/Release/mgGameEngine.tlog/link.write.1.tlog
+Visual Studio/mgGameEngine/Release/vc120.pdb
+Visual Studio/SDLengine/SDLengine.sdf
+Visual Studio/SDLengine/SDLengine.v12.suo
+Visual Studio/SDLengine/SDLengine/Release/SDLengine.tlog/cl.command.1.tlog
+Visual Studio/SDLengine/SDLengine/Release/SDLengine.tlog/CL.read.1.tlog
+Visual Studio/SDLengine/SDLengine/Release/SDLengine.tlog/CL.write.1.tlog
+Visual Studio/SDLengine/SDLengine/Release/SDLengine.tlog/link.command.1.tlog
+Visual Studio/SDLengine/SDLengine/Release/SDLengine.tlog/link.read.1.tlog
+Visual Studio/SDLengine/SDLengine/Release/SDLengine.tlog/link.write.1.tlog
+Visual Studio/SDLengine/SDLengine/Release/vc120.pdb
