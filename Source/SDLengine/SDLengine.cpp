@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
 	{
 		mgVector MovementDirection;
 
+		RenderEngine->ClearScreen();
 		ViewDisplay.RenderWorld( LocalPlayer->Position, 1 );		
 		RenderEngine->UpdateScreen();
 
