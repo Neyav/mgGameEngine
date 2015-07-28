@@ -1,4 +1,4 @@
-﻿Build started 7/28/2015 11:34:46 AM.
+﻿Build started 7/28/2015 11:49:19 AM.
      1>Project "C:\Users\Chris\Desktop\Projects\mgGameEngine\Visual Studio\mgGameEngine\mgGameEngine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Source\ConsoleMazeGenerator.cpp ..\..\Source\mgCollisionDetection.cpp ..\..\Source\mgLineSegment.cpp ..\..\Source\mgMapDataHandler.cpp ..\..\Source\mgMapElement.cpp ..\..\Source\mgMapObject.cpp ..\..\Source\mgPathSolutionGenerator.cpp ..\..\Source\mgRandomMazeGenerator.cpp ..\..\Source\mgRayTracer.cpp ..\..\Source\mgStressTest.cpp ..\..\Source\mgVectorPoint.cpp ..\..\Source\mgVisibilityMap.cpp
@@ -40,4 +40,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:07.19
+Time Elapsed 00:00:06.91
