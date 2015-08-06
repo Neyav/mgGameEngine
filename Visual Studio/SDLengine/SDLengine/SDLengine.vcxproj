@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -95,6 +95,7 @@
     <ClInclude Include="..\..\..\Source\mgVectorPoint.h" />
     <ClInclude Include="..\..\..\Source\mgVisibilityMap.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\GameGlobals.h" />
+    <ClInclude Include="..\..\..\Source\SDLengine\SEMovementHandler.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\SERenderHandler.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\SETextureHandler.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\SEViewDisplay.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="..\..\..\Source\mgVectorPoint.cpp" />
     <ClCompile Include="..\..\..\Source\mgVisibilityMap.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SDLengine.cpp" />
+    <ClCompile Include="..\..\..\Source\SDLengine\SEMovementHandler.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SERenderHandler.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SETextureHandler.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SEViewDisplay.cpp" />
