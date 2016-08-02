@@ -192,7 +192,7 @@ void mgVector::NormalizeVector(void)
 	double Normalizer;
 
 	if ( Magnitude == 0 )
-	{ // We know the answer, why risk a divide by zero.
+	{ // We know the answer, a divide by zero would have undefined behavior.
 		Y = X = 0;
 		return;
 	}

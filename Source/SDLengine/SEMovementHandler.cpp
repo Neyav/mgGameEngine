@@ -11,11 +11,11 @@
 #include "../Containers/mgLinkedList.h"
 
 /************************************************
- *		SEMovementHandler		*
- *	Responsible for processing MOBJList	*
- *	movement based on momentum and handling *
- *	both the collisions and the atrophy of  *
- *	momentum.
+ *		SEMovementHandler						*
+ *	Responsible for processing MOBJList			*
+ *	movement based on momentum and handling		*
+ *	both the collisions and the atrophy of		*
+ *	momentum.									*
  ************************************************/
 
 void SEMovementHandler::ProcessMomentum(void)
