@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 	mgMapObject *LocalPlayer = nullptr;
 
 	RenderEngine = new SERenderHandler;
-	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, "SDL Engine test");
+	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, __mgVersion);
 
 	MOBJList = new mgLinkedList < mgMapObject > ;
 	GameworldFloor = new SETextureHandler;

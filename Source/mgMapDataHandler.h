@@ -3,17 +3,6 @@
 
 #include "mgMapElement.h"
 
-// Since this is practically considered the base element of the game engine it makes sense to keep version
-// information here.
-struct _mgGameEngineVersionstruct
-{
-	unsigned int ReleaseVersion;
-	unsigned int FeatureVersion;
-	unsigned int PatchVersion;
-};
-
-extern _mgGameEngineVersionstruct mgGameEngineVersion;
-
 struct mgMapElementArray
 {
 	mgMapElement *MapBlock;

@@ -341,7 +341,7 @@ int main(int argc, char* argv[])
 	mgStressTimer Timer_Program, Timer_Generate, Timer_PathFind, Timer_vismap, Timer_render;
 	mgStressTest test;
 
-	std::cout << "mgGameEngine production testing suite. Engine Version: " << mgGameEngineVersion.ReleaseVersion << "." << mgGameEngineVersion.FeatureVersion << "." << mgGameEngineVersion.PatchVersion << std::endl;
+	std::cout << "mgGameEngine production testing suite. Engine Version: " << __mgVersion << std::endl;
 	std::cout << "  Generated output is saved to both Maze.HTML and .TXT unless otherwise stated." << std::endl;
 	std::cout << "       Stress tests generate console output only" << std::endl;
 	while (stresstest)

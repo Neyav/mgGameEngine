@@ -1,6 +1,9 @@
 #ifndef MGVECTORPOINTH
 #define MGVECTORPOINTH
 
+// Version string to faciliate quick identification of differences between uses of the included sources.
+static char __mgVersion[] = "mgGameEngine 1-Branch";
+
 // Helper Math functions. Too few for their own file.
 
 #define mgPI 3.14159265359
