@@ -18,7 +18,7 @@
 class mgVisibilityMap
 {
 private:
-	mgAVLBinaryTree<mgPoint> VisibilityTree;
+	mgBinaryTree<mgPoint> VisibilityTree;
 	mgMapDataHandler *MapReference;
 	int VisiblePoints;
 

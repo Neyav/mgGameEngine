@@ -370,15 +370,15 @@ void mgStressTest::TEST_mgCollisionDetection(void)
 	TestObject.Position.Y = 4.5;
 	TestObject.Position.X = 4.5; // The position on the map.
 
-	Timer.Description = "Collision Test: 360 degrees - Magnitude 2 (3,600 tests)";
+	Timer.Description = "Collision Test: 360 degrees - Magnitude 2 (36,000 tests)";
 
 	Timer.StartTimer();
-	for (int i = 0; i < 3600; i++)
+	for (int i = 0; i < 36000; i++)
 	{
 		mgVector Movement;
 
 		Movement.Magnitude = 2;
-		Movement.VectorFromDegrees(i / 10); // Create our movement vector;
+		Movement.VectorFromDegrees(i / 100); // Create our movement vector;
 
 		Results = CollisionTest.CollisionTest(&TestObject, Movement, 2);
 		a = Results.Collision;
@@ -386,17 +386,17 @@ void mgStressTest::TEST_mgCollisionDetection(void)
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(3600);
+	Timer.ConsoleOutputIterationResults(36000);
 
-	Timer.Description = "Collision Test: 360 degrees - Magnitude 7 (3,600 tests)";
+	Timer.Description = "Collision Test: 360 degrees - Magnitude 7 (36,000 tests)";
 
 	Timer.StartTimer();
-	for (int i = 0; i < 3600; i++)
+	for (int i = 0; i < 36000; i++)
 	{
 		mgVector Movement;
 
 		Movement.Magnitude = 7;
-		Movement.VectorFromDegrees(i / 10); // Create our movement vector;
+		Movement.VectorFromDegrees(i / 100); // Create our movement vector;
 
 		Results = CollisionTest.CollisionTest(&TestObject, Movement, 7);
 		a = Results.Collision;
@@ -404,7 +404,7 @@ void mgStressTest::TEST_mgCollisionDetection(void)
 	Timer.StopTimer();
 
 	Timer.ConsoleOutputResults();
-	Timer.ConsoleOutputIterationResults(3600);
+	Timer.ConsoleOutputIterationResults(36000);
 }
 
 mgStressTest::mgStressTest()

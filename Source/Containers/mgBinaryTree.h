@@ -30,8 +30,13 @@ class mgBinaryTreenode
 public:
 	TemplateObject Element;
 
+	// Binary Tree Linking
 	mgBinaryTreenode<TemplateObject> *Greater;
 	mgBinaryTreenode<TemplateObject> *Lesser;
+	
+	// Linked List Linking for iterating through the items.
+	mgBinaryTreenode<TemplateObject> *Next;
+	mgBinaryTreenode<TemplateObject> *Previous;
 
 	mgBinaryTreenode();
 	~mgBinaryTreenode();
@@ -43,6 +48,10 @@ mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 	// New nodes don't have children, so as default behavior this makes a lot of sense.
 	Lesser = nullptr;
 	Greater = nullptr;
+
+	// Default linking is not to be linked.
+	Next = nullptr;
+	Previous = nullptr;
 }
 
 template <typename TemplateObject>
@@ -56,6 +65,8 @@ mgBinaryTreenode<TemplateObject>::~mgBinaryTreenode()
 	if (Greater != nullptr)
 		delete Greater;
 }
+
+template <typename TemplateObject> class mgBinaryTreeIterator;
 
 template <typename TemplateObject> 
 class mgBinaryTree
@@ -73,13 +84,13 @@ public:
 	void ReBalanceTree(void);
 #endif
 
-	void NodeToList(mgBinaryTreenode<TemplateObject> *Node, mgLinkedList<TemplateObject> *ListReference);
-
 	virtual void AddElement(TemplateObject Element);
 	bool IsElementPresent(TemplateObject Element);
 	unsigned int Elements(void);
 
 	void ClearTree(void);
+
+	mgBinaryTreeIterator<TemplateObject> ListIterator(void); // Return a Linked List Iterator to the contents of the tree.
 
 #ifdef BINARYTREEDUMP
 	unsigned int DepthValues[1000];
@@ -92,18 +103,7 @@ public:
 	~mgBinaryTree();
 };
 
-template <typename TemplateObject>
-void mgBinaryTree<TemplateObject>::NodeToList(mgBinaryTreenode<TemplateObject> *Node, mgLinkedList<TemplateObject> *ListReference)
-{
-	if (Node == nullptr)
-		return; // unwind
-
-	ListReference->AddElement(Node->Element); // Add a copy of the element to our sorted list.
-
-	this->NodeToList(Node->Greater, ListReference);
-	this->NodeToList(Node->Lesser, ListReference);
-}
-
+#ifdef REBALANCETREE
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::NodeToSortedList(mgBinaryTreenode<TemplateObject> *Node, mgSortedList<TemplateObject> *ListReference)
 {
@@ -116,7 +116,6 @@ void mgBinaryTree<TemplateObject>::NodeToSortedList(mgBinaryTreenode<TemplateObj
 	this->NodeToSortedList(Node->Lesser, ListReference);
 }
 
-#ifdef REBALANCETREE
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::SplitListSection(int LeftBorder, int RightBorder)
 {
@@ -162,6 +161,14 @@ void mgBinaryTree<TemplateObject>::ReBalanceTree(void)
 #endif
 
 template <typename TemplateObject>
+mgBinaryTreeIterator<TemplateObject> mgBinaryTree<TemplateObject>::ListIterator(void)
+{
+	mgBinaryTreeIterator<TemplateObject> NewListIterator(this);
+
+	return NewListIterator;
+}
+
+template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 {
 	if (Root == nullptr)
@@ -186,6 +193,12 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Lesser->Element = Element;
 					ElementCount++;
 
+					// Connect its list elements.
+					ProgressNode->Next = Root;
+					ProgressNode->Previous = Root->Previous;
+					Root->Previous = ProgressNode;
+					
+
 					break;
 				}
 				else
@@ -199,6 +212,11 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Greater->Element = Element;
 					ElementCount++;
 
+					// Connect its list elements.
+					ProgressNode->Next = Root;
+					ProgressNode->Previous = Root->Previous;
+					Root->Previous = ProgressNode;
+					
 					break;
 				}
 				else
@@ -339,8 +357,99 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 	else
 		TreeStructureFile << ":--(Sanity: Fail) Binary Tree count is actually " << CountedElements << ", not " << ElementCount << "!!!!!" << std::endl;
 
+	TreeStructureFile << ":------ [ Linked List binding test ]" << std::endl;
+
+	mgBinaryTreeIterator<TemplateObject> LIterator = this->ListIterator();
+	int ListCount = 0;
+	while (!LIterator.IteratorAtEnd())
+	{
+		LIterator.ReturnElement();
+		ListCount++;
+	}
+
+	TreeStructureFile << ":------ Linked List hard count has " << ListCount << " items." << std::endl;
+	if (ListCount != ElementCount)
+		TreeStructureFile << ":--(Sanity: Fail) Count is inaccurate, items missing." << std::endl;
+	else
+		TreeStructureFile << ":--(Sanity: Pass) Linked List Bindings are accurate." << std::endl;
+
 	TreeStructureFile.close();
 }
 #endif
+
+// Iterator for the Binary Tree, very similar to Linked List iterator
+
+template <typename TemplateObject> class mgBinaryTreeIterator
+{
+private:
+	mgBinaryTreenode<TemplateObject> *Iterator;
+	mgBinaryTree<TemplateObject> *MasterTree;
+public:
+	
+	TemplateObject ReturnElement(void);
+	unsigned int NumberOfElements(void);
+	bool IteratorAtEnd(void);
+	void JumptoStart(void);
+
+	mgBinaryTreeIterator(mgBinaryTree<TemplateObject> *MasterTree)
+	{
+		this->MasterTree = MasterTree;
+		this->Iterator = MasterTree->Root;
+	}
+	mgBinaryTreeIterator()
+	{
+		this->MasterTree = nullptr;
+		this->Iterator = nullptr;
+	}
+};
+
+template <typename TemplateObject>
+TemplateObject mgBinaryTreeIterator<TemplateObject>::ReturnElement(void)
+{
+	if (Iterator != nullptr)
+	{
+		TemplateObject CopyOfObject;
+
+		CopyOfObject = Iterator->Element;
+		Iterator = Iterator->Previous; // We have to work backwards on this list due to the way it's generated.
+		return CopyOfObject;
+	}
+	else
+	{
+		// You should be checking for the end of the list if you are using this function. Exit hard and painfully because this error could crop up somewhere else
+		// in a more ambigious manner if we don't fix the problem now.
+
+		std::cout << "template <class TemplateObject> TemplateObject mgBinaryTreeIterator<TemplateObject>::ReturnElement(void) -- Attempt to read past end of list." << std::endl;
+
+		exit(-1);
+	}
+}
+
+template <typename TemplateObject>
+unsigned int mgBinaryTreeIterator<TemplateObject>::NumberOfElements(void)
+{
+	if (this->MasterTree != nullptr)
+		return this->MasterTree->Elements();
+	else
+		return 0;
+}
+
+template <typename TemplateObject>
+bool mgBinaryTreeIterator<TemplateObject>::IteratorAtEnd(void)
+{
+	if (Iterator == nullptr)
+		return true;
+	else
+		return false;
+}
+
+template <typename TemplateObject>
+void mgBinaryTreeIterator<TemplateObject>::JumptoStart(void)
+{
+	if (MasterList != nullptr)
+		Iterator = MasterTree->Root;
+	else
+		Iterator = nullptr;
+}
 
 #endif

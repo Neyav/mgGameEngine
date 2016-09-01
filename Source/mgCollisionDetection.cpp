@@ -9,6 +9,7 @@
 #include "mgVectorPoint.h"
 #include "Containers/mgLinkedList.h"
 #include "Containers/mgRBTBinaryTree.h"
+#include "Containers/mgAVLBinaryTree.h"
 
 //
 // =------------------------------------=
@@ -148,8 +149,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 {
 	mgListIterator<mgLineSegment> MapObjectShape;
-	mgRBTBinaryTree<mgPoint> PointTree;
-	mgLinkedList<mgPoint> PointList;
+	mgAVLBinaryTree<mgPoint> PointTree;
 
 	MapObjectShape = MovingObject->ObjectGeometry();
 
@@ -175,14 +175,19 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 		PointTree.AddElement(TestLine->SegmentEnd);
 	}
 
-	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
+	mgBinaryTreeIterator<mgPoint> PointListIterator = PointTree.ListIterator(); // Iterate through our tree linked list style.
 
-	mgListIterator<mgPoint> PointListIterator(&PointList);
+	printf("Items: %i\n", PointListIterator.NumberOfElements());
+	
+	int t = 0;
 
 	while (!PointListIterator.IteratorAtEnd())
 	{ // For each point in our object.
 		mgLineSegment MovementCollisionLine;
 		mgPoint TestPoint;
+
+		t++;
+		printf("Test item: %i\n", t);
 
 		TestPoint = PointListIterator.ReturnElement();
 
@@ -222,8 +227,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 {
 	mgListIterator<mgLineSegment> MapObjectShape;
-	mgRBTBinaryTree<mgCollisionPoint> PointTree;
-	mgLinkedList<mgCollisionPoint> PointList;
+	mgAVLBinaryTree<mgCollisionPoint> PointTree;
 	mgVector ReversedMovement = AttemptedMovement;
 	mgLinkedList<mgLineSegment> IgnoredLines;
 
@@ -250,9 +254,7 @@ void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 		PointTree.AddElement(b);
 	}
 
-	PointTree.NodeToList(PointTree.Root, &PointList); // Convert the Binary Tree to a list.
-
-	mgListIterator<mgCollisionPoint> PointListIterator(&PointList);
+	mgBinaryTreeIterator<mgCollisionPoint> PointListIterator = PointTree.ListIterator(); // Iterate through our tree linked list style.
 
 	MapObjectShape = MovingObject->ObjectGeometry();
 
