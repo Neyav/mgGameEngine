@@ -194,9 +194,9 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ElementCount++;
 
 					// Connect its list elements.
-					ProgressNode->Next = Root;
-					ProgressNode->Previous = Root->Previous;
-					Root->Previous = ProgressNode;
+					ProgressNode->Lesser->Next = Root;
+					ProgressNode->Lesser->Previous = Root->Previous;
+					Root->Previous = ProgressNode->Lesser;
 					
 
 					break;
@@ -213,9 +213,9 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ElementCount++;
 
 					// Connect its list elements.
-					ProgressNode->Next = Root;
-					ProgressNode->Previous = Root->Previous;
-					Root->Previous = ProgressNode;
+					ProgressNode->Greater->Next = Root;
+					ProgressNode->Greater->Previous = Root->Previous;
+					Root->Previous = ProgressNode->Greater;
 					
 					break;
 				}

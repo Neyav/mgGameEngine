@@ -149,7 +149,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 {
 	mgListIterator<mgLineSegment> MapObjectShape;
-	mgAVLBinaryTree<mgPoint> PointTree;
+	mgBinaryTree<mgPoint> PointTree;
 
 	MapObjectShape = MovingObject->ObjectGeometry();
 
@@ -177,17 +177,10 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 
 	mgBinaryTreeIterator<mgPoint> PointListIterator = PointTree.ListIterator(); // Iterate through our tree linked list style.
 
-	printf("Items: %i\n", PointListIterator.NumberOfElements());
-	
-	int t = 0;
-
 	while (!PointListIterator.IteratorAtEnd())
 	{ // For each point in our object.
 		mgLineSegment MovementCollisionLine;
 		mgPoint TestPoint;
-
-		t++;
-		printf("Test item: %i\n", t);
 
 		TestPoint = PointListIterator.ReturnElement();
 
@@ -227,7 +220,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 {
 	mgListIterator<mgLineSegment> MapObjectShape;
-	mgAVLBinaryTree<mgCollisionPoint> PointTree;
+	mgBinaryTree<mgCollisionPoint> PointTree;
 	mgVector ReversedMovement = AttemptedMovement;
 	mgLinkedList<mgLineSegment> IgnoredLines;
 
