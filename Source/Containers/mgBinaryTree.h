@@ -73,6 +73,8 @@ class mgBinaryTree
 {
 public:
 	mgBinaryTreenode<TemplateObject> *Root;
+	mgBinaryTreenode<TemplateObject> *LastAddition;		// Keeps track of the last item added to the tree.
+														// This is to maintain consistency with the Linked List bindings.
 	unsigned int ElementCount;
 	std::string Definition;
 
@@ -176,6 +178,8 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 		Root = new mgBinaryTreenode < TemplateObject > ;
 		Root->Element = Element;
 
+		LastAddition = Root;
+
 		ElementCount++;
 	}
 	else
@@ -194,9 +198,9 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ElementCount++;
 
 					// Connect its list elements.
-					ProgressNode->Lesser->Next = Root;
-					ProgressNode->Lesser->Previous = Root->Previous;
-					Root->Previous = ProgressNode->Lesser;
+					ProgressNode->Lesser->Next = LastAddition;
+					ProgressNode->Lesser->Previous = LastAddition->Previous;
+					LastAddition->Previous = ProgressNode->Lesser;
 					
 
 					break;
@@ -213,9 +217,9 @@ void mgBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ElementCount++;
 
 					// Connect its list elements.
-					ProgressNode->Greater->Next = Root;
-					ProgressNode->Greater->Previous = Root->Previous;
-					Root->Previous = ProgressNode->Greater;
+					ProgressNode->Greater->Next = LastAddition;
+					ProgressNode->Greater->Previous = LastAddition->Previous;
+					LastAddition->Previous = ProgressNode->Greater;
 					
 					break;
 				}
@@ -267,6 +271,8 @@ void mgBinaryTree<TemplateObject>::ClearTree(void)
 	if (Root != nullptr)
 		delete Root;
 
+	LastAddition = nullptr;
+
 	this->ElementCount = 0;
 }
 
@@ -275,7 +281,7 @@ mgBinaryTree<TemplateObject>::mgBinaryTree()
 {
 	Definition = "Unbalanced Binary Tree";
 
-	Root = nullptr;
+	Root = LastAddition = nullptr;
 	ElementCount = 0;
 }
 
@@ -367,7 +373,7 @@ void mgBinaryTree<TemplateObject>::DumpTreeStructure(std::string OutputFile)
 		ListCount++;
 	}
 
-	TreeStructureFile << ":------ Linked List hard count has " << ListCount << " items." << std::endl;
+	TreeStructureFile << ":    -> Linked List hard count has " << ListCount << " items." << std::endl;
 	if (ListCount != ElementCount)
 		TreeStructureFile << ":--(Sanity: Fail) Count is inaccurate, items missing." << std::endl;
 	else
@@ -394,7 +400,7 @@ public:
 	mgBinaryTreeIterator(mgBinaryTree<TemplateObject> *MasterTree)
 	{
 		this->MasterTree = MasterTree;
-		this->Iterator = MasterTree->Root;
+		this->Iterator = MasterTree->LastAddition;
 	}
 	mgBinaryTreeIterator()
 	{
@@ -447,7 +453,7 @@ template <typename TemplateObject>
 void mgBinaryTreeIterator<TemplateObject>::JumptoStart(void)
 {
 	if (MasterList != nullptr)
-		Iterator = MasterTree->Root;
+		Iterator = MasterTree->LastAddition;
 	else
 		Iterator = nullptr;
 }

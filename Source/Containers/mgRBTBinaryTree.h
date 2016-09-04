@@ -167,6 +167,7 @@ void mgRBTBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 		newNode->Element = Element;
 		newNode->BlackNode = true; // This is all the fixing we need for a blank tree.
 		this->Root = newNode;
+		this->LastAddition = newNode;
 
 		this->ElementCount++;
 	}
@@ -189,9 +190,9 @@ void mgRBTBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Lesser = newNode;
 
 					// Add Linked List bindings.
-					newNode->Next = RBTNODE this->Root;
-					newNode->Previous = RBTNODE this->Root->Previous;
-					this->Root->Previous = newNode;
+					newNode->Next = RBTNODE this->LastAddition;
+					newNode->Previous = RBTNODE this->LastAddition->Previous;
+					this->LastAddition->Previous = newNode;
 
 					newNode->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
 					(RBTNODE this->Root)->BlackNode = true;
@@ -214,9 +215,9 @@ void mgRBTBinaryTree<TemplateObject>::AddElement(TemplateObject Element)
 					ProgressNode->Greater = newNode;
 
 					// Add Linked List bindings.
-					newNode->Next = RBTNODE this->Root;
-					newNode->Previous = RBTNODE this->Root->Previous;
-					this->Root->Previous = newNode;
+					newNode->Next = RBTNODE this->LastAddition;
+					newNode->Previous = RBTNODE this->LastAddition->Previous;
+					this->LastAddition->Previous = newNode;
 
 					newNode->fixUp(this); // Fix any Red Black Tree rule violations that occured by adding this node.
 					(RBTNODE this->Root)->BlackNode = true;

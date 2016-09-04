@@ -106,10 +106,12 @@ mgAVLBinaryTreenode<TemplateObject> *mgAVLBinaryTree<TemplateObject>::AVLInsert(
 		// Add Linked List bindings.
 		if (this->Root != nullptr)
 		{
-			newNode->Next = this->Root;
-			newNode->Previous = this->Root->Previous;
-			this->Root->Previous = newNode;
+			newNode->Next = this->LastAddition;
+			newNode->Previous = this->LastAddition->Previous;
+			this->LastAddition->Previous = newNode;
 		}
+		else
+			this->LastAddition = newNode; // First item added to tree.
 		
 		this->ElementCount++;
 
