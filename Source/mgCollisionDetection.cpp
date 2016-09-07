@@ -149,7 +149,7 @@ void mgCollisionDetection::SetupDetectionArea(unsigned int Range) // Stage Two
 void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 {
 	mgListIterator<mgLineSegment> MapObjectShape;
-	mgBinaryTree<mgPoint> PointTree;
+	mgRBTBinaryTree<mgPoint> PointTree;
 
 	MapObjectShape = MovingObject->ObjectGeometry();
 
@@ -220,7 +220,7 @@ void mgCollisionDetection::PerformCollisionTestsP1(void) // Stage Four: Part One
 void mgCollisionDetection::PerformCollisionTestsP2(void) // Stage Four: Part Two
 {
 	mgListIterator<mgLineSegment> MapObjectShape;
-	mgBinaryTree<mgCollisionPoint> PointTree;
+	mgRBTBinaryTree<mgCollisionPoint> PointTree;
 	mgVector ReversedMovement = AttemptedMovement;
 	mgLinkedList<mgLineSegment> IgnoredLines;
 

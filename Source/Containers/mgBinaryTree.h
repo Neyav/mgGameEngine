@@ -39,7 +39,6 @@ public:
 	mgBinaryTreenode<TemplateObject> *Previous;
 
 	mgBinaryTreenode();
-	~mgBinaryTreenode();
 };
 
 template <typename TemplateObject>
@@ -52,18 +51,6 @@ mgBinaryTreenode<TemplateObject>::mgBinaryTreenode()
 	// Default linking is not to be linked.
 	Next = nullptr;
 	Previous = nullptr;
-}
-
-template <typename TemplateObject>
-mgBinaryTreenode<TemplateObject>::~mgBinaryTreenode()
-{
-	/* Deleting a node results in its children being deleted. Supporting individual node deletion is planned
-	   and that means this is going to be replaced with code that delinks this node from the tree safely rather than the
-	   destruction of its children */
-	if (Lesser != nullptr)
-		delete Lesser;
-	if (Greater != nullptr)
-		delete Greater;
 }
 
 template <typename TemplateObject> class mgBinaryTreeIterator;
@@ -144,8 +131,7 @@ void mgBinaryTree<TemplateObject>::ReBalanceTree(void)
 
 	this->NodeToSortedList(Root, &this->BinaryTreeList); // Recursively dump the entire tree to our sorted list.
 
-	if (this->Root != nullptr)
-		delete this->Root; // Kill the tree.
+	this->ClearTree(); // Kill the tree.
 	
 	this->Root = nullptr;
 	this->ElementCount = 0;
@@ -268,10 +254,16 @@ unsigned int mgBinaryTree<TemplateObject>::Elements(void)
 template <typename TemplateObject>
 void mgBinaryTree<TemplateObject>::ClearTree(void)
 {
-	if (Root != nullptr)
-		delete Root;
+	while (LastAddition != nullptr)
+	{
+		mgBinaryTreenode<TemplateObject> *deletedNode = LastAddition;
 
-	LastAddition = nullptr;
+		LastAddition = LastAddition->Previous;
+
+		delete deletedNode;
+	}
+
+	this->Root = nullptr;
 
 	this->ElementCount = 0;
 }
@@ -288,8 +280,7 @@ mgBinaryTree<TemplateObject>::mgBinaryTree()
 template <typename TemplateObject>
 mgBinaryTree<TemplateObject>::~mgBinaryTree()
 {
-	if (Root != nullptr)
-		delete Root; // See the binarytreenode class and appreciate its self destructive behavior.
+	this->ClearTree(); // Destroy the contents of the tree.
 }
 
 #ifdef BINARYTREEDUMP
