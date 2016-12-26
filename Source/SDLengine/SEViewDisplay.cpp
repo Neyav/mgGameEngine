@@ -15,9 +15,9 @@ extern SETextureHandler *GameworldWall;
 extern SETextureHandler *MOBJ_PlayerSprite;
 
 /************************************************
- *		SEViewDisplay			*
- *	Responsible for setting up the screen   *
- *	and rendering the gameworld upon it.    *
+ *		SEViewDisplay		                	*
+ *	Responsible for setting up the screen       *
+ *	and rendering the gameworld upon it.        *
  ************************************************/
 
 void SEViewDisplay::Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler, mgLinkedList<mgMapObject> *MOBJList)
@@ -48,6 +48,12 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 	int TilesY = (int)(SCREENHEIGHT / TileY) + 2;
 	int TilesX = (int)(SCREENWIDTH / TileX) + 2; // The number of tiles we're going to render.
 
+	// Clip based on our maximum boundries.
+	if (TilesY > MAXTILESY)
+		TilesY = MAXTILESY;
+	if (TilesX > MAXTILESX)
+		TilesX = MAXTILESX;
+
 	int StartY = CenterY - (int)(TilesY / 2); 
 	int StopY = CenterY + (int)(TilesY / 2);
 	int StartX = CenterX - (int)(TilesX / 2); 
@@ -55,6 +61,28 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 
 	int PixelY = (SCREENHEIGHT / 2) - ((CenterY - StartY) * TileY) - YPixelOffset;
 	int PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
+
+	mgLinkedList<mgMapObject> VisibleElements[MAXTILESY][MAXTILESX];
+
+	{
+		// Go through the global map object list and fill our visible array with map objects in screen space.
+		mgListIterator<mgMapObject> MOBJ_Iterator(MOBJList);
+		while (!MOBJ_Iterator.IteratorAtEnd())
+		{
+			mgMapObject *WorkingObject = MOBJ_Iterator.ReturnElementReference();
+			int PositionY = mgFloor(WorkingObject->Position.Y);
+			int PositionX = mgFloor(WorkingObject->Position.X);
+
+			if (PositionY >= StartY && PositionY <= StopY)
+			{
+				if (PositionX >= StartX && PositionX <= StopX)
+				{
+					// Object is in visible scope, add it to our array.
+					VisibleElements[PositionY - StartY][PositionX - StartX].AddElementReference(WorkingObject, false);
+				}
+			}
+		}
+	}
 
 	GameworldFloor->setSize(TileY, TileX); // scale texture
 	GameworldWall->setSize(TileY + WalloffsetY, TileX + WalloffsetX);
@@ -79,7 +107,8 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 	{
 		for (int RenderX = StartX; RenderX <= StopX; RenderX++)
 		{
-			mgListIterator<mgMapObject> MOBJ_Iterator(MOBJList);
+			mgListIterator<mgMapObject> MOBJ_Iterator;
+			MOBJ_Iterator.LinktoList(&VisibleElements[RenderY - StartY][RenderX - StartX]);
 
 			if (GameWorld->IsBlockClippable(RenderY, RenderX)) // Simple check to see if it's a wall, we should really be doing a check for map element type.
 				GameworldWall->render(PixelY - WalloffsetY, PixelX - WalloffsetX);
@@ -91,21 +120,18 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 				int offsetY = PixelY;
 				int offsetX = PixelX;
 
-				if (mgFloor(WorkingObject->Position.Y) == RenderY && mgFloor(WorkingObject->Position.X) == RenderX)
-				{  // Our MOBJ is on this block.
-					// Determine our render position.
-					offsetY += (int)((double)(WorkingObject->Position.Y - (double)RenderY - WorkingObject->ObjectSize) * TileY);
-					offsetX += (int)((double)(WorkingObject->Position.X - (double)RenderX - WorkingObject->ObjectSize) * TileX);
+				// Determine our render position.
+				offsetY += (int)((double)(WorkingObject->Position.Y - (double)RenderY - WorkingObject->ObjectSize) * TileY);
+				offsetX += (int)((double)(WorkingObject->Position.X - (double)RenderX - WorkingObject->ObjectSize) * TileX);
 
-					switch (WorkingObject->ObjectType)
-					{
-					case MOBJ_PLAYER:
-						MOBJ_PlayerSprite->setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
-						MOBJ_PlayerSprite->render(offsetY, offsetX);
-						break;
-					default:
-						break; // No sprite.
-					}
+				switch (WorkingObject->ObjectType)
+				{
+				case MOBJ_PLAYER:
+					MOBJ_PlayerSprite->setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
+					MOBJ_PlayerSprite->render(offsetY, offsetX);
+					break;
+				default:
+					break; // No sprite.
 				}
 			}
 
