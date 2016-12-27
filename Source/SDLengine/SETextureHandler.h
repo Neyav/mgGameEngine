@@ -20,7 +20,7 @@ private:
 	SDL_Texture *hwTexture;	// The texture
 	int Width, Height;	// Texture dimensions
 public:
-	bool loadFromFile( std::string filename, SERenderHandler *TextureRenderer );	// Loads image
+	bool loadFromFile( std::string filename );	// Loads image
 	void free();									// Deallocates texture
 	void setColour( Uint8 red, Uint8 green, Uint8 blue );				// Colour modulation
 	void setBlendMode( SDL_BlendMode blending );					// Blending
@@ -32,7 +32,13 @@ public:
 	int getWidth();
 	int getHeight();
 
-	SETextureHandler();
+	SETextureHandler(SERenderHandler *TextureRenderer)
+	{
+		// init
+		hwTexture = NULL;
+		Width = Height = 0;
+		Renderer = TextureRenderer;
+	}
 	~SETextureHandler();
 };
 #endif

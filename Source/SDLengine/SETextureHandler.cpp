@@ -11,11 +11,9 @@
 #include "SETextureHandler.h"
 #include "SERenderHandler.h"
 
-bool SETextureHandler::loadFromFile( std::string filename, SERenderHandler *TextureRenderer )
+bool SETextureHandler::loadFromFile( std::string filename )
 {
 	free(); // Clean up before we start.
-
-	Renderer = TextureRenderer;
 
 	SDL_Texture *newTexture = NULL;
 
@@ -105,13 +103,6 @@ int SETextureHandler::getWidth()
 int SETextureHandler::getHeight()
 {
 	return Height;
-}
-
-SETextureHandler::SETextureHandler()
-{
-	// Init
-	hwTexture = NULL;
-	Width = Height = 0;
 }
 
 SETextureHandler::~SETextureHandler()

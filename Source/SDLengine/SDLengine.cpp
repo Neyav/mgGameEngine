@@ -86,13 +86,13 @@ int main(int argc, char *argv[])
 	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, __mgVersion);
 
 	MOBJList = new mgLinkedList < mgMapObject > ;
-	GameworldFloor = new SETextureHandler;
-	GameworldWall = new SETextureHandler;
-	MOBJ_PlayerSprite = new SETextureHandler;
+	GameworldFloor = new SETextureHandler(RenderEngine);
+	GameworldWall = new SETextureHandler(RenderEngine);
+	MOBJ_PlayerSprite = new SETextureHandler(RenderEngine);
 
-	GameworldFloor->loadFromFile("SDLenginefloor.png", RenderEngine);
-	GameworldWall->loadFromFile("SDLenginewall.png", RenderEngine);
-	MOBJ_PlayerSprite->loadFromFile("SDLplayer.png", RenderEngine);
+	GameworldFloor->loadFromFile("SDLenginefloor.png");
+	GameworldWall->loadFromFile("SDLenginewall.png");
+	MOBJ_PlayerSprite->loadFromFile("SDLplayer.png");
 
 	initGameWorld();
 	LocalPlayer = spawnMapObject(1.5, 1.5, MOBJ_PLAYER, 0.25);
