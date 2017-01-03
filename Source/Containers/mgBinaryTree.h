@@ -443,8 +443,8 @@ bool mgBinaryTreeIterator<TemplateObject>::IteratorAtEnd(void)
 template <typename TemplateObject>
 void mgBinaryTreeIterator<TemplateObject>::JumptoStart(void)
 {
-	if (MasterList != nullptr)
-		Iterator = MasterTree->LastAddition;
+	if (this->MasterList != nullptr)
+		Iterator = this->MasterTree->LastAddition;
 	else
 		Iterator = nullptr;
 }
