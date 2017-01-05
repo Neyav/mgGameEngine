@@ -8,6 +8,15 @@
 #endif
 #include <string>
 
+#include "SETextureHandler.h"
+class SETextureHandler;
+
+// Texture array definitions
+#define NUMTEXTURES 3			// Number of textures.
+#define TEXTURE_GAME_DEFAULTWALL 0
+#define TEXTURE_GAME_DEFAULTFLOOR 1
+#define TEXTURE_GAME_PLAYER 2
+
 class SERenderHandler
 {
 private:
@@ -16,6 +25,12 @@ private:
 public:
 	SDL_Window *Window;
 	SDL_Renderer *Renderer;
+
+	// Texture array
+	SETextureHandler *Texture[NUMTEXTURES];	// Adjust size of array as needed.
+	void loadTextures(void);	// Load all textures. If this becomes too burdensome, we can load them on use
+					// and make sure to clean them up when appropriate.
+	void clearTextures(void);	// Clean up all textures.
 
 	bool InitWindow(int Width, int Height, std::string Title);
 

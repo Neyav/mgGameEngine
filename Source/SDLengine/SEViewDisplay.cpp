@@ -7,17 +7,10 @@
 #include "../mgVectorPoint.h"
 #include "../Containers/mgLinkedList.h"
 
-// Almost all of these should be handled better. TODO!!! Make a Texture handler that returns textures based on a reference ID.
-// Global Variables
-// TEXTURES
-extern SETextureHandler *GameworldFloor;
-extern SETextureHandler *GameworldWall;
-extern SETextureHandler *MOBJ_PlayerSprite;
-
 /************************************************
- *		SEViewDisplay		                	*
- *	Responsible for setting up the screen       *
- *	and rendering the gameworld upon it.        *
+ *		SEViewDisplay                   *
+ *	Responsible for setting up the screen   *
+ *	and rendering the gameworld upon it.    *
  ************************************************/
 
 void SEViewDisplay::Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler, mgLinkedList<mgMapObject> *MOBJList)
@@ -84,15 +77,16 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 		}
 	}
 
-	GameworldFloor->setSize(TileY, TileX); // scale texture
-	GameworldWall->setSize(TileY + WalloffsetY, TileX + WalloffsetX);
+	// Scale textures	
+	Renderer->Texture[TEXTURE_GAME_DEFAULTFLOOR]->setSize(TileY, TileX);
+	Renderer->Texture[TEXTURE_GAME_DEFAULTWALL]->setSize(TileY + WalloffsetY, TileX + WalloffsetX);
 
 	// Render the floor tiles	
 	for (int RenderY = StartY; RenderY <= StopY; RenderY++)
 	{
 		for (int RenderX = StartX; RenderX <= StopX; RenderX++)
 		{
-			GameworldFloor->render(PixelY, PixelX);
+			Renderer->Texture[TEXTURE_GAME_DEFAULTFLOOR]->render(PixelY, PixelX);
 			PixelX += TileX;
 		}
 		PixelX = (SCREENWIDTH / 2) - ((CenterX - StartX) * TileX) - XPixelOffset;
@@ -111,7 +105,7 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 			MOBJ_Iterator.LinktoList(&VisibleElements[RenderY - StartY][RenderX - StartX]);
 
 			if (GameWorld->IsBlockClippable(RenderY, RenderX)) // Simple check to see if it's a wall, we should really be doing a check for map element type.
-				GameworldWall->render(PixelY - WalloffsetY, PixelX - WalloffsetX);
+				Renderer->Texture[TEXTURE_GAME_DEFAULTWALL]->render(PixelY - WalloffsetY, PixelX - WalloffsetX);				
 
 			// Check our map object list to see if any map objects reside here.
 			while (!MOBJ_Iterator.IteratorAtEnd())
@@ -127,8 +121,8 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 				switch (WorkingObject->ObjectType)
 				{
 				case MOBJ_PLAYER:
-					MOBJ_PlayerSprite->setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
-					MOBJ_PlayerSprite->render(offsetY, offsetX);
+					Renderer->Texture[TEXTURE_GAME_PLAYER]->setSize(TileY * (WorkingObject->ObjectSize * 2),TileX * (WorkingObject->ObjectSize * 2)); // Scale sprite
+					Renderer->Texture[TEXTURE_GAME_PLAYER]->render(offsetY, offsetX);
 					break;
 				default:
 					break; // No sprite.

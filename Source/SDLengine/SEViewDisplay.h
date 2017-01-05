@@ -2,6 +2,7 @@
 #define SEVIEWDISPLAY_H
 
 #include "SERenderHandler.h"
+#include "SETextureHandler.h"
 #include "../mgMapDataHandler.h"
 #include "../mgMapObject.h"
 #include "../mgVectorPoint.h"

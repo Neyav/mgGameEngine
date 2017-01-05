@@ -35,10 +35,6 @@ int SCREENHEIGHT = 720;
 SERenderHandler *RenderEngine = nullptr;
 mgMapDataHandler *GameWorld = nullptr;
 mgLinkedList<mgMapObject> *MOBJList = nullptr;
-// TEXTURES
-SETextureHandler *GameworldFloor = nullptr;
-SETextureHandler *GameworldWall = nullptr;
-SETextureHandler *MOBJ_PlayerSprite = nullptr;
 // [END] Global Variables
 
 mgMapObject *spawnMapObject( double Y, double X, unsigned int Type, double size )
@@ -82,24 +78,20 @@ int main(int argc, char *argv[])
 	SDL_Event eventHandler; 	// SDL Event handler
 	mgMapObject *LocalPlayer = nullptr;
 
-	RenderEngine = new SERenderHandler;
-	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, __mgVersion);
-
+	// Initialize mgGameEngine.
 	MOBJList = new mgLinkedList < mgMapObject > ;
-	GameworldFloor = new SETextureHandler(RenderEngine);
-	GameworldWall = new SETextureHandler(RenderEngine);
-	MOBJ_PlayerSprite = new SETextureHandler(RenderEngine);
-
-	GameworldFloor->loadFromFile("SDLenginefloor.png");
-	GameworldWall->loadFromFile("SDLenginewall.png");
-	MOBJ_PlayerSprite->loadFromFile("SDLplayer.png");
 
 	initGameWorld();
 	LocalPlayer = spawnMapObject(1.5, 1.5, MOBJ_PLAYER, 0.25);
 
 	// Initialize SDLengine classes
+	RenderEngine = new SERenderHandler;
+	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, __mgVersion);
+
 	ViewDisplay.Initialize( RenderEngine, GameWorld, MOBJList );
 	MovementHandler.Initialize ( GameWorld, MOBJList );
+
+	RenderEngine->loadTextures();
 
 	while( !exitApplication )
 	{

@@ -117,15 +117,45 @@ void SERenderHandler::UpdateScreen(void)
 	SDL_RenderPresent( Renderer );
 }
 
+void SERenderHandler::loadTextures(void)
+{
+	// Game Wall
+	this->Texture[TEXTURE_GAME_DEFAULTWALL] = new SETextureHandler(this);
+	this->Texture[TEXTURE_GAME_DEFAULTWALL]->loadFromFile("SDLenginewall.png");
+
+	// Game Floor
+	this->Texture[TEXTURE_GAME_DEFAULTFLOOR] = new SETextureHandler(this);
+	this->Texture[TEXTURE_GAME_DEFAULTFLOOR]->loadFromFile("SDLenginefloor.png");
+
+	// Game Player
+	this->Texture[TEXTURE_GAME_PLAYER] = new SETextureHandler(this);
+	this->Texture[TEXTURE_GAME_PLAYER]->loadFromFile("SDLplayer.png");
+}
+
+void SERenderHandler::clearTextures(void)
+{
+	for (int x = 0; x < NUMTEXTURES; x++)
+		if (this->Texture[x] != nullptr )
+		{
+			delete this->Texture[x];
+			this->Texture[x] = nullptr;
+		}
+}
+
 SERenderHandler::SERenderHandler()
 {
 	Renderer = NULL;
 	Window = NULL;
 	ScreenWidth = ScreenHeight = 0;
+
+	for (int x = 0; x < NUMTEXTURES; x++)
+		this->Texture[x] = nullptr;
 }
 
 SERenderHandler::~SERenderHandler()
 {
+	this->clearTextures();
+
 	SDL_DestroyRenderer(Renderer);
 	SDL_DestroyWindow(Window);
 }
