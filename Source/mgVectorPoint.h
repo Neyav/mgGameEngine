@@ -42,6 +42,7 @@ public:
 	bool operator>(const mgPoint& other);
 	bool operator<(const mgPoint& other);
 	bool operator==(const mgPoint& other);
+	bool operator!=(const mgPoint& other);
 };
 
 double DistanceBetweenPoints(mgPoint Start, mgPoint End);

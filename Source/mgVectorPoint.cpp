@@ -79,6 +79,14 @@ bool mgPoint::operator==(const mgPoint& other)
 		return false;
 }
 
+bool mgPoint::operator!=(const mgPoint& other)
+{
+	if (Y == other.Y && X == other.X)
+		return false;
+	else
+		return true;
+}
+
 double DistanceBetweenPoints(const mgPoint Start, const mgPoint End)
 {
 	double Y, X;
