@@ -55,6 +55,7 @@ public:
 	void ImportLine(mgPoint Origin, mgVector Direction);
 	void ImportLine(mgPoint LineStart, mgPoint LineEnd);
 	mgVector NormalFacingPosition(mgPoint Position);
+	mgPoint Middle(void);
 	mgLineCollisionResults CollisionTest(mgLineSegment *Against);
 
 	mgLineSegment();

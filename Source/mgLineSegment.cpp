@@ -67,6 +67,17 @@ mgLineCollisionResults mgLineSegment::CollisionTest(mgLineSegment *Against)
 
 }
 
+// Calculate the middle of the line.
+mgPoint mgLineSegment::Middle(void)
+{
+	mgPoint MiddlePoint;
+
+	MiddlePoint.Y = (SegmentStart.Y + SegmentEnd.Y) / 2;
+	MiddlePoint.X = (SegmentStart.X + SegmentEnd.Y) / 2;
+
+	return MiddlePoint;
+}
+
 // Calculate the lines normal facing the position unless the line has a predetermined facing, in which case that facing is used.
 mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 {
@@ -86,8 +97,7 @@ mgVector mgLineSegment::NormalFacingPosition(mgPoint Position)
 		break;
 	default:
 		// Calculate the middle of our line
-		MiddleofLine.Y = (SegmentEnd.Y - SegmentStart.Y) / 2 + SegmentStart.Y;
-		MiddleofLine.X = (SegmentEnd.X - SegmentStart.X) / 2 + SegmentStart.X;
+		MiddleofLine = this->Middle();
 
 		// Calculate the vector from Position pointing at the center of the line.
 		PositionTowardsCenter.VectorFromPoints(Position, MiddleofLine);
