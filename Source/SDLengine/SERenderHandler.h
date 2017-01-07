@@ -12,10 +12,13 @@
 class SETextureHandler;
 
 // Texture array definitions
-#define NUMTEXTURES 3			// Number of textures.
+#define NUMTEXTURES 4			// Number of textures.
 #define TEXTURE_GAME_DEFAULTWALL 0
 #define TEXTURE_GAME_DEFAULTFLOOR 1
 #define TEXTURE_GAME_PLAYER 2
+// Shadow hulls for dynamic shadow generation.
+#define TEXTURE_SHADOWHULL 3
+
 
 class SERenderHandler
 {

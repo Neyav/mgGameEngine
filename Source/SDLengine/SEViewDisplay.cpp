@@ -13,6 +13,118 @@
  *	and rendering the gameworld upon it.    *
  ************************************************/
 
+mgPoint convertToScreen(mgPoint ConversionPoint, SEViewDisplayContext DisplayContext)
+{
+	// Calculate the pixel location of StartY, StartX
+	int PixelY = (DisplayContext.ScreenHeight / 2) - ((DisplayContext.CenterY - DisplayContext.StartY) * DisplayContext.TileSizeY) - DisplayContext.PositionOffsetY;
+	int PixelX = (DisplayContext.ScreenWidth / 2) - ((DisplayContext.CenterX - DisplayContext.StartX) * DisplayContext.TileSizeX) - DisplayContext.PositionOffsetX;
+
+	// Convert RenderStart/End to a relative value of StartY/X
+	ConversionPoint.Y -= DisplayContext.StartY;
+	ConversionPoint.X -= DisplayContext.StartX;
+
+	// Multiply by the tilesize and add the offset to get our pixel location.
+	ConversionPoint.Y *= DisplayContext.TileSizeY;
+	ConversionPoint.X *= DisplayContext.TileSizeX;
+	ConversionPoint.Y -= DisplayContext.PositionOffsetY;
+	ConversionPoint.X -= DisplayContext.PositionOffsetX;
+
+	return ConversionPoint;
+}
+
+// Render a triangle to the screen by using a image of a 90 degree triangle on a quad
+// and rotating/flipping two of them to get the shape of our custom triangle.
+void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3)
+{
+	mgLineSegment TriangleLines[3];
+	mgLineSegment TestLine;
+	mgLineCollisionResults TestLineResults;
+	mgPoint TrianglePoints[3];
+	mgPoint SplitPoint[2]; // Our triangle split points.
+	mgVector LineNormal;
+	double LongestLength = 0.0;
+	int LongestLine = 0;
+
+	// Import the triangle into our data structures
+	TrianglePoints[0].Y = Y1;
+	TrianglePoints[0].X = X1;
+	TrianglePoints[1].Y = Y2;
+	TrianglePoints[1].X = X2;
+	TrianglePoints[2].Y = Y3;
+	TrianglePoints[2].X = X3;
+
+	TriangleLines[0].ImportLine(TrianglePoints[0], TrianglePoints[1]);
+	TriangleLines[1].ImportLine(TrianglePoints[1], TrianglePoints[2]);
+	TriangleLines[2].ImportLine(TrianglePoints[2], TrianglePoints[0]);
+
+	// Determine which line in our triangle is the longest, as we are going to use this line to split.
+	for (int iterator = 0; iterator < 3; iterator++)
+	{
+		if (TriangleLines[iterator].SegmentLength > LongestLength)
+		{	// This is the new longest line.
+			LongestLength = TriangleLines[iterator].SegmentLength;
+			LongestLine = iterator;
+		}
+	}
+	
+	// The first split point is the one not on the plane of the longest line,
+	if (LongestLine == 0)
+		SplitPoint[0] = TrianglePoints[2];
+	else if (LongestLine == 1)
+		SplitPoint[0] = TrianglePoints[0];
+	else
+		SplitPoint[0] = TrianglePoints[1];
+
+	// The second split point is where the normal of the longest line projected from the split point
+	// would meet with the first split point. To figure this out we are going to get the normal of the longest line.
+	// and then we are going to reverse it, project it from the first split point and determine where the collision occurs.
+	LineNormal = TriangleLines[LongestLine].NormalFacingPosition(SplitPoint[0]);
+	LineNormal.ReverseDirection();
+
+	TestLine.ImportLine(SplitPoint[0], LineNormal, 5000);	// Rediculous length as a hack to ensure it collides. Doesn't effect speed any,
+															// no reason to do real calculations.
+
+	TestLineResults = TestLine.CollisionTest(&TriangleLines[LongestLine]);
+
+	SplitPoint[1] = TestLineResults.CollisionPoint;
+}
+
+// TODO: Break into it's own class, just here as a proof of concept.
+void drawShadowHull(SERenderHandler *RenderHandler, SEViewDisplayContext DisplayContext, mgLineSegment HullLine, mgPoint LightPosition)
+{
+	mgPoint MiddleofLine = HullLine.Middle(); // Grab the middle of the line.
+	
+	mgVector PointToLine; // A vector representing the direction from the point to the center of the line.
+
+	PointToLine.VectorFromPoints(LightPosition, MiddleofLine);
+
+	double DotProduct = PointToLine * HullLine.NormalFacingPosition(LightPosition); // Grab the dot product of the line and the vector to determine if it's facing away or towards us.
+
+	// Facing opposite directions or perpendicular, not a shadow caster.
+	if (DotProduct <= 0)
+		return;
+
+	// Shadow hulls are a projection of lines from the light source, towards the edges of the occluding line ( which is any line not facing the light, for simplicity )
+	// This will give us four points. Two points of the occluding line, and two points that extend off the screen, projected from the light source against both
+	// edges of the occluding line. This skewed quad will then be filled in with black triangles to mask the content underneath.
+
+	// TODO: Make this all render to a shadowmap, and find a way to merge them together so we can have multiple light sources.
+	
+	// First we need to transfer the line from world space to screen space, we will do this using the render view context.
+	mgPoint RenderStart, RenderEnd;
+	RenderStart = HullLine.SegmentStart;
+	RenderEnd = HullLine.SegmentEnd;
+
+	RenderStart = convertToScreen(RenderStart, DisplayContext);
+	RenderEnd = convertToScreen(RenderEnd, DisplayContext);
+	LightPosition = convertToScreen(LightPosition, DisplayContext);
+
+	//RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->setSize(RenderEnd.X - RenderStart.X, RenderEnd.Y - RenderStart.Y);
+	//RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->render(RenderStart.Y, RenderStart.X, NULL);
+	//if (DotProduct > 0)
+	//	RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->render(1, 1, NULL);
+}
+
 void SEViewDisplay::Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler, mgLinkedList<mgMapObject> *MOBJList)
 {
 	Renderer = RenderHandler;
@@ -171,6 +283,17 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 		PixelY += this->ViewContext.TileSizeY;
 		PixelX = (this->ViewContext.ScreenWidth / 2) - ((this->ViewContext.CenterX - this->ViewContext.StartX) * this->ViewContext.TileSizeX) - this->ViewContext.PositionOffsetX;
 	}
+
+	/*mgLineSegment Test;
+	mgPoint a, b;
+	a.Y = 5.4;
+	a.X = 5.4;
+	b.Y = 7;
+	b.X = 6;
+	Test.ImportLine(a, b);
+	Test.Facing = LINEFACE_RIGHT;
+
+	drawShadowHull(this->Renderer, this->ViewContext, Test, Position);*/
 }
 
 SEViewDisplay::SEViewDisplay()

@@ -130,6 +130,10 @@ void SERenderHandler::loadTextures(void)
 	// Game Player
 	this->Texture[TEXTURE_GAME_PLAYER] = new SETextureHandler(this);
 	this->Texture[TEXTURE_GAME_PLAYER]->loadFromFile("SDLplayer.png");
+
+	// Shadow hulls for dynamic shadow generation.
+	this->Texture[TEXTURE_SHADOWHULL] = new SETextureHandler(this);
+	this->Texture[TEXTURE_SHADOWHULL]->loadFromFile("shadowhull.png");
 }
 
 void SERenderHandler::clearTextures(void)
