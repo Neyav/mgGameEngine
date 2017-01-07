@@ -66,7 +66,7 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 			LongestLine = iterator;
 		}
 	}
-	
+
 	// The first split point is the one not on the plane of the longest line,
 	if (LongestLine == 0)
 		SplitPoint[0] = TrianglePoints[2];
@@ -92,6 +92,11 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 	// So the height of our sprite will be the distance between the split points.
 	// The width will be the length from SplitPoint[1] towards the longest line's segment end.
 	// The rotation is going to be the angle from SplitPoint[1] to the longst line's segment end.
+
+	// Our first question is going to be, do we need to flip the right angle triangle sprite to be able to represent this triangle?
+	// To get the answer we are going to make a line out of the spine from top to bottom ( bottom = longestline ) with the facing set
+	// to right, and then test the dot product of it against the extended point to see if it faces the interior of the triangle line, or the exterior.
+	// If it is the exterior then we need to flip it. flip it good. Whatever answer we get here, the opposite will be true for the second triangle.
 }
 
 // TODO: Break into it's own class, just here as a proof of concept.
