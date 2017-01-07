@@ -16,6 +16,8 @@
 // A line going from 0, 2 to 0, 0 is considered to be facing right
 // If you are uncertain which to use when generating a shape out of lines, either test it out or just
 // leave it as its default undefined. This isn't a make or break decision, just a little optimization.
+// UPDATE: Properly identifying the facing of your geometry lines is necessary for proper operation of
+//			shadow hull generation. So if you plan on having dynamic shadows, this is necessary.
 #define LineFacing unsigned char
 #define LINEFACE_UNDEFINED 0
 #define LINEFACE_RIGHT 1
