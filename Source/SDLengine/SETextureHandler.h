@@ -21,13 +21,14 @@ private:
 	SDL_Texture *hwTexture;	// The texture
 	int Width, Height;	// Texture dimensions
 public:
-	bool loadFromFile( std::string filename );	// Loads image
-	void free();									// Deallocates texture
-	void setColour( Uint8 red, Uint8 green, Uint8 blue );				// Colour modulation
-	void setBlendMode( SDL_BlendMode blending );					// Blending
-	void setAlpha( Uint8 alpha );							// Alpha modulation
+	bool loadFromFile( std::string filename );					// Loads image
+	void free();												// Deallocates texture
+	void setColour( Uint8 red, Uint8 green, Uint8 blue );		// Colour modulation
+	void setBlendMode( SDL_BlendMode blending );				// Blending
+	void setAlpha( Uint8 alpha );								// Alpha modulation
 	void setSize(int Width, int Height);						// Size of image
-	void render( int y, int x, SDL_Rect* clip = NULL );				// Renders texture
+	void render( int y, int x, SDL_Rect* clip = NULL );			// Renders texture
+	void renderExt(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	// Gets image dimensions
 	int getWidth();
