@@ -34,7 +34,7 @@ mgPoint convertToScreen(mgPoint ConversionPoint, SEViewDisplayContext DisplayCon
 
 // Render a triangle to the screen by using a image of a 90 degree triangle on a quad
 // and rotating/flipping two of them to get the shape of our custom triangle.
-void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3)
+void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHandler *RenderHandler)
 {
 	mgLineSegment TriangleLines[3];
 	mgLineSegment TestLine;
@@ -87,6 +87,11 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3)
 	TestLineResults = TestLine.CollisionTest(&TriangleLines[LongestLine]);
 
 	SplitPoint[1] = TestLineResults.CollisionPoint;
+
+	// Now we are going to draw the first triangle. The spine of it will be between both split points, with the top being SplitPoint[0].
+	// So the height of our sprite will be the distance between the split points.
+	// The width will be the length from SplitPoint[1] towards the longest line's segment end.
+	// The rotation is going to be the angle from SplitPoint[1] to the longst line's segment end.
 }
 
 // TODO: Break into it's own class, just here as a proof of concept.
