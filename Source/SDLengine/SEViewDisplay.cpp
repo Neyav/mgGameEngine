@@ -44,15 +44,19 @@ void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHan
 	Axis[0].ImportLine(Spine1, Spine2);
 	Axis[1].ImportLine(Spine2, P3);
 
-	RotationAxis.y = Spine2.Y - Spine1.Y;
-	RotationAxis.x = Spine2.X - Spine1.X;
+	RotationAxis.y = 0;
+	RotationAxis.x = 0;
 
 	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
 
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(20, 20);
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine1.Y, Spine1.X);
+
+	//if (rotationAngle > 180 || rotationAngle < -180)
+	//	Flip = SDL_FLIP_VERTICAL;
+
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(5, 5);
+	//RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine1.Y, Spine1.X);
 	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine2.Y, Spine2.X);
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(P3.Y, P3.X);
+	//RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(P3.Y, P3.X);
 
 	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(Axis[1].SegmentLength, Axis[0].SegmentLength);
 	RenderHandler->Texture[TEXTURE_SHADOWHULL]->renderExt(Spine1.Y, Spine1.X, NULL, rotationAngle, &RotationAxis, Flip);
@@ -116,7 +120,7 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 
 	// Render our two right angle triangles.
 	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentEnd, RenderHandler);
-	//renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentStart, RenderHandler);
+	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentStart, RenderHandler);
 
 	// Now we are going to draw the first triangle. The spine of it will be between both split points, with the top being SplitPoint[0].
 	// So the height of our sprite will be the distance between the split points.
