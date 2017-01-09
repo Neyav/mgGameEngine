@@ -15,19 +15,14 @@
 
 mgPoint convertToScreen(mgPoint ConversionPoint, SEViewDisplayContext DisplayContext)
 {
-	// Calculate the pixel location of StartY, StartX
+	double precisiony, precisionx;
+	
+	// Pixel location of StartY/StartX
 	int PixelY = (DisplayContext.ScreenHeight / 2) - ((DisplayContext.CenterY - DisplayContext.StartY) * DisplayContext.TileSizeY) - DisplayContext.PositionOffsetY;
 	int PixelX = (DisplayContext.ScreenWidth / 2) - ((DisplayContext.CenterX - DisplayContext.StartX) * DisplayContext.TileSizeX) - DisplayContext.PositionOffsetX;
 
-	// Convert RenderStart/End to a relative value of StartY/X
-	ConversionPoint.Y -= DisplayContext.StartY;
-	ConversionPoint.X -= DisplayContext.StartX;
-
-	// Multiply by the tilesize and add the offset to get our pixel location.
-	ConversionPoint.Y *= DisplayContext.TileSizeY;
-	ConversionPoint.X *= DisplayContext.TileSizeX;
-	ConversionPoint.Y -= DisplayContext.PositionOffsetY;
-	ConversionPoint.X -= DisplayContext.PositionOffsetX;
+	ConversionPoint.Y = PixelY + (ConversionPoint.Y - DisplayContext.StartY) * DisplayContext.TileSizeY;
+	ConversionPoint.X = PixelX + (ConversionPoint.X - DisplayContext.StartX) * DisplayContext.TileSizeX;
 
 	return ConversionPoint;
 }
@@ -39,9 +34,11 @@ void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHan
 	SDL_RendererFlip Flip = SDL_FLIP_NONE;
 	double rotationAngle = 0;
 	mgLineSegment Axis[2];
+	mgVector FacingTest;
 
 	// Get our axis lines.
 	Axis[0].ImportLine(Spine1, Spine2);
+	Axis[0].Facing = LINEFACE_RIGHT; // Used for telling if we need to flip the triangle or not.
 	Axis[1].ImportLine(Spine2, P3);
 
 	RotationAxis.y = 0;
@@ -49,7 +46,10 @@ void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHan
 
 	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
 
-	if (rotationAngle > 90 || rotationAngle < -90)
+	// Does this triangle shape match our image? 
+	FacingTest.VectorFromPoints(P3, Spine2);
+
+	if (FacingTest * Axis[0].NormalFacingPosition(P3) > 0)
 		Flip = SDL_FLIP_VERTICAL;
 
 	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(5, 5);
@@ -164,6 +164,20 @@ void drawShadowHull(SERenderHandler *RenderHandler, SEViewDisplayContext Display
 	RenderStart = convertToScreen(RenderStart, DisplayContext);
 	RenderEnd = convertToScreen(RenderEnd, DisplayContext);
 	LightPosition = convertToScreen(LightPosition, DisplayContext);
+
+	mgVector FirstArc, SecondArc;
+	mgLineSegment FirstProjection, SecondProjection;
+
+	FirstArc.VectorFromPoints(LightPosition, RenderStart);
+	SecondArc.VectorFromPoints(LightPosition, RenderEnd);
+
+	FirstProjection.ImportLine(RenderStart, FirstArc, 1000);
+	SecondProjection.ImportLine(RenderEnd, SecondArc, 1000);
+
+	renderTriangle(RenderStart.Y, RenderStart.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X,RenderHandler);
+	renderTriangle(RenderEnd.Y, RenderEnd.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X, RenderHandler);
+	renderTriangle(RenderStart.Y, RenderStart.X, RenderEnd.Y, RenderEnd.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, RenderHandler);
+	//renderTriangle(RenderEnd.Y, RenderEnd.X, RenderStart.Y, RenderStart.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X, RenderHandler);
 
 	//RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->setSize(RenderEnd.X - RenderStart.X, RenderEnd.Y - RenderStart.Y);
 	//RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->render(RenderStart.Y, RenderStart.X, NULL);
@@ -330,25 +344,17 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 		PixelX = (this->ViewContext.ScreenWidth / 2) - ((this->ViewContext.CenterX - this->ViewContext.StartX) * this->ViewContext.TileSizeX) - this->ViewContext.PositionOffsetX;
 	}
 
-	/*mgLineSegment Test;
+	mgLineSegment Test;
 	mgPoint a, b;
-	a.Y = 5.4;
-	a.X = 5.4;
-	b.Y = 7;
-	b.X = 6;
+	a.Y = 3;
+	a.X = 3;
+	b.Y = 4;
+	b.X = 4;
 	Test.ImportLine(a, b);
 	Test.Facing = LINEFACE_RIGHT;
 
-	drawShadowHull(this->Renderer, this->ViewContext, Test, Position);*/
-
-	renderTriangle(300,100,200,150,280,420, Renderer);
-
-	/*SDL_Point Center;
-	Center.y = 100;
-	Center.x = 0;
-
-	Renderer->Texture[TEXTURE_SHADOWHULL]->setSize(100, 100);
-	Renderer->Texture[TEXTURE_SHADOWHULL]->renderExt(10, 10, NULL, 10, &Center);*/
+	drawShadowHull(this->Renderer, this->ViewContext, Test, Position);
+	//renderTriangle(80, 10, 5, 40, 80, 90, Renderer);
 
 }
 
