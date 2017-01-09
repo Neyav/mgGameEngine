@@ -49,17 +49,19 @@ void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHan
 
 	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
 
-
-	//if (rotationAngle > 180 || rotationAngle < -180)
-	//	Flip = SDL_FLIP_VERTICAL;
+	if (rotationAngle > 90 || rotationAngle < -90)
+		Flip = SDL_FLIP_VERTICAL;
 
 	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(5, 5);
-	//RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine1.Y, Spine1.X);
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine1.Y, Spine1.X);
 	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine2.Y, Spine2.X);
-	//RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(P3.Y, P3.X);
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(P3.Y, P3.X);
 
 	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(Axis[1].SegmentLength, Axis[0].SegmentLength);
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->renderExt(Spine1.Y, Spine1.X, NULL, rotationAngle, &RotationAxis, Flip);
+	if (Flip == SDL_FLIP_VERTICAL)
+		RenderHandler->Texture[TEXTURE_SHADOWHULL]->renderExt(Spine2.Y, Spine2.X, NULL, rotationAngle, &RotationAxis, Flip);
+	else
+		RenderHandler->Texture[TEXTURE_SHADOWHULL]->renderExt(Spine1.Y, Spine1.X, NULL, rotationAngle, &RotationAxis, Flip);
 }
 
 // Render a triangle to the screen by using a image of a 90 degree triangle on a quad
@@ -339,7 +341,7 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 
 	drawShadowHull(this->Renderer, this->ViewContext, Test, Position);*/
 
-	renderTriangle(300,200,200,300,320,420, Renderer);
+	renderTriangle(300,100,200,150,280,420, Renderer);
 
 	/*SDL_Point Center;
 	Center.y = 100;
