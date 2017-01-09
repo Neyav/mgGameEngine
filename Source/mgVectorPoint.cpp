@@ -96,9 +96,17 @@ double DistanceBetweenPoints(const mgPoint Start, const mgPoint End)
 
 	// A lot of straight lines are used, and since that is the case these two test case scenarios remove a lot of the "work"
 	if (Y == 0)
+	{
+		if (X < 0)
+			X *= -1; // Don't return negative values.
 		return X;
+	}
 	else if (X == 0)
+	{
+		if (Y < 0)
+			Y *= -1;
 		return Y;
+	}
 	else
 		return sqrt(Y * Y + X * X);
 }

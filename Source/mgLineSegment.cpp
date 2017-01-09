@@ -35,9 +35,6 @@ void mgLineSegment::ImportLine(mgPoint LineStart, mgPoint LineEnd)
 	SegmentEnd.X = LineEnd.X;
 
 	SegmentLength = DistanceBetweenPoints(SegmentStart, SegmentEnd);
-
-	if ( SegmentLength < 0 )
-		SegmentLength *= -1; // Negative segment lengths don't make sense.
 }
 
 // This code is derived from the very useful example I found at: http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/1968345#1968345
