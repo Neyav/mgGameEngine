@@ -41,7 +41,7 @@ void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHan
 	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
 	// Let's see if we need to flip the right angle triangle image first
 
-	std::cout << rotationAngle << std::endl;
+	std::cout << Spine2.Y << ", " << Spine2.X << " - " << P3.Y << ", " << P3.X << " = " << rotationAngle << std::endl;
 }
 
 // Render a triangle to the screen by using a image of a 90 degree triangle on a quad
@@ -102,7 +102,7 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 
 	// Render our two right angle triangles.
 	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentEnd, RenderHandler);
-	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentEnd, RenderHandler);
+	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentStart, RenderHandler);
 
 	// Now we are going to draw the first triangle. The spine of it will be between both split points, with the top being SplitPoint[0].
 	// So the height of our sprite will be the distance between the split points.
@@ -321,8 +321,8 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 
 	drawShadowHull(this->Renderer, this->ViewContext, Test, Position);*/
 
-	renderTriangle(200, 100, 100, 200, 200, 300, Renderer);
-	exit(1);
+	renderTriangle(200, 0, 100, 600, 50, 450, Renderer);
+
 	/*SDL_Point Center;
 	Center.y = 100;
 	Center.x = 0;

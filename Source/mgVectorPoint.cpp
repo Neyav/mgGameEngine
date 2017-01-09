@@ -38,6 +38,14 @@ mgPoint mgPoint::operator-(const mgPoint& other)
 	return product;
 }
 
+void mgPoint::operator=(const mgPoint& other)
+{
+	this->Y = other.Y;
+	this->X = other.X;
+
+	return;
+}
+
 // Comparative operator overloads for quickly comparing mgPoints for storage in a binary search tree.
 bool mgPoint::operator>(const mgPoint& other)
 {
