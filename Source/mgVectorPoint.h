@@ -38,7 +38,6 @@ public:
 	// Manipulative Overloads
 	mgPoint operator+(const mgPoint& other); // addition
 	mgPoint operator-(const mgPoint& other); // subtraction
-	void operator=(const mgPoint& other); // Transfer value.
 	// Comparison Overloads
 	bool operator>(const mgPoint& other);
 	bool operator<(const mgPoint& other);
