@@ -166,17 +166,22 @@ void drawShadowHull(SERenderHandler *RenderHandler, SEViewDisplayContext Display
 	LightPosition = convertToScreen(LightPosition, DisplayContext);
 
 	mgVector FirstArc, SecondArc;
-	mgLineSegment FirstProjection, SecondProjection;
+	mgLineSegment FirstProjection, SecondProjection, Cross1, Cross2;
+	mgLineCollisionResults CrossCollision;
 
 	FirstArc.VectorFromPoints(LightPosition, RenderStart);
 	SecondArc.VectorFromPoints(LightPosition, RenderEnd);
 
 	FirstProjection.ImportLine(RenderStart, FirstArc, 1000);
 	SecondProjection.ImportLine(RenderEnd, SecondArc, 1000);
+	Cross1.ImportLine(RenderStart, SecondArc, 1000);
+	Cross2.ImportLine(RenderEnd, FirstArc, 1000);
+
+	CrossCollision = Cross1.CollisionTest(&Cross2);
 
 	renderTriangle(RenderStart.Y, RenderStart.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X,RenderHandler);
 	renderTriangle(RenderEnd.Y, RenderEnd.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X, RenderHandler);
-	renderTriangle(RenderStart.Y, RenderStart.X, RenderEnd.Y, RenderEnd.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, RenderHandler);
+	renderTriangle(RenderStart.Y, RenderStart.X, RenderEnd.Y, RenderEnd.X, CrossCollision.CollisionPoint.Y, CrossCollision.CollisionPoint.X, RenderHandler);
 	//renderTriangle(RenderEnd.Y, RenderEnd.X, RenderStart.Y, RenderStart.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X, RenderHandler);
 
 	//RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->setSize(RenderEnd.X - RenderStart.X, RenderEnd.Y - RenderStart.Y);
