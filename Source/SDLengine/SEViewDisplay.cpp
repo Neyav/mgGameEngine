@@ -36,12 +36,26 @@ mgPoint convertToScreen(mgPoint ConversionPoint, SEViewDisplayContext DisplayCon
 void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHandler *RenderHandler)
 {
 	SDL_Point RotationAxis;
-	double rotationAngle;
+	SDL_RendererFlip Flip = SDL_FLIP_NONE;
+	double rotationAngle = 0;
+	mgLineSegment Axis[2];
+
+	// Get our axis lines.
+	Axis[0].ImportLine(Spine1, Spine2);
+	Axis[1].ImportLine(Spine2, P3);
+
+	RotationAxis.y = Spine2.Y - Spine1.Y;
+	RotationAxis.x = Spine2.X - Spine1.X;
 
 	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
-	// Let's see if we need to flip the right angle triangle image first
 
-	std::cout << Spine2.Y << ", " << Spine2.X << " - " << P3.Y << ", " << P3.X << " = " << rotationAngle << std::endl;
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(20, 20);
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine1.Y, Spine1.X);
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine2.Y, Spine2.X);
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(P3.Y, P3.X);
+
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(Axis[1].SegmentLength, Axis[0].SegmentLength);
+	RenderHandler->Texture[TEXTURE_SHADOWHULL]->renderExt(Spine1.Y, Spine1.X, NULL, rotationAngle, &RotationAxis, Flip);
 }
 
 // Render a triangle to the screen by using a image of a 90 degree triangle on a quad
@@ -102,7 +116,7 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 
 	// Render our two right angle triangles.
 	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentEnd, RenderHandler);
-	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentStart, RenderHandler);
+	//renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentStart, RenderHandler);
 
 	// Now we are going to draw the first triangle. The spine of it will be between both split points, with the top being SplitPoint[0].
 	// So the height of our sprite will be the distance between the split points.
@@ -321,7 +335,7 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 
 	drawShadowHull(this->Renderer, this->ViewContext, Test, Position);*/
 
-	renderTriangle(200, 0, 100, 600, 50, 450, Renderer);
+	renderTriangle(300,200,200,300,320,420, Renderer);
 
 	/*SDL_Point Center;
 	Center.y = 100;

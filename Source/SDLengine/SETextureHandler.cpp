@@ -95,10 +95,10 @@ void SETextureHandler::render( int y, int x, SDL_Rect* clip )
 	SDL_RenderCopy( Renderer->Renderer, hwTexture, clip, &renderQuad );
 }
 
-void SETextureHandler::renderExt(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+void SETextureHandler::renderExt(int y, int x, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
 	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, Width, Height };
+	SDL_Rect renderQuad = { x, y, Width, Height};
 
 	//Set clip rendering dimensions
 	if (clip != NULL)
