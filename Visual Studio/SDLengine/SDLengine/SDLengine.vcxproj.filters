@@ -78,6 +78,9 @@
     <ClInclude Include="..\..\..\Source\SDLengine\SEMovementHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\SDLengine\SEShadowEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\mgCollisionDetection.cpp">
@@ -126,6 +129,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\SDLengine\SEMovementHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\SDLengine\SEShadowEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -97,6 +97,7 @@
     <ClInclude Include="..\..\..\Source\SDLengine\GameGlobals.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\SEMovementHandler.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\SERenderHandler.h" />
+    <ClInclude Include="..\..\..\Source\SDLengine\SEShadowEngine.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\SETextureHandler.h" />
     <ClInclude Include="..\..\..\Source\SDLengine\SEViewDisplay.h" />
   </ItemGroup>
@@ -115,6 +116,7 @@
     <ClCompile Include="..\..\..\Source\SDLengine\SDLengine.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SEMovementHandler.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SERenderHandler.cpp" />
+    <ClCompile Include="..\..\..\Source\SDLengine\SEShadowEngine.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SETextureHandler.cpp" />
     <ClCompile Include="..\..\..\Source\SDLengine\SEViewDisplay.cpp" />
   </ItemGroup>

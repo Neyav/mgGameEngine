@@ -2,6 +2,7 @@
 #define SEVIEWDISPLAY_H
 
 #include "SERenderHandler.h"
+#include "SEShadowEngine.h"
 #include "SETextureHandler.h"
 #include "../mgMapDataHandler.h"
 #include "../mgMapObject.h"
@@ -41,6 +42,7 @@ class SEViewDisplay
 	private:
 	SERenderHandler *Renderer;
 	mgMapDataHandler *GameWorld;
+	SEShadowEngine *ShadowEngine;
 
 	SEViewDisplayContext ViewContext;
 
@@ -48,11 +50,15 @@ class SEViewDisplay
 
 	public:
 
+	mgPoint convertToScreen(mgPoint ConversionPoint); // Convert a point from game space to screen space
+
 	void Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler, mgLinkedList<mgMapObject> *MOBJList);
+	void InitializeShadowEngine();
 	void SetupViewContext(mgPoint Position, double zoom);
 	void RenderWorld(mgPoint Position, double zoom);
 
 	SEViewDisplay();
+	~SEViewDisplay();
 };
 
 #endif

@@ -15,6 +15,7 @@
 #include "SEViewDisplay.h"
 #include "SETextureHandler.h"
 #include "SEMovementHandler.h"
+#include "SEShadowEngine.h"
 #include "GameGlobals.h"
 
 // mgGameEngine includes
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
 	RenderEngine->InitWindow(SCREENWIDTH,SCREENHEIGHT, __mgVersion);
 
 	ViewDisplay.Initialize( RenderEngine, GameWorld, MOBJList );
+	ViewDisplay.InitializeShadowEngine(); // Initalize the shadow engine.
 	MovementHandler.Initialize ( GameWorld, MOBJList );
 
 	RenderEngine->loadTextures();

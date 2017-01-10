@@ -1,6 +1,7 @@
 #include "SERenderHandler.h"
 #include "SETextureHandler.h"
 #include "SEViewDisplay.h"
+#include "SEShadowEngine.h"
 #include "GameGlobals.h"
 #include "../mgMapDataHandler.h"
 #include "../mgMapObject.h"
@@ -13,213 +14,18 @@
  *	and rendering the gameworld upon it.    *
  ************************************************/
 
-mgPoint convertToScreen(mgPoint ConversionPoint, SEViewDisplayContext DisplayContext)
+mgPoint SEViewDisplay::convertToScreen(mgPoint ConversionPoint)
 {
 	double precisiony, precisionx;
 	
 	// Pixel location of StartY/StartX
-	int PixelY = (DisplayContext.ScreenHeight / 2) - ((DisplayContext.CenterY - DisplayContext.StartY) * DisplayContext.TileSizeY) - DisplayContext.PositionOffsetY;
-	int PixelX = (DisplayContext.ScreenWidth / 2) - ((DisplayContext.CenterX - DisplayContext.StartX) * DisplayContext.TileSizeX) - DisplayContext.PositionOffsetX;
+	int PixelY = (ViewContext.ScreenHeight / 2) - ((ViewContext.CenterY - ViewContext.StartY) * ViewContext.TileSizeY) - ViewContext.PositionOffsetY;
+	int PixelX = (ViewContext.ScreenWidth / 2) - ((ViewContext.CenterX - ViewContext.StartX) * ViewContext.TileSizeX) - ViewContext.PositionOffsetX;
 
-	ConversionPoint.Y = PixelY + (ConversionPoint.Y - DisplayContext.StartY) * DisplayContext.TileSizeY;
-	ConversionPoint.X = PixelX + (ConversionPoint.X - DisplayContext.StartX) * DisplayContext.TileSizeX;
+	ConversionPoint.Y = PixelY + (ConversionPoint.Y - ViewContext.StartY) * ViewContext.TileSizeY;
+	ConversionPoint.X = PixelX + (ConversionPoint.X - ViewContext.StartX) * ViewContext.TileSizeX;
 
 	return ConversionPoint;
-}
-
-// Renders a right angle triangle on the screen using our texture. scales it, rotates it, and flips it as required.
-void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHandler *RenderHandler)
-{
-	SDL_Point RotationAxis;
-	SDL_RendererFlip Flip = SDL_FLIP_NONE;
-	double rotationAngle = 0;
-	double facingtestAngle = 0;
-	int facingtestDiff = 0;
-	mgLineSegment Axis[2];
-	mgVector FacingTest;
-
-	// Get our axis lines.
-	Axis[0].ImportLine(Spine1, Spine2);
-	Axis[0].Facing = LINEFACE_RIGHT; // Used for telling if we need to flip the triangle or not.
-	Axis[1].ImportLine(Spine2, P3);
-
-	RotationAxis.y = 0;
-	RotationAxis.x = 0;
-
-	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
-	facingtestAngle = atan2(Spine1.Y - Spine2.Y, Spine1.X - Spine2.X) * 180 / mgPI;
-
-	std::cout << rotationAngle << " " << facingtestAngle << "(" << rotationAngle - facingtestAngle << " - " << facingtestAngle - rotationAngle << ")" << std::endl;
-
-	facingtestDiff = abs(rotationAngle - facingtestAngle);
-
-	// Account for rounding errors.
-	if ( facingtestDiff == 89 || facingtestDiff == 269 )
-		facingtestDiff++;
-	else if ( facingtestDiff == 91 || facingtestDiff == 271 )
-		facingtestDiff--;
-
-	std::cout << facingtestDiff << std::endl;
-
-	if (facingtestDiff != 90 && facingtestDiff != 270)
-	{
-		// Not a right angle triangle.
-		std::cout << "Not a right angle triangle." << std::endl;
-		std::cout << "Spine1 [" << Spine1.Y << ", " << Spine1.X << "]" << std::endl;
-		std::cout << "Spine2 [" << Spine2.Y << ", " << Spine2.X << "]" << std::endl;
-		std::cout << "P3     [" << P3.Y << ", " << P3.X << "]" << std::endl;
-	
-		exit(0);
-	}
-
-	// Does this triangle shape match our image? 
-	FacingTest.VectorFromPoints(P3, Spine2);
-
-	if (FacingTest * Axis[0].NormalFacingPosition(P3) > 0)
-		Flip = SDL_FLIP_VERTICAL;
-
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(5, 5);
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine1.Y, Spine1.X);
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(Spine2.Y, Spine2.X);
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->render(P3.Y, P3.X);
-
-	RenderHandler->Texture[TEXTURE_SHADOWHULL]->setSize(Axis[1].SegmentLength, Axis[0].SegmentLength);
-	if (Flip == SDL_FLIP_VERTICAL)
-		RenderHandler->Texture[TEXTURE_SHADOWHULL]->renderExt(Spine2.Y, Spine2.X, NULL, rotationAngle, &RotationAxis, Flip);
-	else
-		RenderHandler->Texture[TEXTURE_SHADOWHULL]->renderExt(Spine1.Y, Spine1.X, NULL, rotationAngle, &RotationAxis, Flip);
-}
-
-// Render a triangle to the screen by using a image of a 90 degree triangle on a quad
-// and rotating/flipping two of them to get the shape of our custom triangle.
-void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHandler *RenderHandler)
-{
-	mgLineSegment TriangleLines[3];
-	mgLineSegment TestLine;
-	mgLineCollisionResults TestLineResults;
-	mgPoint TrianglePoints[3];
-	mgPoint SplitPoint[2]; // Our triangle split points.
-	mgVector LineNormal;
-	double LongestLength = 0.0;
-	int LongestLine = 0;
-
-	std::cout << "Triangle IN: [" << Y1 << ", " << X1 << "] [" << Y2 << ", " << X2 << "] [" << Y3 << ", " << X3 << "]" << std::endl;
-
-	// Import the triangle into our data structures
-	TrianglePoints[0].Y = Y1;
-	TrianglePoints[0].X = X1;
-	TrianglePoints[1].Y = Y2;
-	TrianglePoints[1].X = X2;
-	TrianglePoints[2].Y = Y3;
-	TrianglePoints[2].X = X3;
-
-	TriangleLines[0].ImportLine(TrianglePoints[0], TrianglePoints[1]);
-	TriangleLines[1].ImportLine(TrianglePoints[1], TrianglePoints[2]);
-	TriangleLines[2].ImportLine(TrianglePoints[2], TrianglePoints[0]);
-
-	std::cout << "Triangle Lengths: 0:[" << TriangleLines[0].SegmentLength << "] 1:[" << TriangleLines[1].SegmentLength << "] 2:[" << TriangleLines[2].SegmentLength << "]" << std::endl;
-
-	// Determine which line in our triangle is the longest, as we are going to use this line to split.
-	for (int iterator = 0; iterator < 3; iterator++)
-	{
-		if (TriangleLines[iterator].SegmentLength > LongestLength)
-		{	// This is the new longest line.
-			LongestLength = TriangleLines[iterator].SegmentLength;
-			LongestLine = iterator;
-		}
-	}
-
-	// The first split point is the one not on the plane of the longest line,
-	if (LongestLine == 0)
-		SplitPoint[0] = TrianglePoints[2];
-	else if (LongestLine == 1)
-		SplitPoint[0] = TrianglePoints[0];
-	else
-		SplitPoint[0] = TrianglePoints[1];
-	
-	TriangleLines[LongestLine].Facing = LINEFACE_LEFT;
-
-	LineNormal = TriangleLines[LongestLine].NormalFacingPosition(SplitPoint[0]);
-	LineNormal.ReverseDirection();
-
-	std::cout << "Longest Line: " << LongestLine << " Normal: " << LineNormal.Y << ", " << LineNormal.X << std::endl;
-
-	TestLine.ImportLine(SplitPoint[0], LineNormal, 50000);	// Rediculous length as a hack to ensure it collides. Doesn't effect speed any,
-															// no reason to do real calculations.
-
-	TestLineResults = TestLine.CollisionTest(&TriangleLines[LongestLine]);
-
-	if (!TestLineResults.Collision)
-	{	// This is a HUGE cheat. If there was no collision, then just reverse the normal direction and go again!
-		LineNormal.ReverseDirection();
-		TestLine.ImportLine(SplitPoint[0], LineNormal, 50000);
-		TestLineResults = TestLine.CollisionTest(&TriangleLines[LongestLine]);
-	}
-
-	SplitPoint[1] = TestLineResults.CollisionPoint;
-
-	// Render our two right angle triangles.
-	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentEnd, RenderHandler);
-	renderRightTriangle(SplitPoint[0], SplitPoint[1], TriangleLines[LongestLine].SegmentStart, RenderHandler);
-
-	// Now we are going to draw the first triangle. The spine of it will be between both split points, with the top being SplitPoint[0].
-	// So the height of our sprite will be the distance between the split points.
-	// The width will be the length from SplitPoint[1] towards the longest line's segment end.
-	// The rotation is going to be the angle from SplitPoint[1] to the longst line's segment end.
-
-	// Our first question is going to be, do we need to flip the right angle triangle sprite to be able to represent this triangle?
-	// To get the answer we are going to make a line out of the spine from top to bottom ( bottom = longestline ) with the facing set
-	// to right, and then test the dot product of it against the extended point to see if it faces the interior of the triangle line, or the exterior.
-	// If it is the exterior then we need to flip it. flip it good. Whatever answer we get here, the opposite will be true for the second triangle.
-}
-
-// TODO: Break into it's own class, just here as a proof of concept.
-void drawShadowHull(SERenderHandler *RenderHandler, SEViewDisplayContext DisplayContext, mgLineSegment HullLine, mgPoint LightPosition)
-{
-	mgPoint MiddleofLine = HullLine.Middle(); // Grab the middle of the line.
-	
-	mgVector PointToLine; // A vector representing the direction from the point to the center of the line.
-
-	PointToLine.VectorFromPoints(LightPosition, MiddleofLine);
-
-	double DotProduct = PointToLine * HullLine.NormalFacingPosition(LightPosition); // Grab the dot product of the line and the vector to determine if it's facing away or towards us.
-
-	// Facing opposite directions or perpendicular, not a shadow caster.
-	if (DotProduct <= 0)
-		return;
-
-	// Shadow hulls are a projection of lines from the light source, towards the edges of the occluding line ( which is any line not facing the light, for simplicity )
-	// This will give us four points. Two points of the occluding line, and two points that extend off the screen, projected from the light source against both
-	// edges of the occluding line. This skewed quad will then be filled in with black triangles to mask the content underneath.
-
-	// TODO: Make this all render to a shadowmap, and find a way to merge them together so we can have multiple light sources.
-	
-	// First we need to transfer the line from world space to screen space, we will do this using the render view context.
-	mgPoint RenderStart, RenderEnd;
-	RenderStart = HullLine.SegmentStart;
-	RenderEnd = HullLine.SegmentEnd;
-
-	RenderStart = convertToScreen(RenderStart, DisplayContext);
-	RenderEnd = convertToScreen(RenderEnd, DisplayContext);
-	LightPosition = convertToScreen(LightPosition, DisplayContext);
-
-	mgVector FirstArc, SecondArc;
-	mgLineSegment FirstProjection, SecondProjection, Cross1, Cross2;
-	mgLineCollisionResults CrossCollision;
-
-	FirstArc.VectorFromPoints(LightPosition, RenderStart);
-	SecondArc.VectorFromPoints(LightPosition, RenderEnd);
-
-	FirstProjection.ImportLine(RenderStart, FirstArc, 1000);
-	SecondProjection.ImportLine(RenderEnd, SecondArc, 1000);
-	Cross1.ImportLine(RenderStart, SecondArc, 1000);
-	Cross2.ImportLine(RenderEnd, FirstArc, 1000);
-
-	CrossCollision = Cross1.CollisionTest(&Cross2);
-
-	renderTriangle(RenderStart.Y, RenderStart.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X,RenderHandler);
-	renderTriangle(RenderEnd.Y, RenderEnd.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X, RenderHandler);
-	renderTriangle(RenderStart.Y, RenderStart.X, RenderEnd.Y, RenderEnd.X, CrossCollision.CollisionPoint.Y, CrossCollision.CollisionPoint.X, RenderHandler);
 }
 
 void SEViewDisplay::Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler, mgLinkedList<mgMapObject> *MOBJList)
@@ -227,6 +33,14 @@ void SEViewDisplay::Initialize(SERenderHandler *RenderHandler, mgMapDataHandler 
 	Renderer = RenderHandler;
 	GameWorld = MapDataHandler;
 	this->MOBJList = MOBJList;
+}
+
+void SEViewDisplay::InitializeShadowEngine(void)
+{
+	if (Renderer == nullptr)
+		return; // Can't start up shadow engine without a renderer.
+
+	ShadowEngine = new SEShadowEngine(Renderer, this);
 }
 
 // Setup the context for the current render pass. This information only needs to be changed when either the position changes, or the zoom changes.
@@ -390,7 +204,7 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 	Test.ImportLine(a, b);
 	Test.Facing = LINEFACE_RIGHT;
 
-	drawShadowHull(this->Renderer, this->ViewContext, Test, Position);
+	ShadowEngine->drawShadowHull(Test, Position);
 	//renderTriangle(80, 10, 5, 40, 80, 90, Renderer);
 
 }
@@ -400,9 +214,16 @@ SEViewDisplay::SEViewDisplay()
 	Renderer = nullptr;
 	GameWorld = nullptr;
 	MOBJList = nullptr;
+	ShadowEngine = nullptr;
 
 	// These defaults will ensure the first calculation is done 100%
 	// TODO: This can be handled better.
 	ViewContext.Position.Y = ViewContext.Position.X = -100;
 	ViewContext.zoom = -100;
+}
+
+SEViewDisplay::~SEViewDisplay()
+{
+	if (ShadowEngine != nullptr)
+		delete ShadowEngine;
 }
