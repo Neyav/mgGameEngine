@@ -1,9 +1,14 @@
 #ifndef SESHADOWENGINE_H
 #define SESHADOWENGINE_H
 
+#include "../mgVectorPoint.h"
+#include "../mgLineSegment.h"
+
 #include "SERenderHandler.h"
 #include "SEViewDisplay.h"
 #include "SETextureHandler.h"
+
+class SEViewDisplay;
 
 class SEShadowEngine
 {

@@ -9,6 +9,8 @@
 #include "../mgVectorPoint.h"
 #include "../Containers/mgLinkedList.h"
 
+class SEShadowEngine;
+
 // Define our maximum sized viewspace.
 // Rendering errors will occur if we zoom out so far that we exceed this, so we need to tailor it to our uses.
 // Smaller is more efficent.

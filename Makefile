@@ -17,8 +17,8 @@ NCursesExplorer: NCursesExplorer.o mgLineSegment.o mgMapDataHandler.o mgMapEleme
 	$(STRIP) --strip-all NCursesExplorer
 
 # SDLengine build target. This is a SDL2 based renderer for the engine. Top down view.
-SDLengine: SDLengine.o SETextureHandler.o SERenderHandler.o SEViewDisplay.o SEMovementHandler.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
-	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o SEMovementHandler.o SEViewDisplay.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -lSDL2 -lSDL2_image $(LINKERFLAGS)
+SDLengine: SDLengine.o SETextureHandler.o SERenderHandler.o SEViewDisplay.o SEMovementHandler.o SEShadowEngine.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
+	$(CC) -o SDLengine SDLengine.o SETextureHandler.o SERenderHandler.o SEMovementHandler.o SEShadowEngine.o SEViewDisplay.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o -lSDL2 -lSDL2_image $(LINKERFLAGS)
 	$(STRIP) --strip-all SDLengine
 
 NCursesExplorer.o: Source/NCursesExplorer.cpp
@@ -72,6 +72,9 @@ SEViewDisplay.o: Source/SDLengine/SEViewDisplay.cpp Source/SDLengine/SEViewDispl
 
 SEMovementHandler.o: Source/SDLengine/SEMovementHandler.cpp Source/SDLengine/SEMovementHandler.h
 	$(CC) $(CFLAGS) -o SEMovementHandler.o -c Source/SDLengine/SEMovementHandler.cpp
+
+SEShadowEngine.o: Source/SDLengine/SEShadowEngine.cpp Source/SDLengine/SEShadowEngine.h
+	$(CC) $(CFLAGS) -o SEShadowEngine.o -c Source/SDLengine/SEShadowEngine.cpp
 
 SDLengine.o: Source/SDLengine/SDLengine.cpp
 	$(CC) $(CFLAGS) -o SDLengine.o -c Source/SDLengine/SDLengine.cpp
