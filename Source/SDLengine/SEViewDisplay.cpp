@@ -33,6 +33,8 @@ void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHan
 	SDL_Point RotationAxis;
 	SDL_RendererFlip Flip = SDL_FLIP_NONE;
 	double rotationAngle = 0;
+	double facingtestAngle = 0;
+	int facingtestDiff = 0;
 	mgLineSegment Axis[2];
 	mgVector FacingTest;
 
@@ -45,6 +47,30 @@ void renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3, SERenderHan
 	RotationAxis.x = 0;
 
 	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
+	facingtestAngle = atan2(Spine1.Y - Spine2.Y, Spine1.X - Spine2.X) * 180 / mgPI;
+
+	std::cout << rotationAngle << " " << facingtestAngle << "(" << rotationAngle - facingtestAngle << " - " << facingtestAngle - rotationAngle << ")" << std::endl;
+
+	facingtestDiff = abs(rotationAngle - facingtestAngle);
+
+	// Account for rounding errors.
+	if ( facingtestDiff == 89 || facingtestDiff == 269 )
+		facingtestDiff++;
+	else if ( facingtestDiff == 91 || facingtestDiff == 271 )
+		facingtestDiff--;
+
+	std::cout << facingtestDiff << std::endl;
+
+	if (facingtestDiff != 90 && facingtestDiff != 270)
+	{
+		// Not a right angle triangle.
+		std::cout << "Not a right angle triangle." << std::endl;
+		std::cout << "Spine1 [" << Spine1.Y << ", " << Spine1.X << "]" << std::endl;
+		std::cout << "Spine2 [" << Spine2.Y << ", " << Spine2.X << "]" << std::endl;
+		std::cout << "P3     [" << P3.Y << ", " << P3.X << "]" << std::endl;
+	
+		exit(0);
+	}
 
 	// Does this triangle shape match our image? 
 	FacingTest.VectorFromPoints(P3, Spine2);
@@ -77,6 +103,8 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 	double LongestLength = 0.0;
 	int LongestLine = 0;
 
+	std::cout << "Triangle IN: [" << Y1 << ", " << X1 << "] [" << Y2 << ", " << X2 << "] [" << Y3 << ", " << X3 << "]" << std::endl;
+
 	// Import the triangle into our data structures
 	TrianglePoints[0].Y = Y1;
 	TrianglePoints[0].X = X1;
@@ -88,6 +116,8 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 	TriangleLines[0].ImportLine(TrianglePoints[0], TrianglePoints[1]);
 	TriangleLines[1].ImportLine(TrianglePoints[1], TrianglePoints[2]);
 	TriangleLines[2].ImportLine(TrianglePoints[2], TrianglePoints[0]);
+
+	std::cout << "Triangle Lengths: 0:[" << TriangleLines[0].SegmentLength << "] 1:[" << TriangleLines[1].SegmentLength << "] 2:[" << TriangleLines[2].SegmentLength << "]" << std::endl;
 
 	// Determine which line in our triangle is the longest, as we are going to use this line to split.
 	for (int iterator = 0; iterator < 3; iterator++)
@@ -106,17 +136,25 @@ void renderTriangle(int Y1, int X1, int Y2, int X2, int Y3, int X3, SERenderHand
 		SplitPoint[0] = TrianglePoints[0];
 	else
 		SplitPoint[0] = TrianglePoints[1];
+	
+	TriangleLines[LongestLine].Facing = LINEFACE_LEFT;
 
-	// The second split point is where the normal of the longest line projected from the split point
-	// would meet with the first split point. To figure this out we are going to get the normal of the longest line.
-	// and then we are going to reverse it, project it from the first split point and determine where the collision occurs.
 	LineNormal = TriangleLines[LongestLine].NormalFacingPosition(SplitPoint[0]);
 	LineNormal.ReverseDirection();
 
-	TestLine.ImportLine(SplitPoint[0], LineNormal, 5000);	// Rediculous length as a hack to ensure it collides. Doesn't effect speed any,
+	std::cout << "Longest Line: " << LongestLine << " Normal: " << LineNormal.Y << ", " << LineNormal.X << std::endl;
+
+	TestLine.ImportLine(SplitPoint[0], LineNormal, 50000);	// Rediculous length as a hack to ensure it collides. Doesn't effect speed any,
 															// no reason to do real calculations.
 
 	TestLineResults = TestLine.CollisionTest(&TriangleLines[LongestLine]);
+
+	if (!TestLineResults.Collision)
+	{	// This is a HUGE cheat. If there was no collision, then just reverse the normal direction and go again!
+		LineNormal.ReverseDirection();
+		TestLine.ImportLine(SplitPoint[0], LineNormal, 50000);
+		TestLineResults = TestLine.CollisionTest(&TriangleLines[LongestLine]);
+	}
 
 	SplitPoint[1] = TestLineResults.CollisionPoint;
 
@@ -182,12 +220,6 @@ void drawShadowHull(SERenderHandler *RenderHandler, SEViewDisplayContext Display
 	renderTriangle(RenderStart.Y, RenderStart.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X,RenderHandler);
 	renderTriangle(RenderEnd.Y, RenderEnd.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X, RenderHandler);
 	renderTriangle(RenderStart.Y, RenderStart.X, RenderEnd.Y, RenderEnd.X, CrossCollision.CollisionPoint.Y, CrossCollision.CollisionPoint.X, RenderHandler);
-	//renderTriangle(RenderEnd.Y, RenderEnd.X, RenderStart.Y, RenderStart.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X, RenderHandler);
-
-	//RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->setSize(RenderEnd.X - RenderStart.X, RenderEnd.Y - RenderStart.Y);
-	//RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->render(RenderStart.Y, RenderStart.X, NULL);
-	//if (DotProduct > 0)
-	//	RenderHandler->Texture[SHADOWHULL_BOTTOMLEFT]->render(1, 1, NULL);
 }
 
 void SEViewDisplay::Initialize(SERenderHandler *RenderHandler, mgMapDataHandler *MapDataHandler, mgLinkedList<mgMapObject> *MOBJList)
