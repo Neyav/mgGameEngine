@@ -3,8 +3,8 @@ CC = c++
 STRIP = strip
 RM = rm
 
-CFLAGS = -std=c++11 -O2
-LINKERFLAGS = -lm -lstdc++
+CFLAGS = -I/usr/local/include -std=c++11 -O2
+LINKERFLAGS = -L/usr/local/lib -lm -lstdc++
 
 # The default build target. This is the console test engine.
 mgConsoleTest: ConsoleMazeGenerator.o mgLineSegment.o mgMapDataHandler.o mgMapElement.o mgMapObject.o mgPathSolutionGenerator.o mgRayTracer.o mgCollisionDetection.o mgStressTest.o mgVectorPoint.o mgVisibilityMap.o mgRandomMazeGenerator.o
