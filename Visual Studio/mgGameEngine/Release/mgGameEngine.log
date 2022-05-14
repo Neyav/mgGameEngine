@@ -1,5 +1,25 @@
-﻿Build started 2015-08-06 2:50:53 PM.
-
-Build succeeded.
-
-Time Elapsed 00:00:00.10
+﻿  ConsoleMazeGenerator.cpp
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\ConsoleMazeGenerator.cpp(220,57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\ConsoleMazeGenerator.cpp(220,38): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\ConsoleMazeGenerator.cpp(223,67): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\ConsoleMazeGenerator.cpp(223,48): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\ConsoleMazeGenerator.cpp(228,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\ConsoleMazeGenerator.cpp(230,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  mgCollisionDetection.cpp
+  mgLineSegment.cpp
+  mgMapDataHandler.cpp
+  mgMapElement.cpp
+  mgMapObject.cpp
+  mgPathSolutionGenerator.cpp
+  mgRandomMazeGenerator.cpp
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\mgRandomMazeGenerator.cpp(53,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  mgRayTracer.cpp
+  mgStressTest.cpp
+C:\Users\gregh\Documents\GitHub\mgGameEngine\Source\mgStressTest.cpp(412,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  mgVectorPoint.cpp
+  mgVisibilityMap.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 482 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  mgGameEngine.vcxproj -> C:\Users\gregh\Documents\GitHub\mgGameEngine\Windows Binaries\DevelopmentConsole.exe
