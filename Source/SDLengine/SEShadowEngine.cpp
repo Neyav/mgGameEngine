@@ -163,15 +163,19 @@ void SEShadowEngine::drawShadowHull(mgLineSegment HullLine, mgPoint LightPositio
 	mgVector FirstArc, SecondArc;
 	mgLineSegment FirstProjection, SecondProjection, Cross1, Cross2;
 	mgLineCollisionResults CrossCollision;
-
+	
 	FirstArc.VectorFromPoints(LightPosition, RenderStart);
 	SecondArc.VectorFromPoints(LightPosition, RenderEnd);
-	FirstProjection.ImportLine(RenderStart, FirstArc, 300);
-	SecondProjection.ImportLine(RenderEnd, SecondArc, 300);
-	Cross1.ImportLine(RenderStart, SecondArc, 300);
-	Cross2.ImportLine(RenderEnd, FirstArc, 300);
+	FirstProjection.ImportLine(RenderStart, FirstArc, 100);
+	SecondProjection.ImportLine(RenderEnd, SecondArc, 100);
+	Cross1.ImportLine(RenderStart, SecondArc, 100);
+	Cross2.ImportLine(RenderEnd, FirstArc, 100);
 
 	CrossCollision = Cross1.CollisionTest(&Cross2);
+
+	// The collision test failed ENSURING that the hull is going to be rendered improperly. Better off not to render it at all. Not sure how this is occuring, but it is.
+	if (!CrossCollision.Collision)
+		return;
 
 	renderTriangle(RenderStart.Y, RenderStart.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X);
 	renderTriangle(RenderEnd.Y, RenderEnd.X, FirstProjection.SegmentEnd.Y, FirstProjection.SegmentEnd.X, SecondProjection.SegmentEnd.Y, SecondProjection.SegmentEnd.X);
