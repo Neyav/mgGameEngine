@@ -205,7 +205,7 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 	Test.Facing = LINEFACE_RIGHT;
 
 //  Disable ShadowEngine till more testing can be performed.
-//	ShadowEngine->drawShadowHull(Test, Position);
+	ShadowEngine->drawShadowHull(Test, Position);
 	//renderTriangle(80, 10, 5, 40, 80, 90, Renderer);
 
 }

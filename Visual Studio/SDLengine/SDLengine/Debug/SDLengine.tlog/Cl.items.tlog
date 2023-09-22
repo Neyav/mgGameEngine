@@ -1,0 +1,17 @@
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgCollisionDetection.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgCollisionDetection.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgLineSegment.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgLineSegment.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgMapDataHandler.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgMapDataHandler.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgMapElement.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgMapElement.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgMapObject.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgMapObject.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgPathSolutionGenerator.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgPathSolutionGenerator.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgRandomMazeGenerator.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgRandomMazeGenerator.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgRayTracer.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgRayTracer.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgStressTest.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgStressTest.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgVectorPoint.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgVectorPoint.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\mgVisibilityMap.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\mgVisibilityMap.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\SDLengine\SDLengine.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\SDLengine.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\SDLengine\SEMovementHandler.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\SEMovementHandler.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\SDLengine\SERenderHandler.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\SERenderHandler.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\SDLengine\SEShadowEngine.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\SEShadowEngine.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\SDLengine\SETextureHandler.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\SETextureHandler.obj
+C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Source\SDLengine\SEViewDisplay.cpp;C:\Users\gregh_qdzn97y\source\repos\mgGameEngine\Visual Studio\SDLengine\SDLengine\Debug\SEViewDisplay.obj

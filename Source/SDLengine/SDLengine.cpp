@@ -145,6 +145,11 @@ int main(int argc, char *argv[])
 			MovementDirection.X = -1;
 		}
 
+		if (currentKeyStates[SDL_SCANCODE_ESCAPE])
+		{
+			exitApplication = true;
+		}
+
 		// Add momentum to player
 		LocalPlayer->AddMomentum ( 0.15, MovementDirection );
 
