@@ -197,14 +197,15 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 
 	mgLineSegment Test;
 	mgPoint a, b;
-	a.Y = 3;
-	a.X = 3;
-	b.Y = 4;
-	b.X = 4;
+	a.Y = 2;
+	a.X = 2;
+	b.Y = 3;
+	b.X = 3;
 	Test.ImportLine(a, b);
 	Test.Facing = LINEFACE_RIGHT;
 
-	ShadowEngine->drawShadowHull(Test, Position);
+//  Disable ShadowEngine till more testing can be performed.
+//	ShadowEngine->drawShadowHull(Test, Position);
 	//renderTriangle(80, 10, 5, 40, 80, 90, Renderer);
 
 }

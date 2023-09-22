@@ -166,10 +166,10 @@ void SEShadowEngine::drawShadowHull(mgLineSegment HullLine, mgPoint LightPositio
 	
 	FirstArc.VectorFromPoints(LightPosition, RenderStart);
 	SecondArc.VectorFromPoints(LightPosition, RenderEnd);
-	FirstProjection.ImportLine(RenderStart, FirstArc, 100);
-	SecondProjection.ImportLine(RenderEnd, SecondArc, 100);
-	Cross1.ImportLine(RenderStart, SecondArc, 100);
-	Cross2.ImportLine(RenderEnd, FirstArc, 100);
+	FirstProjection.ImportLine(RenderStart, FirstArc, 1000);
+	SecondProjection.ImportLine(RenderEnd, SecondArc, 1000);
+	Cross1.ImportLine(RenderStart, SecondArc, 1000);
+	Cross2.ImportLine(RenderEnd, FirstArc, 1000);
 
 	CrossCollision = Cross1.CollisionTest(&Cross2);
 
