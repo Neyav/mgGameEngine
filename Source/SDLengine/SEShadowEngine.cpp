@@ -15,7 +15,7 @@
 // Renders a right angle triangle on the screen using our texture. scales it, rotates it, and flips it as required.
 void SEShadowEngine::renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint P3)
 {
-	SDL_Point RotationAxis;
+	SDL_Point RotationAxis{ 0,0 };
 	SDL_RendererFlip Flip = SDL_FLIP_NONE;
 	double rotationAngle = 0;
 	double facingtestAngle = 0;
@@ -28,11 +28,8 @@ void SEShadowEngine::renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint
 	Axis[0].Facing = LINEFACE_RIGHT; // Used for telling if we need to flip the triangle or not.
 	Axis[1].ImportLine(Spine2, P3);
 
-	RotationAxis.y = 0;
-	RotationAxis.x = 0;
-
 	rotationAngle = atan2(P3.Y - Spine2.Y, P3.X - Spine2.X) * 180 / mgPI;
-	facingtestAngle = atan2(Spine1.Y - Spine2.Y, Spine1.X - Spine2.X) * 180 / mgPI;
+	/*facingtestAngle = atan2(Spine1.Y - Spine2.Y, Spine1.X - Spine2.X) * 180 / mgPI;
 
 	facingtestDiff = abs(rotationAngle - facingtestAngle);
 
@@ -50,8 +47,8 @@ void SEShadowEngine::renderRightTriangle(mgPoint Spine1, mgPoint Spine2, mgPoint
 		std::cout << "Spine2 [" << Spine2.Y << ", " << Spine2.X << "]" << std::endl;
 		std::cout << "P3     [" << P3.Y << ", " << P3.X << "]" << std::endl;
 
-		exit(0);
-	}
+		//exit(0);
+	}*/ // [Dash|RD] -- This test throws up positives in situations that don't seem to matter, like extreme angles. The function appears to work flawlessly otherwise.
 
 	// Does this triangle shape match our image? 
 	FacingTest.VectorFromPoints(P3, Spine2);

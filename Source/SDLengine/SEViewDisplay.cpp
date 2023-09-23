@@ -112,6 +112,7 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 	this->SetupViewContext(Position, zoom);
 
 	mgLinkedList<mgMapObject> VisibleElements[MAXTILESY][MAXTILESX];
+	mgLinkedList<mgLineSegment> ShadowGeometry;
 
 	{
 		// Go through the global map object list and fill our visible array with map objects in screen space.
@@ -164,7 +165,22 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 			MOBJ_Iterator.LinktoList(&VisibleElements[RenderY - this->ViewContext.StartY][RenderX - this->ViewContext.StartX]);
 
 			if (GameWorld->IsBlockClippable(RenderY, RenderX)) // Simple check to see if it's a wall, we should really be doing a check for map element type.
+			{
 				Renderer->Texture[TEXTURE_GAME_DEFAULTWALL]->render(PixelY - this->ViewContext.WalloffsetY, PixelX - this->ViewContext.WalloffsetX);
+
+				mgMapElement *WorkingElement;
+				WorkingElement = GameWorld->ReturnMapBlockReference(RenderY, RenderX);
+				if (WorkingElement != nullptr)
+				{
+					mgListIterator<mgLineSegment> BlockGeometry = WorkingElement->BlockGeometry();
+					while (!BlockGeometry.IteratorAtEnd())
+					{
+						mgLineSegment* WorkingLine = BlockGeometry.ReturnElementReference();
+						// Add the line to our shadow geometry.
+						ShadowGeometry.AddElementReference(WorkingLine, false);
+					}
+				}
+			}
 
 			// Check our map object list to see if any map objects reside here.
 			while (!MOBJ_Iterator.IteratorAtEnd())
@@ -195,18 +211,15 @@ void SEViewDisplay::RenderWorld(mgPoint Position, double zoom)
 		PixelX = (this->ViewContext.ScreenWidth / 2) - ((this->ViewContext.CenterX - this->ViewContext.StartX) * this->ViewContext.TileSizeX) - this->ViewContext.PositionOffsetX;
 	}
 
-	mgLineSegment Test;
-	mgPoint a, b;
-	a.Y = 2;
-	a.X = 2;
-	b.Y = 3;
-	b.X = 3;
-	Test.ImportLine(a, b);
-	Test.Facing = LINEFACE_RIGHT;
+	mgListIterator<mgLineSegment> ShadowIterator;
 
-//  Disable ShadowEngine till more testing can be performed.
-	ShadowEngine->drawShadowHull(Test, Position);
-	//renderTriangle(80, 10, 5, 40, 80, 90, Renderer);
+	ShadowIterator.LinktoList(&ShadowGeometry);
+
+	while (!ShadowIterator.IteratorAtEnd())
+	{
+		mgLineSegment *WorkingLine = ShadowIterator.ReturnElementReference();
+		ShadowEngine->drawShadowHull(*WorkingLine, Position);
+	}
 
 }
 
